@@ -1,0 +1,6 @@
+framework module Coke {
+  umbrella header "Coke-umbrella.h"
+
+  export *
+  module * { export * }
+}

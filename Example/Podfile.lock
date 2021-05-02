@@ -1,0 +1,16 @@
+PODS:
+  - Coke (0.1.0)
+
+DEPENDENCIES:
+  - Coke (from `../`)
+
+EXTERNAL SOURCES:
+  Coke:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Coke: 1fc214531c43b333ac20d85aac55bea2d174436f
+
+PODFILE CHECKSUM: a343d0505ba876f27c40676323a550b7c0e60c54
+
+COCOAPODS: 1.10.1

@@ -1,0 +1,22 @@
+{
+  "name": "Coke",
+  "version": "0.1.0",
+  "summary": "A short description of Coke.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/yinhaoFrancis/Coke",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "yinhaoFrancis": "1833918721@qq.com"
+  },
+  "source": {
+    "git": "https://github.com/yinhaoFrancis/Coke.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source_files": "Coke/Classes/**/*"
+}
