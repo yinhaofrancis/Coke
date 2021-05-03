@@ -72,13 +72,6 @@ public class WebSourceSession:NSObject,URLSessionDataDelegate,URLSessionDownload
     public static var shared:WebSourceSession = {
         WebSourceSession()
     }()
-    
-    public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didResumeAtOffset fileOffset: Int64, expectedTotalBytes: Int64) {
-        print(fileOffset,expectedTotalBytes)
-    }
-    public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        print(bytesWritten,totalBytesWritten,totalBytesExpectedToWrite)
-    }
     public var queue = DispatchQueue(label: "WebSourceSession", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
     public lazy var urlSession:URLSession = {
         let q = OperationQueue()
@@ -277,30 +270,6 @@ public class WebSourceSession:NSObject,URLSessionDataDelegate,URLSessionDownload
     }
     
 }
-//public class WebSourceAssetDownloaderSession:NSObject,AVAssetDownloadDelegate{
-//
-//    public static var shared:WebSourceAssetDownloaderSession = {
-//        WebSourceAssetDownloaderSession()
-//    }()
-//    public var queue = DispatchQueue(label: "WebSourceAssetDownloaderSession", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
-//    public lazy var urlSession:AVAssetDownloadURLSession = {
-//        let q = OperationQueue()
-//        q.name  = "WebSourceAssetDownloaderSession"
-//        q.maxConcurrentOperationCount = 999
-//        q.underlyingQueue = self.queue
-//        return AVAssetDownloadURLSession(configuration: .background(withIdentifier: "WebSourceAssetDownloaderSession"), assetDownloadDelegate: self, delegateQueue: q)
-//    }()
-//    public func download(url:URL)->AVAssetDownloadTask?{
-//        let a = AVURLAsset(url: url)
-//        return self.urlSession.makeAssetDownloadTask(asset: a, assetTitle: "aaa", assetArtworkData: nil, options: nil)
-//    }
-//    public func urlSession(_ session: URLSession, assetDownloadTask: AVAssetDownloadTask, didLoad timeRange: CMTimeRange, totalTimeRangesLoaded loadedTimeRanges: [NSValue], timeRangeExpectedToLoad: CMTimeRange){
-//        print(timeRange,loadedTimeRanges,timeRangeExpectedToLoad)
-//    }
-//    public func urlSession(_ session: URLSession, assetDownloadTask: AVAssetDownloadTask, didFinishDownloadingTo location: URL){
-//        print(location)
-//    }
-//}
 extension URL:ExpressibleByStringLiteral{
     public typealias StringLiteralType = String
     

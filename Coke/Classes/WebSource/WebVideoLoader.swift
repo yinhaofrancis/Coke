@@ -107,8 +107,7 @@ public class WebVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
                     request.contentInformationRequest?.contentType = AVFileType.mp4.rawValue
                 }
             }else{
-                request.finishLoading(with: NSError(domain: "can't support this media", code: 0, userInfo: nil))
-                
+                request.contentInformationRequest?.contentType = AVFileType.mp4.rawValue
                 return
             }
             

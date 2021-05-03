@@ -29,7 +29,6 @@ class ViewController: UITableViewController,UISearchBarDelegate {
     public var url:URL?
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         do {
             let url = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("back")
             self.url = url
@@ -41,7 +40,14 @@ class ViewController: UITableViewController,UISearchBarDelegate {
         }catch{
             
         }        
-        self.actions = [UITableViewRowAction(style: .destructive, title: "删除") { (a, index) in
+        self.actions = [
+            UITableViewRowAction(style: .normal, title: "下载") { (a, index) in
+                let u = self.data[index.row].url
+                try? WebVideoLoader(url: u).downloader.download {
+                    
+                }
+            },
+            UITableViewRowAction(style: .destructive, title: "删除") { (a, index) in
             
             self.tableView.performBatchUpdates {
                 let u = self.data.remove(at: index.row).url
@@ -51,8 +57,6 @@ class ViewController: UITableViewController,UISearchBarDelegate {
             } completion: { (_) in
                 
             }
-            
-
         }]
     }
 
@@ -140,6 +144,12 @@ class ViewController: UITableViewController,UISearchBarDelegate {
             try data.write(to: url)
         } catch  {
             throw error
+        }
+    }
+    @IBAction func addAction(_ sender: Any) {
+        let d = try! WebSourceSessionDownloader(url: "https://wwwstatic.vivo.com.cn/vivoportal/files/resource/files/1612698718175/20210207/yuelaiyuehao.mp4")
+        d.download {
+            
         }
     }
 }

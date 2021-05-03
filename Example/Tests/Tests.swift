@@ -1,24 +1,28 @@
 import XCTest
 import Coke
-
-class Tests: XCTestCase {
+import AVFoundation
+class Tests: XCTestCase,AVAssetDownloadDelegate {
     
-    override func setUp() {
-        super.setUp()
+    let exp = XCTestExpectation(description: "fix")
+    var session:AVAssetDownloadURLSession!
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        let loader = try WebVideoLoader(url: "https://wwwstatic.vivo.com.cn/vivoportal/files/resource/files/1612698718175/20210207/yuelaiyuehao.mp4")
+        try loader.downloader.storage.delete()
+        self.session = AVAssetDownloadURLSession(configuration: .background(withIdentifier: "ddd"), assetDownloadDelegate: self, delegateQueue: nil)
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
-    override func tearDown() {
+    override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
+        try super.tearDownWithError()
+    }
+    func testExample() throws {
+        self.wait(for: [self.exp], timeout: 4000)
+        
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
-    }
-    
-    func testPerformanceExample() {
+    func testPerformanceExample() throws {
         // This is an example of a performance test case.
         self.measure() {
             // Put the code you want to measure the time of here.
