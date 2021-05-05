@@ -108,7 +108,6 @@ public class WebVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
                 }
             }else{
                 request.contentInformationRequest?.contentType = AVFileType.mp4.rawValue
-                return
             }
             
             request.contentInformationRequest?.isByteRangeAccessSupported = true
