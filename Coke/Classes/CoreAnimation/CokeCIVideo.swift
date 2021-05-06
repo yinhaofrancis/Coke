@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 import AVFoundation
-public protocol CokeVideoProcessOutput:class {
+public protocol CokeVideoProcessOutput:AnyObject {
     func outputVideo(callback:@escaping (Int) -> (CMSampleBuffer?,CVPixelBuffer?,CMTime?)?)
     func outputAudio(callback:@escaping (Int)->CMSampleBuffer?)
     var session:CokeVideoSession? { get set}

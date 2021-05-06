@@ -23,7 +23,7 @@ class Model:Codable{
 }
 class ViewController: UITableViewController,UISearchBarDelegate {
 
-    public var loader:WebVideoLoader?
+    public var loader:CokeVideoLoader?
     public var actions:[UITableViewRowAction]?
     public var data:[Model] = []
     public var url:URL?
@@ -43,7 +43,7 @@ class ViewController: UITableViewController,UISearchBarDelegate {
         self.actions = [
             UITableViewRowAction(style: .normal, title: "下载") { (a, index) in
                 let u = self.data[index.row].url
-                try? WebVideoLoader(url: u).downloader.download {
+                try? CokeVideoLoader(url: u).downloader.download {
                     
                 }
             },
@@ -53,7 +53,7 @@ class ViewController: UITableViewController,UISearchBarDelegate {
                 let u = self.data.remove(at: index.row).url
                 self.tableView.deleteRows(at: [index], with: .automatic)
                 try? self.saveData()
-                try? WebVideoLoader(url: u).downloader.storage.delete()
+                try? CokeVideoLoader(url: u).downloader.storage.delete()
             } completion: { (_) in
                 
             }
@@ -78,7 +78,7 @@ class ViewController: UITableViewController,UISearchBarDelegate {
         
         do {
         
-            self.loader = try WebVideoLoader(url: self.data[indexPath.row].url)
+            self.loader = try CokeVideoLoader(url: self.data[indexPath.row].url)
             let player = AVPlayerViewController()
             guard let asset = self.loader?.asset else { return }
 
@@ -115,8 +115,8 @@ class ViewController: UITableViewController,UISearchBarDelegate {
             Model(name: "", url: u, image: Data())
         }
 
-        a.map { (m) -> (WebVideoLoader,Model)? in
-            guard let l = try? WebVideoLoader(url: m.url) else { return nil }
+        a.map { (m) -> (CokeVideoLoader,Model)? in
+            guard let l = try? CokeVideoLoader(url: m.url) else { return nil }
             return (l,m)
         }.compactMap({$0}).forEach { (i) in
             i.0.image(se: 1) { (img) in

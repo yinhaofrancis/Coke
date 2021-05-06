@@ -8,7 +8,7 @@
 import Foundation
 import AudioToolbox
 import AVFoundation
-public protocol AudioOutputProtocol:class {
+public protocol AudioOutputProtocol:AnyObject {
     
     func handleAudioBuffer(node:AudioNodeProtocol, buffer:CokeAudioBuffer)
     
@@ -17,7 +17,7 @@ public protocol AudioOutputProtocol:class {
     func handleStreamFinish()
 }
 
-public protocol AudioInputProtocol:class {
+public protocol AudioInputProtocol:AnyObject {
     
     var description: AudioStreamBasicDescription { get }
     
@@ -27,7 +27,7 @@ public protocol AudioInputProtocol:class {
     
 }
 
-public protocol AudioNodeProtocol:class {
+public protocol AudioNodeProtocol:AnyObject {
     var isRuning:Bool { get }
 
 }

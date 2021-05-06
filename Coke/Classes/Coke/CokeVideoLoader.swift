@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import AVFoundation
 
-public class WebVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
+public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
     public var downloader:WebSourceSessionDownloader
     
     public init(url:URL) throws {
