@@ -1,15 +1,16 @@
 import XCTest
-import Coke
+
+import Security
 import AVFoundation
+@testable import Coke
 class Tests: XCTestCase,AVAssetDownloadDelegate {
     
     let exp = XCTestExpectation(description: "fix")
-    var session:AVAssetDownloadURLSession!
+
     override func setUpWithError() throws {
         try super.setUpWithError()
-        let loader = try WebVideoLoader(url: "https://wwwstatic.vivo.com.cn/vivoportal/files/resource/files/1612698718175/20210207/yuelaiyuehao.mp4")
-        try loader.downloader.storage.delete()
-        self.session = AVAssetDownloadURLSession(configuration: .background(withIdentifier: "ddd"), assetDownloadDelegate: self, delegateQueue: nil)
+
+    
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
@@ -18,7 +19,9 @@ class Tests: XCTestCase,AVAssetDownloadDelegate {
         try super.tearDownWithError()
     }
     func testExample() throws {
-        self.wait(for: [self.exp], timeout: 4000)
+        let keys =  try CokeKey.generatePair(type: .RSA, size: 1024)
+        let d = keys.0.encrypt(data: "dasadasd".data(using: .utf8)!)!
+        XCTAssert(String(data: keys.1.decrypt(data: d)!, encoding: .utf8) == "dasadasd")
         
     }
     

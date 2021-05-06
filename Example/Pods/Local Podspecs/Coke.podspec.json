@@ -1,8 +1,8 @@
 {
   "name": "Coke",
   "version": "0.1.0",
-  "summary": "A short description of Coke.",
-  "description": "TODO: Add long description of the pod here.",
+  "summary": "Web",
+  "description": "Web Tool",
   "homepage": "https://github.com/yinhaoFrancis/Coke",
   "license": {
     "type": "MIT",
@@ -15,8 +15,10 @@
     "git": "https://github.com/yinhaoFrancis/Coke.git",
     "tag": "0.1.0"
   },
+  "swift_versions": "5.0",
   "platforms": {
-    "ios": "9.0"
+    "ios": "12.0"
   },
-  "source_files": "Coke/Classes/**/*"
+  "source_files": "Coke/Classes/**/*",
+  "swift_version": "5.0"
 }
