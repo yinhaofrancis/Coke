@@ -10,10 +10,10 @@ import UIKit
 import AVFoundation
 
 public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
-    public var downloader:WebSourceSessionDownloader
+    public var downloader:CokeSessionDownloader
     
     public init(url:URL) throws {
-        self.downloader = try WebSourceSessionDownloader(url: url)
+        self.downloader = try CokeSessionDownloader(url: url)
     }
     public var asset:AVAsset?{
         var c = URLComponents(string: self.downloader.url.absoluteString)
@@ -66,7 +66,7 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
                 dataRequest.respond(with: data)
                 request.finishLoading()
             }else{
-                WebSourceSession.shared.beginGroup {
+                CokeSession.shared.beginGroup {
                     try? self.downloader.download(range: UInt64(dataRequest.currentOffset) ... UInt64(dataRequest.currentOffset + 1024 * 1024))
                 } notify: {
                     self.loadFileData(request: request)
@@ -81,7 +81,7 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
                     request.finishLoading()
                 }
             }else{
-                WebSourceSession.shared.beginGroup {
+                CokeSession.shared.beginGroup {
                     try? self.downloader.download(range: r)
                 } notify: {
                     self.loadFileData(request: request)
@@ -113,7 +113,7 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
             request.contentInformationRequest?.isByteRangeAccessSupported = true
             request.finishLoading()
         }else{
-            WebSourceSession.shared.beginGroup {
+            CokeSession.shared.beginGroup {
                 self.downloader.prepare()
             } notify: {
                 self.loadFileType(request: request)

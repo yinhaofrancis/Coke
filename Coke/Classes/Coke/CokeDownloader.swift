@@ -7,22 +7,22 @@
 
 import Foundation
 
-public class WebSourceSessionDownloader{
+public class CokeSessionDownloader{
     
-    public var storage:WebSourceStorage
+    public var storage:CokeStorage
     public let url:URL
     public var group = DispatchGroup()
     var page:UInt64 = 1024 * 1024 * 20
     public init(url:URL) throws{
         self.url = url
      
-        guard let dic = WebSourceDiskStorage.cacheDictionary else {
+        guard let dic = CokeDiskStorage.cacheDictionary else {
             throw NSError(domain: "save dir create fail", code: 0, userInfo: nil)
         }
-        guard let name = WebSourceDiskStorage.digest(name: url.absoluteString) else {
+        guard let name = CokeDiskStorage.digest(name: url.absoluteString) else {
             throw NSError(domain: "digest name fail", code: 0, userInfo: nil)
         }
-        self.storage = try WebSourceDiskStorage(dir: dic, identify: name)
+        self.storage = try CokeDiskStorage(dir: dic, identify: name)
         self.storage.dataHeader.status = 0
         print(self.storage)
     }
@@ -58,7 +58,7 @@ public class WebSourceSessionDownloader{
             if !self.storage.complete(range: i){
                 print(i)
                 
-                let id = WebSourceSession.shared.data(url: self.url, range: i) { (resp) -> URLSession.ResponseDisposition in
+                let id = CokeSession.shared.data(url: self.url, range: i) { (resp) -> URLSession.ResponseDisposition in
                     guard let res = resp else {return .cancel }
                     self.setMetaData(rep: res)
                     return .allow
@@ -92,7 +92,7 @@ public class WebSourceSessionDownloader{
             return
         }
         if self.storage.dataHeader.size > 0{
-            WebSourceSession.shared.beginGroup {
+            CokeSession.shared.beginGroup {
                 for i in self.storage.dataHeader.noDataRanges {
                     try? self.download(range: i)
                 }
@@ -104,10 +104,10 @@ public class WebSourceSessionDownloader{
                 }
             }
         }else{
-            WebSourceSession.shared.beginGroup {
+            CokeSession.shared.beginGroup {
                 self.prepare()
             } notify: {
-                WebSourceSession.shared.beginGroup {
+                CokeSession.shared.beginGroup {
                     for i in 0 ..< self.count {
                         try? self.download(indx: i)
                     }
@@ -130,7 +130,7 @@ public class WebSourceSessionDownloader{
 
     public func cancel(range:ClosedRange<UInt64>){
         if let i = self.downId[range]{
-            WebSourceSession.shared.cancel(identify: i)
+            CokeSession.shared.cancel(identify: i)
         }
     }
     public func cancel(index:UInt64){
@@ -142,7 +142,7 @@ public class WebSourceSessionDownloader{
     }
     public func prepare(){
         if self.storage.size == 0{
-            _ = WebSourceSession.shared.head(url: self.url) { r, _, _, e in
+            _ = CokeSession.shared.head(url: self.url) { r, _, _, e in
                 guard let rep = r else { return }
                 self.setMetaData(rep: rep)
             }

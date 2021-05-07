@@ -32,18 +32,7 @@ public class CokeVideoLayer:CAMetalLayer{
     @objc func renderVideo(){
         if let pl = self.player,let item = pl.currentItem{
             if let px = self.getCurrentPixelBuffer(),item.status == .readyToPlay{
-                guard let texture = self.render.configuration.createTexture(img: px) else { return }
-                guard let displayTexture = self.transformTexture(texture: texture) else { return }
-                self.render.screenSize = self.showSize;
-                guard let draw = self.nextDrawable() else { return  }
-                do {
-                    try self.render.configuration.begin()
-                    self.render.ratio = Float(displayTexture.height) / Float(displayTexture.width)
-                    try self.render.render(texture: displayTexture, drawable: draw)
-                    try self.render.configuration.commit()
-                } catch {
-                    return
-                }
+                self.render(px: px,transform: self.player?.currentPresentTransform ?? .identity)
             }
         }else{
             self.timer?.invalidate()
@@ -51,10 +40,10 @@ public class CokeVideoLayer:CAMetalLayer{
             
         }
     }
-    func transformTexture(texture:MTLTexture)->MTLTexture?{
+    func transformTexture(texture:MTLTexture,transform:CGAffineTransform)->MTLTexture?{
         var result:MTLTexture?
         result = texture
-        if let p = self.player , p.currentPresentTransform != .identity{
+        if transform != .identity{
             guard let outTexture = self.videoTransformFilter.filterTexture(pixel: [texture], w: Float(texture.height), h: Float(texture.width)) else { return nil }
             result = outTexture
         }
@@ -95,6 +84,20 @@ public class CokeVideoLayer:CAMetalLayer{
     }
     public func invalidate(){
         self.timer?.invalidate()
+    }
+    public func render(px:CVPixelBuffer,transform:CGAffineTransform){
+        guard let texture = self.render.configuration.createTexture(img: px) else { return }
+        guard let displayTexture = self.transformTexture(texture: texture,transform: transform) else { return }
+        self.render.screenSize = self.showSize;
+        guard let draw = self.nextDrawable() else { return  }
+        do {
+            try self.render.configuration.begin()
+            self.render.ratio = Float(displayTexture.height) / Float(displayTexture.width)
+            try self.render.render(texture: displayTexture, drawable: draw)
+            try self.render.configuration.commit()
+        } catch {
+            return
+        }
     }
 }
 

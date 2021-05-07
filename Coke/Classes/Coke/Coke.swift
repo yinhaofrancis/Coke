@@ -9,7 +9,7 @@ import Foundation
 import CommonCrypto
 import AVFoundation
 
-public protocol WebSourceStorage{
+public protocol CokeStorage{
     func saveData(data:Data,index:UInt64) throws
     func saveData(url:URL,index:UInt64) throws
     func loadData()->Data?
@@ -23,12 +23,12 @@ public protocol WebSourceStorage{
     var dataRanges:[ClosedRange<UInt64>] {get}
     func delete() throws
     func close() throws
-    var dataHeader:WebSourceHeaderData { get set }
+    var dataHeader:CokeHeaderData { get set }
     subscript(range:ClosedRange<UInt64>)->Data? { get }
     subscript(index:UInt64)->Data? { get }
 }
 
-extension WebSourceStorage{
+extension CokeStorage{
     public static func digest(name:String)->String?{
         guard let data = name.data(using: .utf8) else { return nil }
         let p = UnsafeMutablePointer<UInt8>.allocate(capacity: data.count)
@@ -54,7 +54,7 @@ extension WebSourceStorage{
     }
 }
 
-public class WebSourceSession:NSObject,URLSessionDataDelegate,URLSessionDownloadDelegate{
+public class CokeSession:NSObject,URLSessionDataDelegate,URLSessionDownloadDelegate{
     public func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         let task = downloadTask as URLSessionTask
         self.dataMap[task.taskIdentifier]?.url = location
@@ -69,8 +69,8 @@ public class WebSourceSession:NSObject,URLSessionDataDelegate,URLSessionDownload
     public typealias HandleDataComplete = (HTTPURLResponse?,URL?,Data?,Error?)->Void
     
 
-    public static var shared:WebSourceSession = {
-        WebSourceSession()
+    public static var shared:CokeSession = {
+        CokeSession()
     }()
     public var queue = DispatchQueue(label: "WebSourceSession", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
     public lazy var urlSession:URLSession = {

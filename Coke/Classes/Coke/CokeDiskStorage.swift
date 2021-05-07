@@ -10,7 +10,7 @@ import CommonCrypto
 
 public let copyPage = 50 * 1024 * 1024
 
-public struct WebSourceHeaderData:Codable,CustomDebugStringConvertible{
+public struct CokeHeaderData:Codable,CustomDebugStringConvertible{
     public var debugDescription: String{
         return
             """
@@ -51,21 +51,21 @@ public struct WebSourceHeaderData:Codable,CustomDebugStringConvertible{
     public var lastRequestDate:String?{
         get{
             guard let date = lastRequest else { return nil }
-            return WebSourceHeaderData.format.string(from: date)
+            return CokeHeaderData.format.string(from: date)
         }
         set{
             guard let d = newValue else { self.lastRequest = nil;return }
-            lastRequest = WebSourceHeaderData.format.date(from: d)
+            lastRequest = CokeHeaderData.format.date(from: d)
         }
     }
     public var expiresDate:String?{
         get{
             guard let date = expires else { return nil }
-            return WebSourceHeaderData.format.string(from: date)
+            return CokeHeaderData.format.string(from: date)
         }
         set{
             guard let d = newValue else { self.expires = nil;return }
-            expires = WebSourceHeaderData.format.date(from: d)
+            expires = CokeHeaderData.format.date(from: d)
         }
     }
     public static var format:DateFormatter = {
@@ -75,17 +75,17 @@ public struct WebSourceHeaderData:Codable,CustomDebugStringConvertible{
     }()
 }
 
-public class WebSourceDiskStorage:WebSourceStorage,CustomDebugStringConvertible {
+public class CokeDiskStorage:CokeStorage,CustomDebugStringConvertible {
 
     public var identify: String
     
     private var url:URL
     
-    private var header:WebSourceHeaderData = WebSourceHeaderData(resourceType: "data", dataRanges: [], size: 0, lastRequest: Date(), status: 0, url: nil)
+    private var header:CokeHeaderData = CokeHeaderData(resourceType: "data", dataRanges: [], size: 0, lastRequest: Date(), status: 0, url: nil)
     
     private var saveLock = DispatchSemaphore(value: 1)
     
-    public var dataHeader: WebSourceHeaderData{
+    public var dataHeader: CokeHeaderData{
         get{
             return self.header
         }
@@ -140,7 +140,7 @@ public class WebSourceDiskStorage:WebSourceStorage,CustomDebugStringConvertible 
                 guard let r = self.readHandle else { return nil}
                 var data:Data?
                 do {
-                    try WebSourceDiskStorage.seek(file:r , to: range.lowerBound, size: 0)
+                    try CokeDiskStorage.seek(file:r , to: range.lowerBound, size: 0)
                     data = r.readData(ofLength: Int(range.upperBound - range.lowerBound) + 1)
                 } catch {
                     print(error)
@@ -157,8 +157,8 @@ public class WebSourceDiskStorage:WebSourceStorage,CustomDebugStringConvertible 
         set{
             self.header.size = newValue
             guard let w = self.writeHandle else { return }
-            try? WebSourceDiskStorage.truncate(file:w,size:newValue)
-            try? WebSourceDiskStorage.close(file: w)
+            try? CokeDiskStorage.truncate(file:w,size:newValue)
+            try? CokeDiskStorage.close(file: w)
         }
     }
     
@@ -209,21 +209,21 @@ public class WebSourceDiskStorage:WebSourceStorage,CustomDebugStringConvertible 
             throw NSError(domain: "create file handle fail", code: 0, userInfo: nil)
         }
         do {
-            try WebSourceDiskStorage.seek(file:w ,to: index, size: 0)
+            try CokeDiskStorage.seek(file:w ,to: index, size: 0)
             var findex:UInt64 = 0;
             var flag = true
 
             while flag {
-                guard let data = try WebSourceDiskStorage.read(count: copyPage , file: rhandle) else { flag = false;continue }
+                guard let data = try CokeDiskStorage.read(count: copyPage , file: rhandle) else { flag = false;continue }
                 try self.saveData(data: data, index: index + findex)
                 findex += UInt64(data.count)
                 if(data.count < copyPage){
                     flag = false
                 }
             }
-            try WebSourceDiskStorage.close(file: w)
+            try CokeDiskStorage.close(file: w)
         } catch  {
-            try? WebSourceDiskStorage.close(file: w)
+            try? CokeDiskStorage.close(file: w)
             throw error
         }
     }
@@ -235,17 +235,17 @@ public class WebSourceDiskStorage:WebSourceStorage,CustomDebugStringConvertible 
             }
             self.saveLock.wait()
             do {
-                try WebSourceDiskStorage.seek(file:w ,to: index, size: data.count)
+                try CokeDiskStorage.seek(file:w ,to: index, size: data.count)
                 if #available(iOS 13.4, *) {
                     try w.write(contentsOf: data)
                 } else {
                     w.write(data)
                 }
-                self.header.dataRanges = WebSourceDiskStorage.mix(range: index...(index + UInt64(data.count) - 1), ranges: self.dataRanges)
-                try WebSourceDiskStorage.close(file: w)
+                self.header.dataRanges = CokeDiskStorage.mix(range: index...(index + UInt64(data.count) - 1), ranges: self.dataRanges)
+                try CokeDiskStorage.close(file: w)
                 self.saveLock.signal()
             } catch  {
-                try? WebSourceDiskStorage.close(file: w)
+                try? CokeDiskStorage.close(file: w)
                 self.saveLock.signal()
                 throw error
             }
@@ -255,9 +255,9 @@ public class WebSourceDiskStorage:WebSourceStorage,CustomDebugStringConvertible 
     public func loadHeader() throws {
         guard let r = self.readHandle else { throw NSError(domain: "create read handle error", code: 1, userInfo: nil) }
         do{
-            let end = try WebSourceDiskStorage.seekToEnd(file: r)
+            let end = try CokeDiskStorage.seekToEnd(file: r)
             if(end > MemoryLayout<UInt64>.size){
-                try WebSourceDiskStorage.seek(file: r, to: end - UInt64(MemoryLayout<UInt64>.size), size: 0)
+                try CokeDiskStorage.seek(file: r, to: end - UInt64(MemoryLayout<UInt64>.size), size: 0)
                 let data = r.readData(ofLength: MemoryLayout<UInt64>.size)
                 let b = UnsafeMutablePointer<UInt8>.allocate(capacity: MemoryLayout<UInt64>.size)
                 
@@ -265,13 +265,13 @@ public class WebSourceDiskStorage:WebSourceStorage,CustomDebugStringConvertible 
                 
                 let u64p = b.withMemoryRebound(to: UInt64.self, capacity: 1) {$0}.pointee
                 if(u64p < end - UInt64(MemoryLayout<UInt64>.size)){
-                    try WebSourceDiskStorage.seek(file: r, to: end - UInt64(MemoryLayout<UInt64>.size) - u64p , size: Int(u64p))
+                    try CokeDiskStorage.seek(file: r, to: end - UInt64(MemoryLayout<UInt64>.size) - u64p , size: Int(u64p))
                     let headerData = r.readData(ofLength: Int(u64p))
                     do {
-                        self.header = try JSONDecoder().decode(WebSourceHeaderData.self, from: headerData)
+                        self.header = try JSONDecoder().decode(CokeHeaderData.self, from: headerData)
                         
                     } catch {
-                        self.header = WebSourceHeaderData(resourceType: "data", dataRanges: [], size: 0, lastRequest: Date(), status: 0, url: nil)
+                        self.header = CokeHeaderData(resourceType: "data", dataRanges: [], size: 0, lastRequest: Date(), status: 0, url: nil)
                     }
                 }
             }
@@ -290,7 +290,7 @@ public class WebSourceDiskStorage:WebSourceStorage,CustomDebugStringConvertible 
         if let headerd = try? JSONEncoder().encode(self.header) ,let write = self.writeHandle{
             do {
                 self.saveLock.wait()
-                try WebSourceDiskStorage.truncate(file: write, size: self.header.size)
+                try CokeDiskStorage.truncate(file: write, size: self.header.size)
                 if #available(iOS 13.4, *) {
                     try write.seekToEnd()
                 } else {
@@ -301,7 +301,7 @@ public class WebSourceDiskStorage:WebSourceStorage,CustomDebugStringConvertible 
                 len.pointee = UInt64(headerd.count)
                 let data = Data(bytes: len, count: MemoryLayout<UInt64>.size)
                 write.write(data)
-                try WebSourceDiskStorage.close(file: write)
+                try CokeDiskStorage.close(file: write)
                 self.saveLock.signal()
             } catch {
                 self.saveLock.signal()
@@ -312,7 +312,7 @@ public class WebSourceDiskStorage:WebSourceStorage,CustomDebugStringConvertible 
     public func loadData() -> Data? {
         guard let r = self.readHandle else { return nil }
         let data = r.readData(ofLength: Int(self.size))
-        try? WebSourceDiskStorage.close(file:r)
+        try? CokeDiskStorage.close(file:r)
         return data
     }
     //class method

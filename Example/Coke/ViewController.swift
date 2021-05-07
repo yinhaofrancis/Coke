@@ -146,11 +146,5 @@ class ViewController: UITableViewController,UISearchBarDelegate {
             throw error
         }
     }
-    @IBAction func addAction(_ sender: Any) {
-        let d = try! WebSourceSessionDownloader(url: "https://wwwstatic.vivo.com.cn/vivoportal/files/resource/files/1612698718175/20210207/yuelaiyuehao.mp4")
-        d.download {
-            
-        }
-    }
 }
 
