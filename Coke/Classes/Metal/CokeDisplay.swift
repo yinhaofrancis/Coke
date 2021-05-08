@@ -71,7 +71,17 @@ public class CokeVideoLayer:CAMetalLayer{
         super.init()
         self.contentsScale = UIScreen.main.scale;
     }
-    
+    public override init(layer: Any) {
+        if let lay = layer as? CokeVideoLayer{
+            self.videoFilter = lay.videoFilter
+            self.render = lay.render
+            self.timer = lay.timer
+            self.renderScale = lay.renderScale
+            super.init(layer: layer)
+        }else{
+            fatalError()
+        }
+    }
     required init?(coder: NSCoder) {
         self.render = CokeTextureRender(configuration: .defaultConfiguration)
         super.init(coder: coder)

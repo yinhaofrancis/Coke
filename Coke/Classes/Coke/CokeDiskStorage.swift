@@ -143,7 +143,7 @@ public class CokeDiskStorage:CokeStorage,CustomDebugStringConvertible {
                     try CokeDiskStorage.seek(file:r , to: range.lowerBound, size: 0)
                     data = r.readData(ofLength: Int(range.upperBound - range.lowerBound) + 1)
                 } catch {
-                    print(error)
+                    return nil
                 }
                 return data
             }

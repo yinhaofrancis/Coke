@@ -59,9 +59,14 @@ public class CokeSessionDownloader{
                 print(i)
                 
                 let id = CokeSession.shared.data(url: self.url, range: i) { (resp) -> URLSession.ResponseDisposition in
-                    guard let res = resp else {return .cancel }
-                    self.setMetaData(rep: res)
-                    return .allow
+                    guard let res = resp else { return .cancel }
+                    if res.statusCode >= 200 && res.statusCode < 300{
+                        self.setMetaData(rep: res)
+                        return .allow
+                    }else{
+                        return .cancel
+                    }
+                    
                 } handleData: { (data, resp, range) in
                     try? self.storage.saveData(data: data, index: range.lowerBound)
                     try? self.storage.close()

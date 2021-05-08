@@ -75,26 +75,9 @@ class ViewController: UITableViewController,UISearchBarDelegate {
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        do {
-        
-            self.loader = try CokeVideoLoader(url: self.data[indexPath.row].url)
-            let player = AVPlayerViewController()
-            guard let asset = self.loader?.asset else { return }
-
-            self.loader?.image(se: 1, callback: { (im) in
-                
-            })
-            let item = AVPlayerItem(asset: asset)
-
-            player.player = AVPlayer(playerItem: item)
-            player.player?.play()
-            self.present(player, animated: true) {
-
-            }
-        } catch  {
-            
-        }
+        let vc:playViewController = self.storyboard?.instantiateViewController(withIdentifier: "player") as! playViewController
+        vc.url = self.data[indexPath.row].url
+        self.present(vc, animated: true, completion: nil)
     }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
