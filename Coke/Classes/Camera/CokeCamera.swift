@@ -8,7 +8,11 @@
 import AVFoundation
 import UIKit
 
-public class CokeCamera:NSObject,AVCapturePhotoCaptureDelegate{
+public protocol CokeCameraDelegate{
+    func handleBuffer(sampleBuffer: CMSampleBuffer)
+}
+
+public class CokeCamera:NSObject,AVCapturePhotoCaptureDelegate,AVCaptureVideoDataOutputSampleBufferDelegate{
     
     public typealias CallbackBlock = (UIImage?)->Void
     public struct Exposure{
@@ -22,9 +26,10 @@ public class CokeCamera:NSObject,AVCapturePhotoCaptureDelegate{
     private var callback:CallbackBlock?
     
     public var camera:[AVCaptureDevice] = []
-    
+    public var queue:DispatchQueue = DispatchQueue(label: "CokeCamera")
+    public var delegates:[CokeCameraDelegate] = []
     public var session:AVCaptureSession
-    public var videoOutput:AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
+    private var videoOutput:AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
     public var photoOut = AVCapturePhotoOutput()
     public var position:AVCaptureDevice.Position{
         didSet{
@@ -36,12 +41,13 @@ public class CokeCamera:NSObject,AVCapturePhotoCaptureDelegate{
         self.session = AVCaptureSession()
         self.session.addOutput(self.videoOutput)
         self.session.addOutput(self.photoOut)
+       
         self.videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String :kCVPixelFormatType_32BGRA]
         
         self.position = .back
-        
         super.init()
         self.loadCamera()
+        self.videoOutput.setSampleBufferDelegate(self, queue: self.queue)
     }
     
     public func loadCamera(){
@@ -220,6 +226,11 @@ public class CokeCamera:NSObject,AVCapturePhotoCaptureDelegate{
         guard let s = p.fileDataRepresentation() else { return }
         let a = UIImage(data: s)
         self.callback?(a)
+    }
+    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        for i in self.delegates {
+            i.handleBuffer(sampleBuffer: sampleBuffer)
+        }
     }
 }
 

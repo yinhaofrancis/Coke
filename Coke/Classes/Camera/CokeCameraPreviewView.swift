@@ -7,12 +7,12 @@
 
 import UIKit
 import AVFoundation
-public class CokeCameraPreviewView: CokeVideoView,AVCaptureVideoDataOutputSampleBufferDelegate{
+public class CokeCameraPreviewView: CokeVideoView,CokeCameraDelegate{
 
     weak var camera:CokeCamera?
     public var ratio:CGFloat = 0
     public func setCamera(ca:CokeCamera){
-        ca.videoOutput.setSampleBufferDelegate(self, queue: DispatchQueue.global())
+        ca.delegates.append(self)
         self.camera = ca
         guard let c = self.camera?.currentDevice else { return }
         try? c.lockForConfiguration()
@@ -20,7 +20,7 @@ public class CokeCameraPreviewView: CokeVideoView,AVCaptureVideoDataOutputSample
         c.isSmoothAutoFocusEnabled = true
         c.unlockForConfiguration()
     }
-    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+    public func handleBuffer(sampleBuffer: CMSampleBuffer) {
         DispatchQueue.main.async {
             guard let px = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
             self.ratio = CGFloat(CVPixelBufferGetWidth(px)) / CGFloat(CVPixelBufferGetHeight(px))
