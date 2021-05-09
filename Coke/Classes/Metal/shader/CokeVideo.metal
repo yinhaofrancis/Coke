@@ -25,6 +25,7 @@ fragment half4 fragmentShader(CokeVertex in [[stage_in]],
                               const sampler textureSampler [[sampler(0)]]){
     half4 color = texture.sample(textureSampler, in.textureVX);
     return half4(color.xyz,1);
+//    return half4(1,0,0,1);
 }
 float2 createSampleCood(uint2 gid,float w,float h,int offsetX,int offsetY,uint2 thread_grid_size){
     float2 startPix = float2(gid.x * thread_grid_size.x,gid.y * thread_grid_size.y);

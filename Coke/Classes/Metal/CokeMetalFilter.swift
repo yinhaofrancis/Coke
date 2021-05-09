@@ -28,7 +28,6 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
             do {
                 let ow = Float(pixel.first!.width)
                 let oh = Float(pixel.first!.height)
-                
                 let px1 = pixel.first!
                 guard let px2 = self.Coke.configuration.createTexture(width: Int(w), height: Int(h),store: .private) else { return nil }
                 guard let px3 = self.Coke.configuration.createTexture(width: Int(w), height: Int(h)) else { return nil }

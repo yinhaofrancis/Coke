@@ -17,6 +17,7 @@ public class CokeTextureRender {
     }
     public let configuration:CokeMetalConfiguration
     private let pipelineDescriptor:MTLRenderPipelineDescriptor
+    private var pipelineState:MTLRenderPipelineState?
     public init(configuration:CokeMetalConfiguration = CokeMetalConfiguration.defaultConfiguration)  {
         self.configuration = configuration
         let pipelineDesc = MTLRenderPipelineDescriptor()
@@ -25,23 +26,15 @@ public class CokeTextureRender {
         pipelineDesc.colorAttachments[0].pixelFormat = .bgra8Unorm_srgb
         
         self.pipelineDescriptor = pipelineDesc
-        
         pipelineDesc.vertexDescriptor = self.vertexDescriptor;
-    }
-    
-    public var ratio:Float = 1{
-        didSet{
-            if(oldValue != self.ratio){
-                self.vertice = nil;
-            }
-        }
     }
     public var screenSize:CGSize = CGSize(width: 320, height: 480)
 
-    public var rectangle:[vertex]{
+    public var rectangle:[vertex] {
+//        let w:Float = 1
+//        let h = Float(screenSize.width) / Float(screenSize.height) * ratio;
         let w:Float = 1
-        let h = Float(screenSize.width) / Float(screenSize.height) * ratio;
-        
+        let h:Float = 1
         return [
             vertex(location: simd_float4(-w, h, 0, 1), texture: simd_float2(0, 0)),
             vertex(location: simd_float4(w, h, 0, 1), texture: simd_float2(1, 0)),
@@ -81,7 +74,7 @@ public class CokeTextureRender {
         ]
     }
     
-    
+    private var vp:MTLViewport?
     public func render(image:CGImage,drawable:CAMetalDrawable) throws{
         
         let text = try MTKTextureLoader.init(device: self.configuration.device).newTexture(cgImage: image, options: nil)
@@ -99,10 +92,15 @@ public class CokeTextureRender {
         renderPass.colorAttachments[0].texture = drawable.texture
         
         guard let encoder = self.configuration.commandbuffer?.makeRenderCommandEncoder(descriptor: renderPass) else { throw NSError(domain: "start encoder fail", code: 0, userInfo: nil)}
-        
-        encoder.setViewport(MTLViewport(originX: 0, originY: 0, width: Double(self.screenSize.width), height: Double(self.screenSize.height)
-                                        , znear: -1, zfar: 1))
-        let pipelinestate = try configuration.device.makeRenderPipelineState(descriptor: self.pipelineDescriptor)
+        if self.vp == nil{
+            self.vp = MTLViewport(originX: 0, originY: 0, width: Double(self.screenSize.width), height: Double(self.screenSize.height)
+                                  , znear: -1, zfar: 1)
+        }
+        encoder.setViewport(self.vp!)
+        if self.pipelineState == nil{
+            self.pipelineState = try configuration.device.makeRenderPipelineState(descriptor: self.pipelineDescriptor)
+        }
+        guard let pipelinestate = self.pipelineState else { encoder.endEncoding();return}
         encoder.setRenderPipelineState(pipelinestate)
         encoder.setVertexBuffer(self.vertice, offset: 0, index: 0)
         encoder.setFragmentTexture(texture, index: 0)

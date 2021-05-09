@@ -48,7 +48,7 @@ public class CokeVideoLayer:CAMetalLayer{
             result = outTexture
         }
         if let filter = self.videoFilter{
-            result = filter.filterTexture(pixel: [result!], w: Float(self.showSize.width)  * self.renderScale, h: Float(self.showSize.height) * self.renderScale)
+            result = filter.filterTexture(pixel: [result!], w: Float(self.showSize.width), h: Float(self.showSize.height))
         }
         return result
     }
@@ -102,7 +102,7 @@ public class CokeVideoLayer:CAMetalLayer{
         guard let draw = self.nextDrawable() else { return  }
         do {
             try self.render.configuration.begin()
-            self.render.ratio = Float(displayTexture.height) / Float(displayTexture.width)
+//            self.render.ratio = Float(displayTexture.height) / Float(displayTexture.width)
             try self.render.render(texture: displayTexture, drawable: draw)
             try self.render.configuration.commit()
         } catch {

@@ -10,14 +10,16 @@ import UIKit
 
 class DisplayViewController: UIViewController {
 
+    @IBOutlet weak var slider: UISlider!
     var img:UIImage?
     @IBOutlet weak var image: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.image.image = img
-        // Do any additional setup after loading the view.
+        self.slider.setMaximumTrackImage(UIImage(named: "o"), for: .normal)
+        self.slider.setMinimumTrackImage(UIImage(named: "k"), for: .normal)
+        self.slider.setThumbImage(UIImage(named: "t"), for: .normal)
     }
-    
 
     /*
     // MARK: - Navigation
