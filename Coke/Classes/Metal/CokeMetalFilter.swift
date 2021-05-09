@@ -14,6 +14,7 @@ public protocol CokeMetalFilter{
     func filterTexture(pixel:[MTLTexture],w:Float,h:Float)->MTLTexture?
 }
 public class CokeGaussBackgroundFilter:CokeMetalFilter{
+    public var hasBackground:Bool = true
     public func filter(pixel: CVPixelBuffer) -> CVPixelBuffer? {
         guard let px1 = self.Coke.configuration.createTexture(img: pixel) else { return nil }
         guard let px = self.filterTexture(pixel: [px1], w: self.w, h: self.h) else { return nil }
@@ -29,14 +30,25 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
                 let ow = Float(pixel.first!.width)
                 let oh = Float(pixel.first!.height)
                 let px1 = pixel.first!
+                if(w / h == ow / oh){
+                    return px1
+                }
                 guard let px2 = self.Coke.configuration.createTexture(width: Int(w), height: Int(h),store: .private) else { return nil }
                 guard let px3 = self.Coke.configuration.createTexture(width: Int(w), height: Int(h)) else { return nil }
                 try self.Coke.configuration.begin()
-                let psize =  MTLSize(width: Int(ow * max(h / oh , w / ow)), height: Int(oh * max(h / oh , w / ow)), depth: 1)
-                try self.Coke.compute(name: "imageScaleToFill", pixelSize:psize, buffers: [], textures: [px1,px2])
                 
-                self.blur.encode(commandBuffer: self.Coke.configuration.commandbuffer!, sourceTexture: px2, destinationTexture: px3)
-                try self.Coke.compute(name: "imageScaleToFit", pixelSize: psize, buffers: [], textures: [px1,px3])
+                let psize =  MTLSize(width: Int(ow * max(h / oh , w / ow)), height: Int(oh * max(h / oh , w / ow)), depth: 1)
+                
+                
+                if self.hasBackground{
+                    try self.Coke.compute(name: "imageScaleToFill", pixelSize:psize, buffers: [], textures: [px1,px2])
+                    
+                    self.blur.encode(commandBuffer: self.Coke.configuration.commandbuffer!, sourceTexture: px2, destinationTexture: px3)
+                    try self.Coke.compute(name: "imageScaleToFit", pixelSize: psize, buffers: [], textures: [px1,px3])
+                }else{
+                    try self.Coke.compute(name: "imageScaleToFit", pixelSize: psize, buffers: [], textures: [px1,px3])
+                }
+                
                 try self.Coke.configuration.commit()
                 return px3
                 

@@ -18,9 +18,11 @@ public class playViewController:UIViewController{
     var url:URL?
     var videoLoader:CokeVideoLoader?
     var player:CokeVideoPlayer?
+    var filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
     public override func viewDidLoad() {
         super.viewDidLoad()
-        self.videoView.videoLayer.videoFilter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
+        self.videoView.videoLayer.videoFilter = filter
+        
         guard let u = url else { return }
         do {
             self.videoLoader = try CokeVideoLoader(url: u)
@@ -32,7 +34,8 @@ public class playViewController:UIViewController{
         } catch  {
             
         }
-        
-        
+    }
+    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.filter?.hasBackground = !(self.filter?.hasBackground ?? false)
     }
 }
