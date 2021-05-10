@@ -52,7 +52,7 @@
 		A9A7C02A2644EA0300BA7557 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		A9A7C02E26454CBC00BA7557 /* DisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayViewController.swift; sourceTree = "<group>"; };
 		AE1540686FDBE993FCBC0274 /* Pods_Coke_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Coke_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		EAE707543F18CB0EC4B05745 /* Coke.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Coke.podspec; path = ../Coke.podspec; sourceTree = "<group>"; };
+		EAE707543F18CB0EC4B05745 /* Coke.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Coke.podspec; path = ../Coke.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

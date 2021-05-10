@@ -20,7 +20,7 @@ public class CokeVideoLayer:CAMetalLayer{
             if self.player != nil{
                 if self.timer == nil{
                     self.timer = CADisplayLink(target: self, selector: #selector(renderVideo))
-                    self.timer?.add(to: RunLoop.main, forMode: .common)
+                    self.timer?.add(to: RunLoop.main, forMode: .default)
                 }
                 self.device = self.render.configuration.device
             }else{

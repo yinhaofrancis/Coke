@@ -86,7 +86,8 @@ public class CokeSession:NSObject,URLSessionDataDelegate,URLSessionDownloadDeleg
     }
     public func head(url:URL,call:@escaping HandleDataComplete)->Int{
         var r = URLRequest(url: url)
-        r.httpMethod = "head"
+        r.httpMethod = "get"
+        r.setValue("bytes=\(0)-\(1)", forHTTPHeaderField: "Range")
         return self.data(request: r, dataComplete: call)
     }
     public func data(url:URL,range:ClosedRange<UInt64>? = nil,handleResponse: HandleResponse? = nil,dataComplete:@escaping HandleDataComplete)->Int{
@@ -288,4 +289,136 @@ extension HTTPURLResponse{
             return l
         }
     }
+}
+
+
+public class CokeCModel<T:AnyObject>{
+    public var content:T?
+    public init(content:T? = nil){
+        self.content = content
+    }
+}
+
+
+open class CokeRunloopSource<T:Any>{
+    private var context: CFRunLoopSourceContext?
+    
+    public var mode: CFRunLoopMode = .defaultMode
+    
+    public var runloop: CFRunLoop?
+    
+    open func start() {
+        print("start")
+    }
+    
+    open func end() {
+        print("end")
+    }
+    
+    open func perform() {
+        print("perform")
+    }
+    
+    public init(order:Int) throws {
+        self.model.content = self
+        pthread_mutex_init(self.mutex, nil)
+        pthread_cond_init(self.con, nil)
+        createRunloopSourceContext(info: &self.model)
+        try createRunloopSource(info: &self.model, order: order)
+    }
+    
+    private var model:CokeCModel<CokeRunloopSource> = CokeCModel()
+    
+    private var source: CFRunLoopSource!
+    
+    private var mutex:UnsafeMutablePointer<pthread_mutex_t> = .allocate(capacity: 1)
+    private var con:UnsafeMutablePointer<pthread_cond_t> = .allocate(capacity: 1)
+    
+}
+
+extension CokeRunloopSource {
+    public func createRunloopSourceContext(info:UnsafeMutableRawPointer){
+        var ctx = CFRunLoopSourceContext()
+        ctx.info = info
+        ctx.version = 0
+        ctx.perform = { i in
+            i?.assumingMemoryBound(to: CokeCModel<CokeRunloopSource<Any>>.self).pointee.content?.perform()
+        }
+        ctx.schedule = { i,r,m in
+            let p = i?.assumingMemoryBound(to: CokeCModel<CokeRunloopSource<Any>>.self).pointee.content
+            p?.runloop = r
+            p?.mode = m ?? .defaultMode
+            p?.start()
+        }
+        ctx.cancel = { i, r, m in
+            let p = i?.assumingMemoryBound(to: CokeCModel<CokeRunloopSource<Any>>.self).pointee
+            p?.content?.runloop = nil
+            p?.content?.end()
+            p?.content = nil
+        }
+        self.context = ctx
+    }
+    
+    public func createRunloopSource(info:UnsafeMutableRawPointer,order:Int) throws {
+        guard let source = CFRunLoopSourceCreate(kCFAllocatorDefault, order, &(self.context!)) else {
+            throw NSError(domain:" create runloop source fail", code: 0, userInfo: nil)
+        }
+        self.source = source
+    }
+    public func addRunloop(runloop:CFRunLoop,mode:RunLoop.Mode){
+        CFRunLoopAddSource(runloop, self.source, CFRunLoopMode(rawValue: mode.rawValue as CFString))
+    }
+    public func cancel(){
+        guard let rl = self.runloop else { return }
+        CFRunLoopRemoveSource(rl, self.source, mode)
+    }
+    public func signal(model:T){
+        guard let rl = self.runloop else { return }
+        if !CFRunLoopIsWaiting(rl){
+            pthread_cond_wait(self.con, self.mutex)
+        }
+        CFRunLoopSourceSignal(self.source)
+        CFRunLoopWakeUp(rl)
+    }
+    
+    
+}
+
+public class CokeRunloopObserver{
+    private var observerCtx:CFRunLoopObserverContext?
+    private var observer:CFRunLoopObserver!
+    private var model:CokeCModel<CokeRunloopObserver> = CokeCModel()
+    private var mode:CFRunLoopMode = .defaultMode
+    private var runloop:CFRunLoop?
+    func createRunloopObseverContext(info:UnsafeMutableRawPointer){
+        var ctx = CFRunLoopObserverContext()
+        ctx.info = info
+        ctx.version = 0
+        self.observerCtx = ctx
+    }
+    func createRunloopObsever(info:UnsafeMutableRawPointer,activity:CFRunLoopActivity,order:Int,call:@escaping ()->Void) throws {
+        self.observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault, activity.rawValue, true, order) { o, a in
+            call()
+        }
+        if self.observer == nil{
+            throw NSError(domain:" create runloop observer fail", code: 0, userInfo: nil)
+        }
+    }
+    
+    public func addRunloop(runloop:CFRunLoop,mode:RunLoop.Mode){
+        self.runloop = runloop
+        self.mode = CFRunLoopMode(rawValue: mode.rawValue as CFString)
+        CFRunLoopAddObserver(runloop, self.observer,self.mode)
+    }
+    public func cancel(){
+        guard let rl = self.runloop else { return }
+        CFRunLoopRemoveObserver(rl, self.observer, self.mode)
+        self.runloop = nil
+    }
+    public init(order:Int,activity:CFRunLoopActivity,call:@escaping ()->Void) throws{
+        self.model.content = self
+        self.createRunloopObseverContext(info: &self.model)
+        try self.createRunloopObsever(info: &self.model, activity: activity, order: order, call: call)
+    }
+    
 }
