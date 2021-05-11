@@ -109,15 +109,6 @@ public class CokePlayerViewController:UIViewController{
         s.minimumValue = 0
         return s
     }()
-    public var percent:Double{
-        get{
-            Double((self.item?.currentTime() ?? .zero).seconds / (self.item?.duration.seconds ?? 1))
-        }
-        set{
-            guard let sec = self.item?.duration.seconds else { return }
-            self.item?.seek(to:CMTime(seconds: newValue * sec, preferredTimescale: .max), toleranceBefore: CMTime(seconds: .zero, preferredTimescale: .max), toleranceAfter: CMTime(seconds: .zero, preferredTimescale: .max), completionHandler: nil)
-        }
-    }
     private func currentTime(time:CMTime){
         guard let s = self.item?.duration.seconds else { return }
         let p = time.seconds / s
@@ -160,7 +151,7 @@ public class CokePlayerViewController:UIViewController{
         self.player?.play()
     }
     @objc func slideAction(){
-        self.percent = Double(self.timeslider.value)
+        self.player?.percent = Double(self.timeslider.value)
     }
     deinit {
         guard let ob = self.observer else { return }

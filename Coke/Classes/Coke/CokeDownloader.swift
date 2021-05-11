@@ -56,7 +56,7 @@ public class CokeSessionDownloader{
         for i in rs {
             
             if !self.storage.complete(range: i){
-                print(i)
+//                print(i)
                 
                 let id = CokeSession.shared.data(url: self.url, range: i) { (resp) -> URLSession.ResponseDisposition in
                     guard let res = resp else { return .cancel }
@@ -69,7 +69,6 @@ public class CokeSessionDownloader{
                     
                 } handleData: { (data, resp, range) in
                     try? self.storage.saveData(data: data, index: range.lowerBound)
-                    try? self.storage.close()
                 } complete: { (resp, e) in
                     if e == nil{
                         guard let res = resp else { return }

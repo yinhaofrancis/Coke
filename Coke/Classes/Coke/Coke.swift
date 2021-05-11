@@ -167,7 +167,10 @@ public class CokeSession:NSObject,URLSessionDataDelegate,URLSessionDownloadDeleg
         }
     }
     public func cancel(identify:Int){
-        self.dataMap[identify]?.task.cancel()
+        self.queue.async(execute: DispatchWorkItem(qos: .userInteractive, flags: .barrier, block: {
+            self.dataMap[identify]?.task.cancel()
+        }))
+
     }
     public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         self.dataMap[task.taskIdentifier]?.handleComplete?(task.response as? HTTPURLResponse,error)

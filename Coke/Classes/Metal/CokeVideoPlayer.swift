@@ -42,5 +42,17 @@ public class CokeVideoPlayer:AVPlayer{
         }
         return nil
     }
+    public var percent:Double{
+        get{
+            Double((self.currentTime() ).seconds / (self.currentItem?.duration.seconds ?? 1))
+        }
+        set{
+            guard let sec = self.currentItem?.duration.seconds else { return }
+            let step = self.currentItem?.duration.seconds ?? 0 / 100.00
+            self.seek(to:CMTime(seconds: newValue * sec, preferredTimescale: .max), toleranceBefore: CMTime(seconds: step, preferredTimescale: .max), toleranceAfter: CMTime(seconds: step, preferredTimescale: .max), completionHandler: { b in
+                
+            })
+        }
+    }
     
 }

@@ -20,7 +20,7 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
         c?.scheme = "wvl"
         guard let url = c?.url else { return nil }
         let a = AVURLAsset(url: url)
-        a.resourceLoader.setDelegate(self, queue: DispatchQueue.global())
+        a.resourceLoader.setDelegate(self, queue: DispatchQueue(label: "CokeVideoLoader"))
         return a
     }
     public func image(se:TimeInterval,callback:@escaping (CGImage?)->Void){
@@ -61,13 +61,16 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
         if request.isFinished || request.isCancelled{
             return
         }
+        print(dataRequest.requestedOffset,dataRequest.requestedLength,dataRequest.currentOffset)
         if dataRequest.requestsAllDataToEndOfResource{
             if let data = self.downloader[UInt64(dataRequest.currentOffset)]{
                 dataRequest.respond(with: data)
                 request.finishLoading()
             }else{
+                let n :UInt64 = UInt64(dataRequest.currentOffset + 1024 * 1024 * 50)
+                let end = n > self.downloader.storage.size - 1 ? UInt64(self.downloader.storage.size - 1) : n
                 CokeSession.shared.beginGroup {
-                    try? self.downloader.download(range: UInt64(dataRequest.currentOffset) ... UInt64(dataRequest.currentOffset + 1024 * 1024))
+                    try? self.downloader.download(range: UInt64(dataRequest.currentOffset) ... end)
                 } notify: {
                     self.loadFileData(request: request)
                 }
