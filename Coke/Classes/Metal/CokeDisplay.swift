@@ -14,7 +14,7 @@ public class CokeVideoLayer:CAMetalLayer{
     }
 
     public var renderScale:Float = 1
-
+    public var queue = DispatchQueue(label: "CokeVideoLayer")
     public var player:CokeVideoPlayer?{
         didSet{
             if self.player != nil{
@@ -30,9 +30,12 @@ public class CokeVideoLayer:CAMetalLayer{
         }
     }
     @objc func renderVideo(){
+        
         if let pl = self.player,let item = pl.currentItem{
-            if let px = self.getCurrentPixelBuffer(),item.status == .readyToPlay{
-                self.render(px: px,transform: self.player?.currentPresentTransform ?? .identity)
+            self.queue.async {
+                if let px = self.getCurrentPixelBuffer(),item.status == .readyToPlay{
+                    self.render(px: px,transform: self.player?.currentPresentTransform ?? .identity)
+                }
             }
         }else{
             self.timer?.invalidate()

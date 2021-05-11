@@ -42,8 +42,9 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
                 
                 if self.hasBackground{
                     try self.Coke.compute(name: "imageScaleToFill", pixelSize:psize, buffers: [], textures: [px1,px2])
-                    
-                    self.blur.encode(commandBuffer: self.Coke.configuration.commandbuffer!, sourceTexture: px2, destinationTexture: px3)
+                    if let buffer = self.Coke.configuration.commandbuffer{
+                        self.blur.encode(commandBuffer: buffer, sourceTexture: px2, destinationTexture: px3)
+                    }
                     try self.Coke.compute(name: "imageScaleToFit", pixelSize: psize, buffers: [], textures: [px1,px3])
                 }else{
                     try self.Coke.compute(name: "imageScaleToFit", pixelSize: psize, buffers: [], textures: [px1,px3])

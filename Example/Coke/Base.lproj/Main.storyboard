@@ -165,19 +165,10 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1WB-tL-bgK">
                                 <rect key="frame" x="16" y="269" width="343" height="128"/>
                             </imageView>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Lm8-oi-Fb6">
-                                <rect key="frame" x="6" y="629" width="363" height="31"/>
-                                <color key="minimumTrackTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="maximumTrackTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="thumbTintColor" red="0.75294117650000003" green="0.61960784310000006" blue="0.25098039220000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </slider>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="1WB-tL-bgK" firstAttribute="centerY" secondItem="FU2-qQ-JYz" secondAttribute="centerY" id="0Xu-5c-Wjs"/>
-                            <constraint firstAttribute="trailing" secondItem="Lm8-oi-Fb6" secondAttribute="trailing" constant="8" id="1ft-HD-27n"/>
-                            <constraint firstItem="Lm8-oi-Fb6" firstAttribute="leading" secondItem="FU2-qQ-JYz" secondAttribute="leading" constant="8" id="QnK-x5-END"/>
-                            <constraint firstItem="rhk-ze-kQK" firstAttribute="top" secondItem="Lm8-oi-Fb6" secondAttribute="bottom" constant="8" id="Upz-Av-Xb2"/>
                             <constraint firstAttribute="trailingMargin" secondItem="1WB-tL-bgK" secondAttribute="trailing" id="UuA-Ng-lHP"/>
                             <constraint firstItem="1WB-tL-bgK" firstAttribute="leading" secondItem="FU2-qQ-JYz" secondAttribute="leadingMargin" id="sEc-Z7-HNK"/>
                         </constraints>
@@ -185,7 +176,6 @@
                     <navigationItem key="navigationItem" id="z1D-xU-PeR"/>
                     <connections>
                         <outlet property="image" destination="1WB-tL-bgK" id="DJ2-CN-pdw"/>
-                        <outlet property="slider" destination="Lm8-oi-Fb6" id="5J4-7C-OFU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zPZ-7c-pPb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
