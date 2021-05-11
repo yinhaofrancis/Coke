@@ -75,8 +75,8 @@ class ViewController: UITableViewController,UISearchBarDelegate {
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc:playViewController = self.storyboard?.instantiateViewController(withIdentifier: "player") as! playViewController
-        vc.url = self.data[indexPath.row].url
+        let vc:CokePlayerViewController = self.storyboard?.instantiateViewController(withIdentifier: "player") as! CokePlayerViewController
+        vc.play(url: self.data[indexPath.row].url)
         self.present(vc, animated: true, completion: nil)
     }
 

@@ -14,7 +14,7 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		93DCBEC8D3E49B7BCAB1C457 /* Pods_Coke_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE1540686FDBE993FCBC0274 /* Pods_Coke_Example.framework */; };
-		A94AF10B2646F4F2006F4931 /* playViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94AF10A2646F4F2006F4931 /* playViewController.swift */; };
+		A94AF10B2646F4F2006F4931 /* CokePlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94AF10A2646F4F2006F4931 /* CokePlayerViewController.swift */; };
 		A9A7C02B2644EA0300BA7557 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A7C02A2644EA0300BA7557 /* CameraViewController.swift */; };
 		A9A7C02F26454CBC00BA7557 /* DisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A7C02E26454CBC00BA7557 /* DisplayViewController.swift */; };
 		E387366D9CE4C4C48AC5DACE /* Pods_Coke_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C74AA0AC8F28578A0CBAAC0 /* Pods_Coke_Tests.framework */; };
@@ -48,7 +48,7 @@
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		634C475BECDCF909E2CFEEB2 /* Pods-Coke_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Coke_Tests.debug.xcconfig"; path = "Target Support Files/Pods-Coke_Tests/Pods-Coke_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		7EB7F9BC32B68738AE6B0C72 /* Pods-Coke_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Coke_Tests.release.xcconfig"; path = "Target Support Files/Pods-Coke_Tests/Pods-Coke_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		A94AF10A2646F4F2006F4931 /* playViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = playViewController.swift; sourceTree = "<group>"; };
+		A94AF10A2646F4F2006F4931 /* CokePlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokePlayerViewController.swift; sourceTree = "<group>"; };
 		A9A7C02A2644EA0300BA7557 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		A9A7C02E26454CBC00BA7557 /* DisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayViewController.swift; sourceTree = "<group>"; };
 		AE1540686FDBE993FCBC0274 /* Pods_Coke_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Coke_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,7 +115,7 @@
 				A9A7C02A2644EA0300BA7557 /* CameraViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				A9A7C02E26454CBC00BA7557 /* DisplayViewController.swift */,
-				A94AF10A2646F4F2006F4931 /* playViewController.swift */,
+				A94AF10A2646F4F2006F4931 /* CokePlayerViewController.swift */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
@@ -345,7 +345,7 @@
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				A9A7C02B2644EA0300BA7557 /* CameraViewController.swift in Sources */,
 				A9A7C02F26454CBC00BA7557 /* DisplayViewController.swift in Sources */,
-				A94AF10B2646F4F2006F4931 /* playViewController.swift in Sources */,
+				A94AF10B2646F4F2006F4931 /* CokePlayerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -33,10 +33,11 @@ class CameraViewController: UIViewController {
 //        exp.minimumValue = camera.
         self.camera.startCapture()
         self.camera.exposureMode = .continuousAutoExposure
+        
+        exp.maximumValue = Float(camera.maxExposureDuration) * 5
+        exp.minimumValue = Float(camera.minExposureDuration)
     }
     @IBAction func sliderAction(_ sender: UISlider) {
-        exp.maximumValue = Float(camera.maxExposureDuration)
-        exp.minimumValue = Float(camera.minExposureDuration)
         camera.exposure = CokeCamera.Exposure(iso: self.iso.value, during: TimeInterval(self.exp.value))
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
