@@ -52,32 +52,26 @@ public class CokeSessionDownloader{
         guard let ran = self.checkRange(range: range) else {
             throw NSError(domain: "out of range", code: 0, userInfo: nil)
         }
-        let rs = self.cutRange(range: ran)
-        for i in rs {
-            
-            if !self.storage.complete(range: i){
-//                print(i)
-                
-                let id = CokeSession.shared.data(url: self.url, range: i) { (resp) -> URLSession.ResponseDisposition in
-                    guard let res = resp else { return .cancel }
-                    if res.statusCode >= 200 && res.statusCode < 300{
-                        self.setMetaData(rep: res)
-                        return .allow
-                    }else{
-                        return .cancel
-                    }
-                    
-                } handleData: { (data, resp, range) in
-                    try? self.storage.saveData(data: data, index: range.lowerBound)
-                } complete: { (resp, e) in
-                    if e == nil{
-                        guard let res = resp else { return }
-                        self.setMetaData(rep: res)
-                        try? self.storage.close()
-                    }
+        if !self.storage.complete(range: ran){
+            let id = CokeSession.shared.data(url: self.url, range: range) { (resp) -> URLSession.ResponseDisposition in
+                guard let res = resp else { return .cancel }
+                if res.statusCode >= 200 && res.statusCode < 300{
+                    self.setMetaData(rep: res)
+                    return .allow
+                }else{
+                    return .cancel
                 }
-                self.downId[i] = id
+                
+            } handleData: { (data, resp, range) in
+                try? self.storage.saveData(data: data, index: range.lowerBound)
+            } complete: { (resp, e) in
+                if e == nil{
+                    guard let res = resp else { return }
+                    self.setMetaData(rep: res)
+                    try? self.storage.close()
+                }
             }
+            self.downId[ran] = id
         }
         
     }

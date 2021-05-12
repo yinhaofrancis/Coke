@@ -41,9 +41,9 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
     public func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
         DispatchQueue.global().async {
             if loadingRequest.contentInformationRequest != nil{
-                self.loadFileType(request: loadingRequest)
+                self.loadFileType(request: loadingRequest,noRecall: false)
             }else{
-                self.loadFileData(request: loadingRequest)
+                self.loadFileData(request: loadingRequest,noRecall: false)
             }
         }
         return true
@@ -56,12 +56,11 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
             self.downloader.cancel(range: UInt64(dataReq.requestedOffset)...UInt64(Int(dataReq.requestedOffset) + dataReq.requestedLength - 1))
         }
     }
-    func loadFileData(request:AVAssetResourceLoadingRequest) {
+    func loadFileData(request:AVAssetResourceLoadingRequest,noRecall:Bool) {
         guard let dataRequest = request.dataRequest else { return }
         if request.isFinished || request.isCancelled{
             return
         }
-        print(dataRequest.requestedOffset,dataRequest.requestedLength,dataRequest.currentOffset)
         if dataRequest.requestsAllDataToEndOfResource{
             if let data = self.downloader[UInt64(dataRequest.currentOffset)]{
                 dataRequest.respond(with: data)
@@ -72,7 +71,7 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
                 CokeSession.shared.beginGroup {
                     try? self.downloader.download(range: UInt64(dataRequest.currentOffset) ... end)
                 } notify: {
-                    self.loadFileData(request: request)
+                    self.loadFileData(request: request,noRecall: true)
                 }
 
             }
@@ -87,12 +86,12 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
                 CokeSession.shared.beginGroup {
                     try? self.downloader.download(range: r)
                 } notify: {
-                    self.loadFileData(request: request)
+                    self.loadFileData(request: request,noRecall: true)
                 }
             }
         }
     }
-    func loadFileType(request:AVAssetResourceLoadingRequest) {
+    func loadFileType(request:AVAssetResourceLoadingRequest,noRecall:Bool) {
         if(self.downloader.storage.size > 0){
             request.contentInformationRequest?.contentLength = Int64(self.downloader.storage.size)
             if(self.downloader.storage.resourceType.contains("video")){
@@ -119,7 +118,7 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
             CokeSession.shared.beginGroup {
                 self.downloader.prepare()
             } notify: {
-                self.loadFileType(request: request)
+                self.loadFileType(request: request,noRecall: true)
             }
 
         }

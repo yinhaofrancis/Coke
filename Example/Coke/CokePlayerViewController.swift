@@ -60,6 +60,7 @@ public class CokePlayerViewController:UIViewController{
     
     private var videoView:CokeVideoView = CokeVideoView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
     public private(set) var item:AVPlayerItem?
+    public var timer:Timer?
     public private(set) var videoLoader:CokeVideoLoader?
     public private(set) var player:CokeVideoPlayer?
     public private(set) var filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
@@ -77,15 +78,23 @@ public class CokePlayerViewController:UIViewController{
         self.videoView.videoLayer.videoFilter = filter
         self.view.addSubview(self.timeControl)
         let a = [
-            self.timeControl.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            self.timeControl.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            self.timeControl.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            self.timeControl.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,constant: 20),
+            self.timeControl.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,constant: -20),
+            self.timeControl.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,constant: -20)
         ]
+
+        self.timeControl.layer.masksToBounds = true;
+        self.timeControl.layer.cornerRadius = 8
+        self.timeControl.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         self.view .addConstraints(a)
         self.timeslider .addTarget(self, action: #selector(self.slideAction), for: .valueChanged)
         self.timeslider.addTarget(self, action: #selector(self.slideStart), for: .touchDown)
         self.timeslider.addTarget(self, action: #selector(self.slideEnd), for: .touchUpInside)
         self.timeslider.addTarget(self, action: #selector(self.slideEnd), for: .touchUpOutside)
+        self.timer?.invalidate()
+        self.timer = Timer .scheduledTimer(withTimeInterval: 2, repeats: false, block: {[weak self] t in
+            self?.timeControl.isHidden = true
+        })
     }
     private var observer:Any?
     lazy var timeControl:UIView = {
@@ -93,10 +102,10 @@ public class CokePlayerViewController:UIViewController{
         v.addSubview(self.timeslider)
         v.translatesAutoresizingMaskIntoConstraints = false
         let a = [
-            self.timeslider.leadingAnchor.constraint(equalTo: v.leadingAnchor),
-            self.timeslider.trailingAnchor.constraint(equalTo: v.trailingAnchor),
-            self.timeslider.topAnchor.constraint(equalTo: v.topAnchor),
-            self.timeslider.bottomAnchor.constraint(equalTo: v.bottomAnchor)
+            self.timeslider.leadingAnchor.constraint(equalTo: v.leadingAnchor,constant: -15),
+            self.timeslider.trailingAnchor.constraint(equalTo: v.trailingAnchor,constant: 15),
+            self.timeslider.topAnchor.constraint(equalTo: v.topAnchor,constant: -20),
+            self.timeslider.bottomAnchor.constraint(equalTo: v.bottomAnchor,constant: 20)
         ]
         v.addConstraints(a)
         return v
@@ -144,17 +153,34 @@ public class CokePlayerViewController:UIViewController{
     @objc func slideStart(){
         self.isseek = true
         self.player?.pause()
+        self.timer?.invalidate()
+        self.timeControl.isHidden = false
     }
     var isseek:Bool = false
     @objc func slideEnd(){
         self.isseek = false
         self.player?.play()
+        self.timer?.invalidate()
+        self.timer = Timer .scheduledTimer(withTimeInterval: 2, repeats: false, block: {[weak self] t in
+            self?.timeControl.isHidden = true
+        })
     }
     @objc func slideAction(){
         self.player?.percent = Double(self.timeslider.value)
+        self.timeControl.isHidden = false
     }
     deinit {
         guard let ob = self.observer else { return }
         self.player?.removeTimeObserver(ob)
     }
+    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.timer?.invalidate()
+        
+        super.touchesEnded(touches, with: event)
+        self.timeControl.isHidden = false
+        self.timer = Timer .scheduledTimer(withTimeInterval: 2, repeats: false, block: {[weak self] t in
+            self?.timeControl.isHidden = true
+        })
+    }
+    
 }
