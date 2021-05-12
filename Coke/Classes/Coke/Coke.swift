@@ -299,10 +299,23 @@ public class CokeCModel<T:AnyObject>{
     public var content:T?
     public init(content:T? = nil){
         self.content = content
-        let p = mach_thread_self()
     }
 }
 
-public class Port{
-    
+public class RunloopObserver{
+    public private(set) var observer:CFRunLoopObserver!
+    public init(activitys:CFRunLoopActivity,order:Int,repeatObserver:Bool,callback:@escaping (CFRunLoopActivity)->Void){
+        
+        let ob = CFRunLoopObserverCreateWithHandler(kCFAllocatorSystemDefault, activitys.rawValue, repeatObserver, order) { ob, ac in
+            callback(ac)
+        }
+        self.observer = ob
+    }
+    public func addRunloop(runloop:RunLoop,mode:RunLoop.Mode){
+        CFRunLoopAddObserver(runloop.getCFRunLoop(), self.observer, CFRunLoopMode(mode.rawValue as CFString))
+    }
+    public func removeRunloop(runloop:RunLoop,mode:RunLoop.Mode){
+        CFRunLoopRemoveObserver(runloop.getCFRunLoop(), self.observer, CFRunLoopMode(mode.rawValue as CFString))
+    }
+
 }

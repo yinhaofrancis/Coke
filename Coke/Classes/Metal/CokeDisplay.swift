@@ -7,7 +7,13 @@
 
 import Metal
 import AVFoundation
-
+extension RunLoop.Mode{
+    static var renderVideo:RunLoop.Mode = {
+        let m = RunLoop.Mode.init("CokeVideoLayerRenderVideo")
+        CFRunLoopAddCommonMode(CFRunLoopGetMain(), CFRunLoopMode(m.rawValue as CFString))
+        return m
+    }()
+}
 public class CokeVideoLayer:CAMetalLayer{
     public var showSize:CGSize{
         return CGSize(width: self.frame.size.width * UIScreen.main.scale , height: self.frame.size.height * UIScreen.main.scale)
