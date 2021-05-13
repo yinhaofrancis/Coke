@@ -6,12 +6,11 @@ import AVFoundation
 class Tests: XCTestCase,AVAssetDownloadDelegate {
     
     let exp = XCTestExpectation(description: "fix")
-    var thread:pthread_t?
-    var lock:UnsafeMutablePointer<pthread_mutex_t> = .allocate(capacity: 1)
+    var runloop:CokeRunloop? = CokeRunloop()
     
     override func setUpWithError() throws {
         try super.setUpWithError()
-        pthread_mutex_init(self.lock, nil)
+        
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
@@ -20,10 +19,20 @@ class Tests: XCTestCase,AVAssetDownloadDelegate {
         try super.tearDownWithError()
     }
     func app() {
-        
+        self.runloop?.runloop.perform(inModes: [.common]) {[weak self] in
+            print(self?.runloop?.runloop)
+        }
+        DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(3)) {
+            self.runloop = nil
+        }
     }
     func testExample() throws {
-        app()
+        DispatchQueue.global().async {
+            self.app()
+        }
         self.wait(for: [exp], timeout: 10000)
+    }
+    deinit {
+        
     }
 }
