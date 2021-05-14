@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 import Coke
 import AVKit
+import SwiftUI
 
 class Model:Codable{
     var name:String
@@ -28,7 +29,8 @@ class ViewController: UITableViewController,UISearchBarDelegate {
     public var data:[Model] = []
     public var url:URL?
     public var timer:Timer?
-    var runloopOb:RunloopObserver?
+    var runloopOb:CokeRunloopObserver?
+    var rl = CokeRunloop()
     override func viewDidLoad() {
         super.viewDidLoad()
         do {

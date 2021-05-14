@@ -71,7 +71,7 @@ public class CokeSessionDownloader{
                     try? self.storage.close()
                 }
             }
-            self.downId[ran] = id
+            self.downId[ran] = id.taskIdentifier
         }
         
     }
@@ -84,7 +84,7 @@ public class CokeSessionDownloader{
         }
         return ranges
     }
-    public func download( callback:@escaping()->Void){
+    public func download(callback:@escaping()->Void){
         if self.storage.isComplete{
             callback()
             return

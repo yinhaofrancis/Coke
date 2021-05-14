@@ -81,21 +81,21 @@ public class CokeSession:NSObject,URLSessionDataDelegate,URLSessionDownloadDeleg
         return URLSession(configuration: .ephemeral, delegate: self, delegateQueue: q)
     }()
    
-    public func data(url:URL,range:ClosedRange<UInt64>? = nil,handleResponse: HandleResponse? = nil ,handleData: @escaping HandleData,complete:@escaping HandleComplete)->Int{
+    public func data(url:URL,range:ClosedRange<UInt64>? = nil,handleResponse: HandleResponse? = nil ,handleData: @escaping HandleData,complete:@escaping HandleComplete)->URLSessionTask{
         return self.data(request: URLRequest(url: url), range: range ,handleResponse: handleResponse, handleData: handleData, complete: complete)
     }
-    public func head(url:URL,call:@escaping HandleDataComplete)->Int{
+    public func head(url:URL,call:@escaping HandleDataComplete)->URLSessionTask{
         var r = URLRequest(url: url)
         r.httpMethod = "get"
         r.setValue("bytes=\(0)-\(1)", forHTTPHeaderField: "Range")
         return self.data(request: r, dataComplete: call)
     }
-    public func data(url:URL,range:ClosedRange<UInt64>? = nil,handleResponse: HandleResponse? = nil,dataComplete:@escaping HandleDataComplete)->Int{
+    public func data(url:URL,range:ClosedRange<UInt64>? = nil,handleResponse: HandleResponse? = nil,dataComplete:@escaping HandleDataComplete)->URLSessionTask{
         let urlr = URLRequest(url: url)
         return self.data(request: urlr, range: range, handleResponse: handleResponse, dataComplete: dataComplete)
         
     }
-    public func data(request:URLRequest,range:ClosedRange<UInt64>? = nil,handleResponse: HandleResponse? = nil,handleData: @escaping HandleData,complete:@escaping HandleComplete)->Int{
+    public func data(request:URLRequest,range:ClosedRange<UInt64>? = nil,handleResponse: HandleResponse? = nil,handleData: @escaping HandleData,complete:@escaping HandleComplete)->URLSessionTask{
         group?.enter()
         var req = request
         if let r = range{
@@ -110,9 +110,9 @@ public class CokeSession:NSObject,URLSessionDataDelegate,URLSessionDownloadDeleg
                 task.resume()
             }
         }))
-        return task.taskIdentifier
+        return task
     }
-    public func data(request:URLRequest,range:ClosedRange<UInt64>? = nil,handleResponse:HandleResponse? = nil,dataComplete:@escaping HandleDataComplete)->Int{
+    public func data(request:URLRequest,range:ClosedRange<UInt64>? = nil,handleResponse:HandleResponse? = nil,dataComplete:@escaping HandleDataComplete)->URLSessionTask{
         group?.enter()
         
         var req = request
@@ -130,9 +130,9 @@ public class CokeSession:NSObject,URLSessionDataDelegate,URLSessionDownloadDeleg
                 task.resume()
             }
         }))
-        return task.taskIdentifier
+        return task
     }
-    public func file(request:URLRequest,range:ClosedRange<UInt64>? = nil,handle:@escaping HandleFile)->Int{
+    public func file(request:URLRequest,range:ClosedRange<UInt64>? = nil,handle:@escaping HandleFile)->URLSessionTask{
         group?.enter()
         
         var req = request
@@ -148,9 +148,9 @@ public class CokeSession:NSObject,URLSessionDataDelegate,URLSessionDownloadDeleg
                 task.resume()
             }
         }))
-        return task.taskIdentifier
+        return task
     }
-    public func file(url:URL,range:ClosedRange<UInt64>? = nil,handle:@escaping HandleFile)->Int{
+    public func file(url:URL,range:ClosedRange<UInt64>? = nil,handle:@escaping HandleFile)->URLSessionTask{
         let req = URLRequest(url: url)
         return self.file(request: req, range: range ,handle: handle)
     }
@@ -231,10 +231,19 @@ public class CokeSession:NSObject,URLSessionDataDelegate,URLSessionDownloadDeleg
             let g = DispatchGroup()
             self.groups.append(g)
             build()
-            self.groups.removeLast().notify(qos: .userInteractive, flags: .barrier, queue: self.queue, execute: notify)
+            self.groups.removeLast().notify(qos: .userInteractive, flags: .barrier, queue: self.queue,execute: notify)
         }))
     }
-    
+    public func beginGroup(@TaskBuild builder:@escaping ()->[URLSessionTask],notifier:@escaping ([URLSessionTask])->Void){
+        self.queue.async(execute: DispatchWorkItem(qos: .userInteractive, flags: .barrier, block: {
+            let g = DispatchGroup()
+            self.groups.append(g)
+            let tasks = builder()
+            self.groups.removeLast().notify(qos: .userInteractive, flags: .barrier, queue: self.queue) {
+                notifier(tasks)
+            }
+        }))
+    }
     private class WebSourceDownloadModel{
         var handleResponse:HandleResponse?
         var handleData:HandleData?
@@ -301,8 +310,75 @@ public class CokeCModel<T:AnyObject>{
         self.content = content
     }
 }
-
-public class RunloopObserver{
+public class CokeRunloop{
+    public private(set) var runloop:RunLoop!
+    public func close(){
+        CFRunLoopRemoveSource(self.runloop.getCFRunLoop(), self.source.cfsource, .commonModes)
+        CFRunLoopStop(self.runloop.getCFRunLoop())
+        pthread_mutex_destroy(self.lock)
+        self.lock.deallocate()
+    }
+    public init(){
+        self.model.content = self
+        var thread:pthread_t?
+        pthread_mutex_init(self.lock, nil)
+        pthread_mutex_lock(self.lock)
+        pthread_create(&thread, nil, { i in
+            let l = i.assumingMemoryBound(to: CokeRunloop.self)
+            l.pointee.runloop = RunLoop.current
+            pthread_setname_np("CokeRunloop")
+            
+            pthread_mutex_unlock(l.pointee.lock)
+            l.pointee.addSource()
+            l.pointee.model.content = nil
+            RunLoop.current.run()
+            return i
+        }, &self.model.content)
+        pthread_mutex_lock(self.lock)
+    }
+    private var model = CokeCModel<CokeRunloop>()
+    
+    private var lock = UnsafeMutablePointer<pthread_mutex_t>.allocate(capacity: 1)
+    
+    private lazy var source:CokeRunloopSource = {
+        return CokeRunloopSource { [weak self] in
+        
+        }
+    }()
+    private func addSource(){
+        CFRunLoopAddSource(self.runloop.getCFRunLoop(), self.source.cfsource, .commonModes)
+    }
+    deinit {
+        self.close()
+    }
+}
+public class CokeRunloopSource{
+    private var model = CokeCModel<CokeRunloopSource>()
+    
+    lazy var sourceContext:CFRunLoopSourceContext = {
+        var context = CFRunLoopSourceContext()
+        context.version = 0
+        context.info = withUnsafeMutableBytes(of: &self.model.content) { i in
+            return i.baseAddress
+        }
+       
+        context.perform = { i in
+            i?.assumingMemoryBound(to: CokeRunloopSource.self).pointee.perform()
+        }
+        return context
+    }()
+    public lazy var cfsource:CFRunLoopSource = {
+        CFRunLoopSourceCreate(kCFAllocatorSystemDefault, 0, &self.sourceContext)
+    }()
+    private var call:(()->Void)?
+    init(call:@escaping ()->Void) {
+        self.call = call
+    }
+    func perform(){
+        self.call?()
+    }
+}
+public class CokeRunloopObserver{
     public private(set) var observer:CFRunLoopObserver!
     public init(activitys:CFRunLoopActivity,order:Int,repeatObserver:Bool,callback:@escaping (CFRunLoopActivity)->Void){
         
@@ -317,5 +393,26 @@ public class RunloopObserver{
     public func removeRunloop(runloop:RunLoop,mode:RunLoop.Mode){
         CFRunLoopRemoveObserver(runloop.getCFRunLoop(), self.observer, CFRunLoopMode(mode.rawValue as CFString))
     }
-
+}
+@resultBuilder public struct TaskBuild{
+    public static func buildBlock(_ components: URLSessionTask...) -> [URLSessionTask] {
+        return components
+    }
+    public static func buildOptional(_ component: [URLSessionTask]?) -> [URLSessionTask] {
+        return component ?? []
+    }
+    public static func buildArray(_ components: [[URLSessionTask]]) -> [URLSessionTask] {
+        return components.flatMap { i in
+            return i
+        }
+    }
+    public static func buildFinalResult(_ component: [URLSessionTask]) -> [Int] {
+        return component.map{$0.taskIdentifier}
+    }
+    public static func buildEither(first component: [URLSessionTask]) -> [URLSessionTask] {
+        return component
+    }
+    public static func buildEither(second component: [URLSessionTask]) -> [URLSessionTask] {
+        return component
+    }
 }
