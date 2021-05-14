@@ -64,6 +64,14 @@ public class CokePlayerViewController:UIViewController{
     public private(set) var videoLoader:CokeVideoLoader?
     public private(set) var player:CokeVideoPlayer?
     public private(set) var filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
+    public override func viewDidAppear(_ animated: Bool) {
+        super .viewDidAppear(animated)
+        UIApplication.shared.isIdleTimerDisabled = false
+    }
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        UIApplication.shared.isIdleTimerDisabled = true
+    }
     public override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(self.videoView)
