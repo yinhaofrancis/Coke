@@ -11,7 +11,7 @@
         <!--Coke Player View Controller-->
         <scene sceneID="dEM-L3-5Ca">
             <objects>
-                <viewController storyboardIdentifier="player" id="zIH-R9-HcI" customClass="CokePlayerViewController" customModule="Coke_Example" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="player" id="zIH-R9-HcI" customClass="CokePlayerViewController" customModule="Coke" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="z1c-xO-w7L"/>
                         <viewControllerLayoutGuide type="bottom" id="Y9U-wN-Xez"/>
