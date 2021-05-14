@@ -21,6 +21,8 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
         guard let url = c?.url else { return nil }
         let a = AVURLAsset(url: url)
         a.resourceLoader.setDelegate(self, queue: DispatchQueue(label: "CokeVideoLoader"))
+        AVAssetImageGenerator(asset: a).generateCGImagesAsynchronously(forTimes: [NSValue(time: CMTime(seconds: 5, preferredTimescale: .max))]) { (t, i, tt, re, e) in
+        }
         return a
     }
     public func image(se:TimeInterval,callback:@escaping (CGImage?)->Void){

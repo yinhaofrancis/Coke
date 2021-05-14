@@ -45,23 +45,27 @@ class ViewController: UITableViewController,UISearchBarDelegate {
             
         }        
         self.actions = [
+            UITableViewRowAction(style: .destructive, title: "删除") { (a, index) in
+                self.tableView.performBatchUpdates {
+                    let u = self.data.remove(at: index.row).url
+                    self.tableView.deleteRows(at: [index], with: .automatic)
+                    try? self.saveData()
+                    try? CokeVideoLoader(url: u).downloader.storage.delete()
+                } completion: { (_) in
+                    
+                }
+            },
+            UITableViewRowAction(style: .normal, title: "复制") { (a, index) in
+                let u = self.data[index.row].url
+                UIPasteboard.general.url = u
+            },
             UITableViewRowAction(style: .normal, title: "下载") { (a, index) in
                 let u = self.data[index.row].url
                 try? CokeVideoLoader(url: u).downloader.download {
                     
                 }
-            },
-            UITableViewRowAction(style: .destructive, title: "删除") { (a, index) in
-            
-            self.tableView.performBatchUpdates {
-                let u = self.data.remove(at: index.row).url
-                self.tableView.deleteRows(at: [index], with: .automatic)
-                try? self.saveData()
-                try? CokeVideoLoader(url: u).downloader.storage.delete()
-            } completion: { (_) in
-                
             }
-        }]
+        ]
     }
 
     override func didReceiveMemoryWarning() {
