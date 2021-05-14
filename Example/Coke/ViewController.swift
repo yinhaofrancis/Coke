@@ -31,30 +31,6 @@ class ViewController: UITableViewController,UISearchBarDelegate {
     var runloopOb:RunloopObserver?
     override func viewDidLoad() {
         super.viewDidLoad()
-        CFRunLoopAddCommonMode(RunLoop.main.getCFRunLoop(), CFRunLoopMode("CC" as CFString))
-        self.runloopOb = RunloopObserver(activitys: [.allActivities], order: 0, repeatObserver: true, callback: { a in
-            print("--------------------------")
-            if a.contains(.afterWaiting){
-                print("afterWaiting")
-            }
-            if a.contains(.exit){
-                print("exit")
-            }
-            if a.contains(.beforeWaiting){
-                print("beforeWaiting")
-            }
-            if a.contains(.beforeSources){
-                print("beforeSource")
-            }
-            if a.contains(.beforeTimers){
-                print("beforeTimers")
-            }
-            if a.contains(.entry){
-                print("entry")
-            }
-            print("--------------------------")
-        })
-        self.runloopOb?.addRunloop(runloop: RunLoop.main, mode: .common)
         do {
             let url = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("back")
             self.url = url

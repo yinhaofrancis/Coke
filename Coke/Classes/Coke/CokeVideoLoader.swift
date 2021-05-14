@@ -66,7 +66,7 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
                 dataRequest.respond(with: data)
                 request.finishLoading()
             }else{
-                let n :UInt64 = UInt64(dataRequest.currentOffset + 1024 * 1024 * 50)
+                let n :UInt64 = UInt64(dataRequest.currentOffset + 1024 * 1024)
                 let end = n > self.downloader.storage.size - 1 ? UInt64(self.downloader.storage.size - 1) : n
                 CokeSession.shared.beginGroup {
                     try? self.downloader.download(range: UInt64(dataRequest.currentOffset) ... end)
