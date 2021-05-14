@@ -66,11 +66,11 @@ public class CokePlayerViewController:UIViewController{
     public private(set) var filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
     public override func viewDidAppear(_ animated: Bool) {
         super .viewDidAppear(animated)
-        UIApplication.shared.isIdleTimerDisabled = false
+        UIApplication.shared.isIdleTimerDisabled = true
     }
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        UIApplication.shared.isIdleTimerDisabled = true
+        UIApplication.shared.isIdleTimerDisabled = false
     }
     public override func viewDidLoad() {
         super.viewDidLoad()
