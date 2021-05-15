@@ -19,6 +19,7 @@ public class CokeVideoLayer:CAMetalLayer{
         return CGSize(width: self.frame.size.width * UIScreen.main.scale , height: self.frame.size.height * UIScreen.main.scale)
     }
 
+    public var ob:Any?
     public var renderScale:Float = 1
     public var queue = DispatchQueue(label: "CokeVideoLayer")
     public var player:CokeVideoPlayer?{
@@ -29,9 +30,15 @@ public class CokeVideoLayer:CAMetalLayer{
                     self.timer?.add(to: RunLoop.main, forMode: .default)
                 }
                 self.device = self.render.configuration.device
+                self.ob = NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player, queue: .main) { [weak self] n in
+                    self?.timer?.invalidate()
+                }
             }else{
                 self.timer?.invalidate()
                 self.timer = nil
+                guard let ob = self.ob else { return }
+                NotificationCenter.default.removeObserver(ob)
+                self.ob = nil
             }
         }
     }

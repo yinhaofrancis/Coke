@@ -303,13 +303,6 @@ extension HTTPURLResponse{
     }
 }
 
-
-public class CokeCModel<T:AnyObject>{
-    public var content:T?
-    public init(content:T? = nil){
-        self.content = content
-    }
-}
 public class CokeRunloop{
     public private(set) var runloop:RunLoop!
     public func close(){
@@ -319,24 +312,21 @@ public class CokeRunloop{
         self.lock.deallocate()
     }
     public init(){
-        self.model.content = self
         var thread:pthread_t?
         pthread_mutex_init(self.lock, nil)
         pthread_mutex_lock(self.lock)
         pthread_create(&thread, nil, { i in
-            let l = i.assumingMemoryBound(to: CokeRunloop.self)
-            l.pointee.runloop = RunLoop.current
+            let l = Unmanaged<CokeRunloop>.fromOpaque(i).takeUnretainedValue()
+            l.runloop = RunLoop.current
             pthread_setname_np("CokeRunloop")
             
-            pthread_mutex_unlock(l.pointee.lock)
-            l.pointee.addSource()
-            l.pointee.model.content = nil
+            pthread_mutex_unlock(l.lock)
+            l.addSource()
             RunLoop.current.run()
             return i
-        }, &self.model.content)
+        }, Unmanaged.passUnretained(self).toOpaque())
         pthread_mutex_lock(self.lock)
     }
-    private var model = CokeCModel<CokeRunloop>()
     
     private var lock = UnsafeMutablePointer<pthread_mutex_t>.allocate(capacity: 1)
     
@@ -353,15 +343,11 @@ public class CokeRunloop{
     }
 }
 public class CokeRunloopSource{
-    private var model = CokeCModel<CokeRunloopSource>()
     
     lazy var sourceContext:CFRunLoopSourceContext = {
         var context = CFRunLoopSourceContext()
         context.version = 0
-        context.info = withUnsafeMutableBytes(of: &self.model.content) { i in
-            return i.baseAddress
-        }
-       
+        context.info = Unmanaged.passUnretained(self).toOpaque()
         context.perform = { i in
             i?.assumingMemoryBound(to: CokeRunloopSource.self).pointee.perform()
         }
