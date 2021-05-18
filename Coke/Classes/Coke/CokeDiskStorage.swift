@@ -300,6 +300,7 @@ public class CokeDiskStorage:CokeStorage,CustomDebugStringConvertible {
                 let len = UnsafeMutablePointer<UInt64>.allocate(capacity: 1)
                 len.pointee = UInt64(headerd.count)
                 let data = Data(bytes: len, count: MemoryLayout<UInt64>.size)
+                len.deallocate()
                 write.write(data)
                 try CokeDiskStorage.close(file: write)
                 self.saveLock.signal()
