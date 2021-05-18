@@ -67,32 +67,7 @@ class ViewController: UITableViewController,UISearchBarDelegate {
             }
         ]
         
-        let a = CokeAttributeItem()
-        a.size = CGSize(width: 40, height: 40)
-        let b = NSMutableAttributedString()
-        let tmp = NSAttributedString(string: "\nddddeed",attributes: [.foregroundColor:UIColor.red])
-        b.append(tmp)
-        b.append(a.attributeString)
-        b.append(NSAttributedString(string: "aaaarrraa",attributes: [.foregroundColor:UIColor.red]))
-        b.append(tmp)
-        b.append(a.attributeString)
-        b.append(NSAttributedString(string: "aaaraaa",attributes: [.foregroundColor:UIColor.red]))
-        b.append(tmp)
-        b.append(a.attributeString)
-        b.append(NSAttributedString(string: "aaaawrweraa",attributes: [.foregroundColor:UIColor.red]))
         
-        
-        let c = try! CokeContext(width: 400, height: 300)
-        c.draw { c in
-            c.context.setFillColor(UIColor.white.cgColor)
-            c.context.fill(CGRect(x: 30, y: 40, width: 200, height: 200))
-            let frame = b.frame(ctx: c.context, rect: CGRect(x: 30, y: 40, width: 200, height: 200))
-            CTFrameDraw(frame, c.context)
-        }
-        c.renderImage { i in
-            let u = UIImage(cgImage: i!)
-            print(u)
-        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

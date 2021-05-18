@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VgT-9M-Pc5">
-    <device id="retina4_7" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="a5Q-Ls-9np">
+    <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
@@ -17,25 +17,25 @@
                         <viewControllerLayoutGuide type="bottom" id="Y9U-wN-Xez"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="AdW-Fl-dD8">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xa1-TC-rII" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="721" y="-847"/>
+            <point key="canvasLocation" x="966" y="-973"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="r8P-ZU-wzu">
             <objects>
                 <tableViewController id="kJj-Ga-zE5" customClass="ViewController" customModule="Coke_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="1PU-7s-LwT">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" searchBarStyle="minimal" placeholder="输入URL,多个URL用空格分开" showsCancelButton="YES" id="Qrg-Zb-lxb">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="51"/>
+                            <rect key="frame" x="0.0" y="0.0" width="428" height="51"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
                             <scopeButtonTitles>
@@ -48,21 +48,21 @@
                         </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" textLabel="h0a-Ta-j8H" detailTextLabel="k54-RP-IXA" style="IBUITableViewCellStyleSubtitle" id="szl-pB-FqL">
-                                <rect key="frame" x="0.0" y="75.5" width="375" height="55.5"/>
+                                <rect key="frame" x="0.0" y="75.333333969116211" width="428" height="55.666667938232422"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="szl-pB-FqL" id="rXQ-hH-pOJ">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="55.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="428" height="55.666667938232422"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="h0a-Ta-j8H">
-                                            <rect key="frame" x="16" y="10" width="33" height="20.5"/>
+                                            <rect key="frame" x="20" y="8.9999999999999982" width="33" height="20.333333333333332"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="k54-RP-IXA">
-                                            <rect key="frame" x="16" y="31.5" width="44" height="14.5"/>
+                                            <rect key="frame" x="19.999999999999996" y="31.333333333333332" width="43.666666666666664" height="14.333333333333334"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <nil key="textColor"/>
@@ -98,21 +98,21 @@
                         <viewControllerLayoutGuide type="bottom" id="rwM-qS-22g"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="swF-NK-CDH">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tAp-Sy-fBI" customClass="CokeCameraPreviewView" customModule="Coke">
-                                <rect key="frame" x="0.0" y="77" width="375" height="513"/>
+                                <rect key="frame" x="0.0" y="111" width="428" height="704"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="wKo-MI-ay4">
-                                <rect key="frame" x="6" y="637" width="363" height="31"/>
+                                <rect key="frame" x="6" y="862" width="416" height="31"/>
                                 <connections>
                                     <action selector="sliderAction:" destination="KHV-ZC-rCv" eventType="valueChanged" id="XOV-pj-daT"/>
                                 </connections>
                             </slider>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="LX0-PF-mkf" customClass="CokeSlider" customModule="Coke_Example" customModuleProvider="target">
-                                <rect key="frame" x="42" y="598" width="291" height="31"/>
+                                <rect key="frame" x="42" y="823" width="344" height="31"/>
                                 <connections>
                                     <action selector="sliderAction:" destination="KHV-ZC-rCv" eventType="valueChanged" id="r0o-cq-eCr"/>
                                 </connections>
@@ -159,11 +159,11 @@
                         <viewControllerLayoutGuide type="bottom" id="rhk-ze-kQK"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="FU2-qQ-JYz">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1WB-tL-bgK">
-                                <rect key="frame" x="16" y="269" width="343" height="128"/>
+                                <rect key="frame" x="20" y="269" width="388" height="128"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -182,12 +182,45 @@
             </objects>
             <point key="canvasLocation" x="1774" y="-409"/>
         </scene>
+        <!--Draw View Controller-->
+        <scene sceneID="M4a-Kn-VWy">
+            <objects>
+                <viewController id="a5Q-Ls-9np" customClass="DrawViewController" customModule="Coke_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="dOV-XW-X4k"/>
+                        <viewControllerLayoutGuide type="bottom" id="2Ks-Nw-F2U"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Lxl-qt-Qf3">
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TAb-gn-n8H" customClass="BackgroundRenderView" customModule="Coke">
+                                <rect key="frame" x="0.0" y="44" width="428" height="848"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="TAb-gn-n8H" firstAttribute="top" secondItem="dOV-XW-X4k" secondAttribute="bottom" id="Unm-zS-10x"/>
+                            <constraint firstAttribute="right" secondItem="TAb-gn-n8H" secondAttribute="right" id="lMG-Oi-ctQ"/>
+                            <constraint firstItem="2Ks-Nw-F2U" firstAttribute="top" secondItem="TAb-gn-n8H" secondAttribute="bottom" id="prg-2Q-s5T"/>
+                            <constraint firstItem="TAb-gn-n8H" firstAttribute="leading" secondItem="Lxl-qt-Qf3" secondAttribute="leading" id="tGm-5w-yvw"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="back" destination="TAb-gn-n8H" id="0Kr-I3-MG3"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pqK-7e-omx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1551.2" y="-393.55322338830587"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="mBe-Sp-fvQ">
             <objects>
                 <navigationController id="VgT-9M-Pc5" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="mhI-hO-kPq">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="428" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
