@@ -82,7 +82,6 @@ class ViewController: UITableViewController,UISearchBarDelegate {
                 
             }
         ]
-        AVSampleBufferDisplayLayer
         
     }
 

@@ -135,26 +135,28 @@ public class CokePlayerViewController:UIViewController{
         do {
             self.videoLoader = try CokeVideoLoader(url: url)
             guard let asset = self.videoLoader?.asset else { return }
-            self.item = AVPlayerItem(asset: asset)
-            self.player = CokeVideoPlayer(playerItem: self.item)
-            if let ob = self.observer{
-                self.player?.removeTimeObserver(ob)
-            }
-            self.observer = self.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.01, preferredTimescale: .max), queue: DispatchQueue.global(qos: .background), using: { [weak self]t in
-                
-                guard let ws = self else { return }
-                if ws.isseek == false{
-                    ws.currentTime(time: t)
-                }
-                
-                
-            })
-            self.videoView.videoLayer.cokePlayer = self.player
-            self.player?.play()
+            self.play(item: AVPlayerItem(asset: asset))
         } catch  {
             
         }
-        
+    }
+    public func play(item:AVPlayerItem){
+        self.item = item
+        self.player = CokeVideoPlayer(playerItem: self.item)
+        if let ob = self.observer{
+            self.player?.removeTimeObserver(ob)
+        }
+        self.observer = self.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.01, preferredTimescale: .max), queue: DispatchQueue.global(qos: .background), using: { [weak self]t in
+            
+            guard let ws = self else { return }
+            if ws.isseek == false{
+                ws.currentTime(time: t)
+            }
+            
+            
+        })
+        self.videoView.videoLayer.cokePlayer = self.player
+        self.player?.play()
     }
     @objc func slideStart(){
         self.isseek = true

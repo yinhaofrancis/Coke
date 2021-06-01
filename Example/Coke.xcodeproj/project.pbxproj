@@ -16,6 +16,7 @@
 		93DCBEC8D3E49B7BCAB1C457 /* Pods_Coke_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE1540686FDBE993FCBC0274 /* Pods_Coke_Example.framework */; };
 		A9A7C02F26454CBC00BA7557 /* DisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A7C02E26454CBC00BA7557 /* DisplayViewController.swift */; };
 		A9C31ABB265218EE000E55DF /* DrawViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C31ABA265218EE000E55DF /* DrawViewController.swift */; };
+		A9F03F0E26661F23006F752F /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F03F0D26661F22006F752F /* PhotosViewController.swift */; };
 		E387366D9CE4C4C48AC5DACE /* Pods_Coke_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C74AA0AC8F28578A0CBAAC0 /* Pods_Coke_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +50,7 @@
 		7EB7F9BC32B68738AE6B0C72 /* Pods-Coke_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Coke_Tests.release.xcconfig"; path = "Target Support Files/Pods-Coke_Tests/Pods-Coke_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		A9A7C02E26454CBC00BA7557 /* DisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayViewController.swift; sourceTree = "<group>"; };
 		A9C31ABA265218EE000E55DF /* DrawViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawViewController.swift; sourceTree = "<group>"; };
+		A9F03F0D26661F22006F752F /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 		AE1540686FDBE993FCBC0274 /* Pods_Coke_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Coke_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAE707543F18CB0EC4B05745 /* Coke.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Coke.podspec; path = ../Coke.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 /* End PBXFileReference section */
@@ -111,6 +113,7 @@
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
+				A9F03F0D26661F22006F752F /* PhotosViewController.swift */,
 				A9A7C02E26454CBC00BA7557 /* DisplayViewController.swift */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -342,6 +345,7 @@
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				A9C31ABB265218EE000E55DF /* DrawViewController.swift in Sources */,
 				A9A7C02F26454CBC00BA7557 /* DisplayViewController.swift in Sources */,
+				A9F03F0E26661F23006F752F /* PhotosViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
