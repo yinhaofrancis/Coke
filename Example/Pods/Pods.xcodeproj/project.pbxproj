@@ -17,10 +17,8 @@
 		27B7BAC04D6E5355370A6B990FFEE39B /* Coke-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = CC8972B3D41B2D54A9ABF157806B003F /* Coke-dummy.m */; };
 		2C1FC6CBB80AD69F3B8840EE0141D144 /* CokeAudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA0482209407231D2049A3A216BD710 /* CokeAudioRecorder.swift */; };
 		383CD1F08B579915ADF09613E2B1608A /* CokeRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82578554DFC529EF60003DD0A3A20E82 /* CokeRender.swift */; };
-		392DD98161E326D1DCD13810C7A4B441 /* CokeCameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F06538A1D8BAF4FA08E9578F134707EA /* CokeCameraPreviewView.swift */; };
 		3A25CA4E32A6D19F4ECEF49758B8764C /* CokeCookie.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA67252F4B9574FE1930C1322A49E7 /* CokeCookie.swift */; };
 		3D26A358880C2885D44F7308C05345B3 /* CokePlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4BAEE8A0144EA5D48CC06FB66D2219 /* CokePlayerViewController.swift */; };
-		5054A603D9C758B73F8425B5F7885684 /* CokeLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F330A3CA894CADD75A4CCBBF1BD4AB /* CokeLayer.swift */; };
 		54235339354BF01AA1100369B845ECD6 /* Coke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0A808C05FE81C3CBD23565A696A71C /* Coke.swift */; };
 		57BD580E56F35A18C8EE6F1E20FC6C3C /* CokeRender.metal in Sources */ = {isa = PBXBuildFile; fileRef = B3B4D14D48D0B89B232E840C67E4A3DD /* CokeRender.metal */; };
 		58B999DF11A3E22FA4E9EF2CFD1A3728 /* CokeText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034012923A104E72DF9E20F76A495601 /* CokeText.swift */; };
@@ -38,8 +36,6 @@
 		924E5587DE5DF4FEDCCFECCAB016BA8B /* CokeVideoGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC52810DDFE610696E038DE8F47939B /* CokeVideoGallery.swift */; };
 		93A45FBBE190251401A430BF05D19844 /* CokeMetalFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 913D90ABAACAC929C4CD107C7A4E0AD9 /* CokeMetalFilter.swift */; };
 		9AD6438F1F144D24978F36B0A7B96ECD /* CokeVideo.metal in Sources */ = {isa = PBXBuildFile; fileRef = EBF161818D9FB79DDC6445EB2C73AF74 /* CokeVideo.metal */; };
-		9DD992AEE5FA8DC66898B1178C7C153F /* CokeCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9C5716F39378FA912684A22BEFADF4 /* CokeCamera.swift */; };
-		A0CE81AF64DFBB7164AF99A59F7A0A98 /* LayerShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 6C5675638C23A0D429949DE2FE8319ED /* LayerShader.metal */; };
 		A555CFDDBE2096F917E799817A9EC8F1 /* CokeCompute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30369EA933293F389106DC6D855CD3EA /* CokeCompute.swift */; };
 		A7F990095039F2207EAC70F72D0002F5 /* CokeDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09834ECEBDFC3E2AE9FC6C1CD609ECE0 /* CokeDownloader.swift */; };
 		A9C31ABD26524256000E55DF /* BackgroundRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C31ABC26524256000E55DF /* BackgroundRenderView.swift */; };
@@ -95,17 +91,14 @@
 		61067855B958E90D98F1B8F90B67A3DA /* CokeAudioPlayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CokeAudioPlayer.swift; sourceTree = "<group>"; };
 		6155DA48460411CAB50017A96A93CD5F /* Pods-Coke_Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Coke_Tests-Info.plist"; sourceTree = "<group>"; };
 		680730FC470699FE94EEDDF660396A02 /* Pods-Coke_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Coke_Example-frameworks.sh"; sourceTree = "<group>"; };
-		6C5675638C23A0D429949DE2FE8319ED /* LayerShader.metal */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.metal; path = LayerShader.metal; sourceTree = "<group>"; };
 		6D3A0F08BEDF55DED861C391392EF692 /* Pods-Coke_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Coke_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		79F330A3CA894CADD75A4CCBBF1BD4AB /* CokeLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CokeLayer.swift; sourceTree = "<group>"; };
 		7D11C0433C68DD8563EAD08EF9EF44D7 /* Coke-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Coke-prefix.pch"; sourceTree = "<group>"; };
 		7E8AE58D262308165F0CD35E68C279AA /* Coke-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Coke-Info.plist"; sourceTree = "<group>"; };
 		82578554DFC529EF60003DD0A3A20E82 /* CokeRender.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CokeRender.swift; sourceTree = "<group>"; };
 		835416DA1214A597735316596B473AFD /* Coke.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Coke.modulemap; sourceTree = "<group>"; };
 		87A205B4BB1378BB83B076DE874FA4E7 /* CokeConfiguration.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CokeConfiguration.swift; sourceTree = "<group>"; };
 		8C98608D74EC55E4F1BAF279D2F34D43 /* CokeDiskStorage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CokeDiskStorage.swift; sourceTree = "<group>"; };
-		8C9C5716F39378FA912684A22BEFADF4 /* CokeCamera.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CokeCamera.swift; sourceTree = "<group>"; };
 		8D7CDA07EBC1D8E49579E98CA3D09BC4 /* Pods-Coke_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Coke_Tests.modulemap"; sourceTree = "<group>"; };
 		90CCAC810A467FE176EF04AD918CDD1C /* Pods-Coke_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Coke_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		90F8F65BD1D7661F703A2EBCD4C9CDA8 /* Coke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Coke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -130,7 +123,6 @@
 		E5FA2DDF101F3CC3C9B6FA388AF72F6D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		EB9DF9D797F75F5002DAF74FBBD1C251 /* Pods-Coke_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Coke_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		EBF161818D9FB79DDC6445EB2C73AF74 /* CokeVideo.metal */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.metal; path = CokeVideo.metal; sourceTree = "<group>"; };
-		F06538A1D8BAF4FA08E9578F134707EA /* CokeCameraPreviewView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CokeCameraPreviewView.swift; sourceTree = "<group>"; };
 		F26411D42C8B2C9E095322AFCFDA6F5C /* Pods-Coke_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Coke_Example-Info.plist"; sourceTree = "<group>"; };
 		F5803254368E165DF6DCE02000422E6C /* Pods_Coke_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Coke_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBBCE9B8DA30A75627E50CF791376847 /* Pods-Coke_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Coke_Example.modulemap"; sourceTree = "<group>"; };
@@ -170,7 +162,6 @@
 				30369EA933293F389106DC6D855CD3EA /* CokeCompute.swift */,
 				87A205B4BB1378BB83B076DE874FA4E7 /* CokeConfiguration.swift */,
 				4171B7420E06254C8D4C0A58BF0A8E7A /* CokeDisplay.swift */,
-				79F330A3CA894CADD75A4CCBBF1BD4AB /* CokeLayer.swift */,
 				913D90ABAACAC929C4CD107C7A4E0AD9 /* CokeMetalFilter.swift */,
 				82578554DFC529EF60003DD0A3A20E82 /* CokeRender.swift */,
 				15C929871B611D3D87BB3D18171BA134 /* CokeTextureRender.swift */,
@@ -286,16 +277,6 @@
 			path = "Example/Pods/Target Support Files/Coke";
 			sourceTree = "<group>";
 		};
-		70738F7392E52127768988E39AAE65C7 /* Camera */ = {
-			isa = PBXGroup;
-			children = (
-				8C9C5716F39378FA912684A22BEFADF4 /* CokeCamera.swift */,
-				F06538A1D8BAF4FA08E9578F134707EA /* CokeCameraPreviewView.swift */,
-			);
-			name = Camera;
-			path = Coke/Classes/Camera;
-			sourceTree = "<group>";
-		};
 		8C24A565B2CA34EE4AADF284DD144EA5 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
@@ -322,7 +303,6 @@
 			isa = PBXGroup;
 			children = (
 				8C24A565B2CA34EE4AADF284DD144EA5 /* Audio */,
-				70738F7392E52127768988E39AAE65C7 /* Camera */,
 				D7331C0D8A81409E62ABEBB71CEFE367 /* Coke */,
 				D3D3C43C69354066D2BF7F981F4AC215 /* CoreAnimation */,
 				0D6B468DBA4007B040BA111D971EC3A8 /* Metal */,
@@ -394,7 +374,6 @@
 			children = (
 				B3B4D14D48D0B89B232E840C67E4A3DD /* CokeRender.metal */,
 				EBF161818D9FB79DDC6445EB2C73AF74 /* CokeVideo.metal */,
-				6C5675638C23A0D429949DE2FE8319ED /* LayerShader.metal */,
 			);
 			path = shader;
 			sourceTree = "<group>";
@@ -565,8 +544,6 @@
 				F979606790C634D44270B5F88A378046 /* CokeAudioNode.swift in Sources */,
 				FF80157A8A178385C1976ACFB0C5C619 /* CokeAudioPlayer.swift in Sources */,
 				2C1FC6CBB80AD69F3B8840EE0141D144 /* CokeAudioRecorder.swift in Sources */,
-				9DD992AEE5FA8DC66898B1178C7C153F /* CokeCamera.swift in Sources */,
-				392DD98161E326D1DCD13810C7A4B441 /* CokeCameraPreviewView.swift in Sources */,
 				0D87D05031E5EB41A91F341FB653646C /* CokeCIVideo.swift in Sources */,
 				A555CFDDBE2096F917E799817A9EC8F1 /* CokeCompute.swift in Sources */,
 				1169E8143E3361CB87BB1BB14FE0811B /* CokeConfiguration.swift in Sources */,
@@ -575,7 +552,6 @@
 				702D76CD3246B6E175B12720F1D26E7D /* CokeDisplay.swift in Sources */,
 				A7F990095039F2207EAC70F72D0002F5 /* CokeDownloader.swift in Sources */,
 				8B758EB7CAABBCD082BAB649174F86F0 /* CokeHash.swift in Sources */,
-				5054A603D9C758B73F8425B5F7885684 /* CokeLayer.swift in Sources */,
 				93A45FBBE190251401A430BF05D19844 /* CokeMetalFilter.swift in Sources */,
 				3D26A358880C2885D44F7308C05345B3 /* CokePlayerViewController.swift in Sources */,
 				57BD580E56F35A18C8EE6F1E20FC6C3C /* CokeRender.metal in Sources */,
@@ -591,7 +567,6 @@
 				15E0EAF21D462D3B8A518A3DD876A331 /* CokeVideoPlayer.swift in Sources */,
 				143DAD4CCF97B418D19FBCAA9F1FE897 /* CokeVideoTrack.swift in Sources */,
 				8C6FE128A1E821EDEF05B9E8277491E3 /* CokeView.swift in Sources */,
-				A0CE81AF64DFBB7164AF99A59F7A0A98 /* LayerShader.metal in Sources */,
 				81F029CCE710A48D8B4E04D873492AE7 /* BackgroundRender.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

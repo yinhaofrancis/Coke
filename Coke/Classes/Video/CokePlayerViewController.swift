@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Coke
 import AVFoundation
 
 public class CokeSlider:UISlider{
@@ -43,7 +42,6 @@ public class CokeSlider:UISlider{
     }
     public lazy var thumbImg:UIImage? = {
         let ss:CGFloat = 12
-//        UIGraphicsBeginImageContextWithOptions(_ size: CGSize, _ opaque: Bool, _ scale: CGFloat)
         UIGraphicsBeginImageContextWithOptions(CGSize(width: self.thumbSize, height: self.thumbSize), false, UIScreen.main.scale)
         UIColor.white.setFill()
         let ctx = UIGraphicsGetCurrentContext()
@@ -58,7 +56,7 @@ public class CokeSlider:UISlider{
 
 public class CokePlayerViewController:UIViewController{
     
-    private var videoView:CokeVideoView = CokeVideoView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+    private var videoView:CokeVideoView<CokeVideoLayer> = CokeVideoView(frame: UIScreen.main.bounds)
     public private(set) var item:AVPlayerItem?
     public var timer:Timer?
     public private(set) var videoLoader:CokeVideoLoader?
@@ -151,7 +149,7 @@ public class CokePlayerViewController:UIViewController{
                 
                 
             })
-            self.videoView.videoLayer.player = self.player
+            self.videoView.videoLayer.cokePlayer = self.player
             self.player?.play()
         } catch  {
             

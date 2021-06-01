@@ -24,7 +24,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xa1-TC-rII" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="966" y="-973"/>
+            <point key="canvasLocation" x="805" y="-1062"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="r8P-ZU-wzu">
@@ -47,11 +47,11 @@
                             </connections>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" textLabel="h0a-Ta-j8H" detailTextLabel="k54-RP-IXA" style="IBUITableViewCellStyleSubtitle" id="szl-pB-FqL">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="detailButton" indentationWidth="10" reuseIdentifier="cell" editingAccessoryType="detailButton" textLabel="h0a-Ta-j8H" detailTextLabel="k54-RP-IXA" style="IBUITableViewCellStyleSubtitle" id="szl-pB-FqL">
                                 <rect key="frame" x="0.0" y="75.333333969116211" width="428" height="55.666667938232422"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="szl-pB-FqL" id="rXQ-hH-pOJ">
-                                    <rect key="frame" x="0.0" y="0.0" width="428" height="55.666667938232422"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="387.33333333333331" height="55.666667938232422"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="h0a-Ta-j8H">
@@ -78,109 +78,12 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="2Mm-Ub-LP8">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="rnb-3J-qlq">
-                            <connections>
-                                <segue destination="KHV-ZC-rCv" kind="show" id="BwW-zh-RZs"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="rnb-3J-qlq"/>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d8B-w7-gOf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="110" y="-393"/>
-        </scene>
-        <!--Camera View Controller-->
-        <scene sceneID="QAJ-Bd-XTO">
-            <objects>
-                <viewController id="KHV-ZC-rCv" customClass="CameraViewController" customModule="Coke_Example" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="utd-82-lFV"/>
-                        <viewControllerLayoutGuide type="bottom" id="rwM-qS-22g"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="swF-NK-CDH">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tAp-Sy-fBI" customClass="CokeCameraPreviewView" customModule="Coke">
-                                <rect key="frame" x="0.0" y="111" width="428" height="704"/>
-                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="wKo-MI-ay4">
-                                <rect key="frame" x="6" y="862" width="416" height="31"/>
-                                <connections>
-                                    <action selector="sliderAction:" destination="KHV-ZC-rCv" eventType="valueChanged" id="XOV-pj-daT"/>
-                                </connections>
-                            </slider>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="LX0-PF-mkf" customClass="CokeSlider" customModule="Coke_Example" customModuleProvider="target">
-                                <rect key="frame" x="42" y="823" width="344" height="31"/>
-                                <connections>
-                                    <action selector="sliderAction:" destination="KHV-ZC-rCv" eventType="valueChanged" id="r0o-cq-eCr"/>
-                                </connections>
-                            </slider>
-                        </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="tAp-Sy-fBI" firstAttribute="centerY" secondItem="swF-NK-CDH" secondAttribute="centerY" id="5ve-h4-BaP"/>
-                            <constraint firstItem="rwM-qS-22g" firstAttribute="top" secondItem="wKo-MI-ay4" secondAttribute="bottom" id="9kP-9F-ipi"/>
-                            <constraint firstAttribute="trailing" secondItem="LX0-PF-mkf" secondAttribute="trailing" constant="44" id="Bdt-hn-H9r"/>
-                            <constraint firstItem="LX0-PF-mkf" firstAttribute="leading" secondItem="swF-NK-CDH" secondAttribute="leading" constant="44" id="BeL-N0-51n"/>
-                            <constraint firstItem="wKo-MI-ay4" firstAttribute="leading" secondItem="swF-NK-CDH" secondAttribute="leading" constant="8" id="HUb-2Y-vZd"/>
-                            <constraint firstAttribute="trailing" secondItem="tAp-Sy-fBI" secondAttribute="trailing" id="MlG-2Z-2b0"/>
-                            <constraint firstItem="tAp-Sy-fBI" firstAttribute="leading" secondItem="swF-NK-CDH" secondAttribute="leading" id="bB3-PI-uUX"/>
-                            <constraint firstAttribute="trailing" secondItem="wKo-MI-ay4" secondAttribute="trailing" constant="8" id="c7q-bB-7Ro"/>
-                            <constraint firstItem="LX0-PF-mkf" firstAttribute="top" secondItem="tAp-Sy-fBI" secondAttribute="bottom" constant="8" id="hrg-nF-yK8"/>
-                            <constraint firstItem="wKo-MI-ay4" firstAttribute="top" secondItem="LX0-PF-mkf" secondAttribute="bottom" constant="9" id="two-ts-zSd"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="ikO-e1-nUU">
-                        <barButtonItem key="rightBarButtonItem" title="Item" id="RFr-WO-exD">
-                            <connections>
-                                <action selector="capture:" destination="KHV-ZC-rCv" id="ytL-Ew-ZcO"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="ccv" destination="tAp-Sy-fBI" id="iRl-v9-vbm"/>
-                        <outlet property="exp" destination="LX0-PF-mkf" id="iCX-ja-Ep7"/>
-                        <outlet property="iso" destination="wKo-MI-ay4" id="x1c-Ig-jsf"/>
-                        <segue destination="yCv-PU-B8g" kind="show" identifier="display" id="phf-FZ-vyY"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="vvt-Pg-SwX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="944.79999999999995" y="-403.44827586206901"/>
-        </scene>
-        <!--Display View Controller-->
-        <scene sceneID="4JA-vR-0cw">
-            <objects>
-                <viewController id="yCv-PU-B8g" customClass="DisplayViewController" customModule="Coke_Example" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="IVe-yw-4v5"/>
-                        <viewControllerLayoutGuide type="bottom" id="rhk-ze-kQK"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="FU2-qQ-JYz">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1WB-tL-bgK">
-                                <rect key="frame" x="20" y="269" width="388" height="128"/>
-                            </imageView>
-                        </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="1WB-tL-bgK" firstAttribute="centerY" secondItem="FU2-qQ-JYz" secondAttribute="centerY" id="0Xu-5c-Wjs"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="1WB-tL-bgK" secondAttribute="trailing" id="UuA-Ng-lHP"/>
-                            <constraint firstItem="1WB-tL-bgK" firstAttribute="leading" secondItem="FU2-qQ-JYz" secondAttribute="leadingMargin" id="sEc-Z7-HNK"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="z1D-xU-PeR"/>
-                    <connections>
-                        <outlet property="image" destination="1WB-tL-bgK" id="DJ2-CN-pdw"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="zPZ-7c-pPb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1774" y="-409"/>
         </scene>
         <!--Draw View Controller-->
         <scene sceneID="M4a-Kn-VWy">

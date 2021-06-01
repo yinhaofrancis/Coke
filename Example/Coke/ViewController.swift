@@ -10,7 +10,6 @@ import UIKit
 import AVFoundation
 import Coke
 import AVKit
-import SwiftUI
 
 class Model:Codable{
     var name:String
@@ -29,10 +28,19 @@ class ViewController: UITableViewController,UISearchBarDelegate {
     public var data:[Model] = []
     public var url:URL?
     public var timer:Timer?
+    public var window:UIWindow = UIWindow(frame: UIScreen.main.bounds)
+    public var dlayler:AVPlayerLayer = AVPlayerLayer()
+    public var player:AVPlayer?
     var runloopOb:CokeRunloopObserver?
     var rl = CokeRunloop()
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.window.makeKeyAndVisible()
+        self.window.isUserInteractionEnabled = false;
+        self.window.layer.addSublayer(dlayler)
+        self.window.isHidden = false
+        self.window.alpha = 1
+        dlayler.frame = UIScreen.main.bounds
         do {
             let url = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("back")
             self.url = url
@@ -64,9 +72,17 @@ class ViewController: UITableViewController,UISearchBarDelegate {
                 try? CokeVideoLoader(url: u).downloader.download {
                     
                 }
+            },
+            UITableViewRowAction(style: .normal, title: "Display") { (a, index) in
+                let u = self.data[index.row].url
+                let i = AVPlayerItem(asset: AVAsset(url: u))
+                self.player = AVPlayer(playerItem: i)
+                self.dlayler.player = self.player
+                self.player?.play()
+                
             }
         ]
-        
+        AVSampleBufferDisplayLayer
         
     }
 

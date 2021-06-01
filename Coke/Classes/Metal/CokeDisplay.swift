@@ -14,7 +14,45 @@ extension RunLoop.Mode{
         return m
     }()
 }
-public class CokeVideoLayer:CAMetalLayer{
+public protocol CokeVideoDisplayer{
+    var cokePlayer:CokeVideoPlayer? {get set}
+    func invalidate()
+    func basicConfig()
+    var videoFilter:CokeMetalFilter? { get set }
+}
+extension AVPlayerLayer:CokeVideoDisplayer{
+    public var videoFilter: CokeMetalFilter? {
+        get {
+            return nil
+        }
+        set {
+            
+        }
+    }
+    
+    
+    public var cokePlayer: CokeVideoPlayer? {
+        get{
+            return self.player as? CokeVideoPlayer
+        }
+        set{
+            self.player = newValue
+        }
+    }
+    
+    public func invalidate() {
+        
+    }
+    
+    public func basicConfig() {
+        
+    }
+    
+    
+}
+public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
+    public var videoFilter: CokeMetalFilter?
+    
     public var showSize:CGSize{
         return CGSize(width: self.frame.size.width * UIScreen.main.scale , height: self.frame.size.height * UIScreen.main.scale)
     }
@@ -22,15 +60,15 @@ public class CokeVideoLayer:CAMetalLayer{
     public var ob:Any?
     public var renderScale:Float = 1
     public var queue = DispatchQueue(label: "CokeVideoLayer")
-    public var player:CokeVideoPlayer?{
+    public var cokePlayer:CokeVideoPlayer?{
         didSet{
-            if self.player != nil{
+            if self.cokePlayer != nil{
                 if self.timer == nil{
                     self.timer = CADisplayLink(target: self, selector: #selector(renderVideo))
                     self.timer?.add(to: RunLoop.main, forMode: .default)
                 }
                 self.device = self.render.configuration.device
-                self.ob = NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player, queue: .main) { [weak self] n in
+                self.ob = NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.cokePlayer, queue: .main) { [weak self] n in
                     self?.timer?.invalidate()
                 }
             }else{
@@ -44,10 +82,10 @@ public class CokeVideoLayer:CAMetalLayer{
     }
     @objc func renderVideo(){
         
-        if let pl = self.player,let item = pl.currentItem{
+        if let pl = self.cokePlayer,let item = pl.currentItem{
             self.queue.async {
                 if let px = self.getCurrentPixelBuffer(),item.status == .readyToPlay{
-                    self.render(px: px,transform: self.player?.currentPresentTransform ?? .identity)
+                    self.render(px: px,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
                 }
             }
         }else{
@@ -69,7 +107,7 @@ public class CokeVideoLayer:CAMetalLayer{
         return result
     }
     func getCurrentPixelBuffer()->CVPixelBuffer?{
-        return self.player?.copyPixelbuffer()
+        return self.cokePlayer?.copyPixelbuffer()
     }
     public func clean(){
         self.render.vertice = nil
@@ -77,8 +115,6 @@ public class CokeVideoLayer:CAMetalLayer{
     lazy private var videoTransformFilter:CokeMetalFilter = {
         return CokeTransformFilter(configuration: .defaultConfiguration)!
     }()
-    
-    public var videoFilter:CokeMetalFilter?
     private var render:CokeTextureRender
     private var timer:CADisplayLink?
     
@@ -101,12 +137,10 @@ public class CokeVideoLayer:CAMetalLayer{
     required init?(coder: NSCoder) {
         self.render = CokeTextureRender(configuration: .defaultConfiguration)
         super.init(coder: coder)
-        self.contentsScale = UIScreen.main.scale;
     }
     public override init() {
         self.render = CokeTextureRender(configuration: .defaultConfiguration)
         super.init()
-        self.contentsScale = UIScreen.main.scale;
     }
     public func invalidate(){
         self.timer?.invalidate()
@@ -125,26 +159,31 @@ public class CokeVideoLayer:CAMetalLayer{
             return
         }
     }
+    public func basicConfig(){
+        self.pixelFormat = .bgra8Unorm_srgb
+        self.contentsScale = UIScreen.main.scale
+        self.rasterizationScale = UIScreen.main.scale
+    }
 }
 
-public class CokeVideoView:UIView{
+
+
+public class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
     public override class var layerClass: AnyClass{
-        return CokeVideoLayer.self
+        return layer.self
     }
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        self.videoLayer.pixelFormat = .bgra8Unorm_srgb
-        self.videoLayer.contentsScale = UIScreen.main.scale
-        self.videoLayer.rasterizationScale = UIScreen.main.scale
+        self.backgroundColor = UIColor.black
+        self.videoLayer.basicConfig()
     }
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.videoLayer.pixelFormat = .bgra8Unorm_srgb
-        self.videoLayer.contentsScale = UIScreen.main.scale
-        self.videoLayer.rasterizationScale = UIScreen.main.scale
+        self.backgroundColor = UIColor.black
+        self.videoLayer.basicConfig()
     }
-    public var videoLayer:CokeVideoLayer{
-        return self.layer as! CokeVideoLayer
+    public var videoLayer:layer{
+        return self.layer as! layer
     }
     deinit {
         self.videoLayer.invalidate()

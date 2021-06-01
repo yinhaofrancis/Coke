@@ -8,7 +8,7 @@
 import Foundation
 import VideoToolbox
 import AVFoundation
-public class CokeVideoEncoder:CokeCameraDelegate{
+public class CokeVideoEncoder{
     
     private struct Con{
         weak var ws:CokeVideoEncoder?
