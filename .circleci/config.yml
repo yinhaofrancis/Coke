@@ -11,6 +11,9 @@ jobs:
 
     steps:
       - checkout
+      - run: |
+          cd Example
+
       - run: pod install # Install CocoaPods dependencies
       - run: fastlane scan # Run tests using Fastlane
 
