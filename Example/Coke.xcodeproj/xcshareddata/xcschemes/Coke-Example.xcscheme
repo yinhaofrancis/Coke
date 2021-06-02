@@ -72,9 +72,10 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
-      enableGPUFrameCaptureMode = "3"
+      enableGPUFrameCaptureMode = "1"
       enableGPUShaderValidationMode = "2"
-      allowLocationSimulation = "YES">
+      allowLocationSimulation = "YES"
+      GPUProfilerEnabled = "No">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference

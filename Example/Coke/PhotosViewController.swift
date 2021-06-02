@@ -23,7 +23,7 @@ class PhotosViewController: UIViewController {
         ]
         list.translatesAutoresizingMaskIntoConstraints = false;
         self.view.addConstraints(c)
-        list.assets = CokePhoto.shared.asset()
+        list.assets = CokePhoto.shared.asset(type: .video)
         list.playCallback = {[weak self] i in
             if let item = i{
                 self?.play(item: item)
