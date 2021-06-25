@@ -35,7 +35,7 @@ public class CokeRender{
     public func begin(drawable:CAMetalDrawable) throws {
         let renderPass = MTLRenderPassDescriptor()
         renderPass.colorAttachments[0].clearColor = MTLClearColor(red: 1, green: 1, blue: 1, alpha: 1)
-        renderPass.colorAttachments[0].storeAction = .store
+        renderPass.colorAttachments[0].storeAction = .dontCare
         renderPass.colorAttachments[0].loadAction = .clear
         renderPass.colorAttachments[0].texture = drawable.texture
         renderPass.depthAttachment.clearDepth = 1.0

@@ -22,7 +22,7 @@ public class CokeMetalConfiguration{
         let device:MTLDevice? = MTLCreateSystemDefaultDevice()
         guard let dev = device else { throw NSError(domain: "can't create metal context", code: 0, userInfo: nil) }
         self.device = dev
-        guard let queue = dev.makeCommandQueue() else { throw NSError(domain: "can't create metal command queue", code: 0, userInfo: nil)}
+        guard let queue = dev.makeCommandQueue(maxCommandBufferCount: 2) else { throw NSError(domain: "can't create metal command queue", code: 0, userInfo: nil)}
         self.queue = queue
         try self.loadDefaultLibrary()
     }
@@ -40,7 +40,6 @@ public class CokeMetalConfiguration{
     public func commit() throws {
         self.commandbuffer?.commit()
         self.commandbuffer?.waitUntilCompleted()
-        self.commandbuffer = nil
         
     }
     

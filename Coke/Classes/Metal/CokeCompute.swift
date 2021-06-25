@@ -34,16 +34,11 @@ public class CokeComputer{
                 encoder.setBuffers(buffers, offsets: (0 ..< buffers.count).map({_ in 0}), range: 0 ..< buffers.count)
             }
             if let gsize = pixelSize{
-//                let maxX = Int(sqrt(Double(self.device.maxThreadsPerThreadgroup.width)))
-//                let maxY = Int(sqrt(Double(self.device.maxThreadsPerThreadgroup.height)))
-//                let x = Int(ceil(Float(gsize.width) / Float(maxX)))
-//                let y = Int(ceil(Float(gsize.height) / Float(maxY)))
-//                let s = MTLSize(width: x, height: y, depth: 1)
-//                encoder.dispatchThreadgroups(s, threadsPerThreadgroup: MTLSize(width: maxX, height: maxY, depth: 1))
                 let w = self.device.maxThreadsPerThreadgroup.width
                 let dw = Int(ceil(Double(gsize.width) / Double(w)))
                 let s = MTLSize(width: dw, height: gsize.height, depth: 1)
-                let g = MTLSize(width: w, height: 1, depth: 1)
+                let threadW = Int(ceil(Double(gsize.width / dw)))
+                let g = MTLSize(width: threadW, height: 1, depth: 1)
                 encoder.dispatchThreadgroups(s, threadsPerThreadgroup: g)
                 
             }
