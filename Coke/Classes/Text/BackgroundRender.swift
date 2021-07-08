@@ -85,7 +85,7 @@ public class CokeAttributeItem{
         p.lineSpacing = 0
         p.paragraphSpacing = 0
         p.paragraphSpacingBefore = 0
-        return NSAttributedString(string: "0", attributes: [
+        return NSAttributedString(string: "\u{FFFC}", attributes: [
             NSAttributedString.Key(kCTRunDelegateAttributeName as String):self.rundelegate as Any,
             .init("CokeAttributeItem"):self,
             .font:UIFont.systemFont(ofSize: 5),

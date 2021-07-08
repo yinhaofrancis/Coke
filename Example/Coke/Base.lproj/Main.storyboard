@@ -78,6 +78,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="2Mm-Ub-LP8">
+                        <barButtonItem key="leftBarButtonItem" title="Item" id="nlV-WP-gsD">
+                            <connections>
+                                <segue destination="a5Q-Ls-9np" kind="show" id="70Q-Ya-RYX"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="rnb-3J-qlq">
                             <connections>
                                 <segue destination="4my-is-ade" kind="show" id="yF6-4u-qx2"/>
@@ -121,7 +126,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TAb-gn-n8H" customClass="BackgroundRenderView" customModule="Coke">
-                                <rect key="frame" x="0.0" y="44" width="428" height="848"/>
+                                <rect key="frame" x="0.0" y="88" width="428" height="804"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                         </subviews>
@@ -133,13 +138,14 @@
                             <constraint firstItem="TAb-gn-n8H" firstAttribute="leading" secondItem="Lxl-qt-Qf3" secondAttribute="leading" id="tGm-5w-yvw"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="bjM-kz-zSh"/>
                     <connections>
                         <outlet property="back" destination="TAb-gn-n8H" id="0Kr-I3-MG3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pqK-7e-omx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1551.2" y="-393.55322338830587"/>
+            <point key="canvasLocation" x="-111" y="-1084"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="mBe-Sp-fvQ">

@@ -237,7 +237,7 @@ public class CokeTextImage:CokeRunDelegate{
 extension NSAttributedString{
     public class func runDelegate(run:CokeRunProtocol)->NSAttributedString{
         
-        return NSAttributedString(string: "0", attributes:
+        return NSAttributedString(string: String(NSTextAttachment.character), attributes:
                                     [
                                         .foregroundColor:UIColor.clear,
                                         NSAttributedString.Key(kCTRunDelegateAttributeName as String):run.runDelegate,

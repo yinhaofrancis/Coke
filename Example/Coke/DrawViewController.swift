@@ -76,12 +76,8 @@ class DrawViewController: UIViewController {
         a1.content = bt
         a1.backgroundColor = UIColor.lightGray.cgColor
         self.back.item = sum
-        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { i in
-            self.back.item = sum
-        })
         
         
     }
-    var timer:Timer?
 
 }
