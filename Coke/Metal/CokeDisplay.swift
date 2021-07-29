@@ -15,13 +15,21 @@ extension RunLoop.Mode{
         return m
     }()
 }
-public protocol CokeVideoDisplayer{
+public protocol CokeVideoDisplayer:AnyObject{
     var cokePlayer:CokeVideoPlayer? {get set}
     func invalidate()
     func basicConfig()
     var videoFilter:CokeMetalFilter? { get set }
+    func render(image:CGImageSource) throws
+    func render(data:Data)
 }
 extension AVPlayerLayer:CokeVideoDisplayer{
+    public func render(image: CGImageSource) throws {
+        guard let px = image.image(index: 0) else { return }
+        self.contentsGravity = CALayerContentsGravity.resizeAspect
+        self.contents = px
+    }
+    
     public var videoFilter: CokeMetalFilter? {
         get {
             return nil
@@ -30,7 +38,14 @@ extension AVPlayerLayer:CokeVideoDisplayer{
             
         }
     }
-    
+    public func render(data:Data){
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return }
+        do {
+            try self.render(image: source)
+        } catch {
+            print(error)
+        }
+    }
     
     public var cokePlayer: CokeVideoPlayer? {
         get{
@@ -48,8 +63,6 @@ extension AVPlayerLayer:CokeVideoDisplayer{
     public func basicConfig() {
         
     }
-    
-    
 }
 public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
     public var videoFilter: CokeMetalFilter?
@@ -197,6 +210,22 @@ extension CGImageSource{
 
 
 public class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
+    public var player:CokeVideoPlayer?{
+        get{
+            self.videoLayer.cokePlayer
+        }
+        set{
+            self.videoLayer.cokePlayer = newValue
+        }
+    }
+    public var filter:CokeMetalFilter?{
+        get{
+            return self.videoLayer.videoFilter
+        }
+        set{
+            self.videoLayer.videoFilter = newValue
+        }
+    }
     public override class var layerClass: AnyClass{
         return layer.self
     }
@@ -204,6 +233,9 @@ public class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
         super.init(frame: frame)
         self.backgroundColor = UIColor.black
         self.videoLayer.basicConfig()
+        
+        self.filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
+
     }
     public required init?(coder: NSCoder) {
         super.init(coder: coder)

@@ -55,13 +55,10 @@ public class CokeSlider:UISlider{
 
 
 public class CokePlayerViewController:UIViewController{
-    
-    private var videoView:CokeVideoView<CokeVideoLayer> = CokeVideoView(frame: UIScreen.main.bounds)
+    private var videoView:CokeVideoView<AVPlayerLayer> = CokeVideoView(frame: UIScreen.main.bounds)
     public private(set) var item:AVPlayerItem?
     public var timer:Timer?
     public private(set) var videoLoader:CokeVideoLoader?
-    public private(set) var player:CokeVideoPlayer?
-    public private(set) var filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
     public override func viewDidAppear(_ animated: Bool) {
         super .viewDidAppear(animated)
         UIApplication.shared.isIdleTimerDisabled = true
@@ -81,7 +78,6 @@ public class CokePlayerViewController:UIViewController{
         ]
         self.videoView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraints(vl)
-        self.videoView.videoLayer.videoFilter = filter
         self.view.addSubview(self.timeControl)
         let a = [
             self.timeControl.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,constant: 20),
@@ -145,11 +141,11 @@ public class CokePlayerViewController:UIViewController{
     }
     public func play(item:AVPlayerItem){
         self.item = item
-        self.player = CokeVideoPlayer(playerItem: self.item)
+        self.videoView.player = CokeVideoPlayer(playerItem: self.item)
         if let ob = self.observer{
-            self.player?.removeTimeObserver(ob)
+            self.videoView.player?.removeTimeObserver(ob)
         }
-        self.observer = self.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.01, preferredTimescale: .max), queue: DispatchQueue.global(qos: .background), using: { [weak self]t in
+        self.observer = self.videoView.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.01, preferredTimescale: .max), queue: DispatchQueue.global(qos: .background), using: { [weak self]t in
             
             guard let ws = self else { return }
             if ws.isseek == false{
@@ -158,31 +154,30 @@ public class CokePlayerViewController:UIViewController{
             
             
         })
-        self.videoView.videoLayer.cokePlayer = self.player
-        self.player?.play()
+        self.videoView.player?.play()
     }
     @objc func slideStart(){
         self.isseek = true
-        self.player?.pause()
+        self.videoView.player?.pause()
         self.timer?.invalidate()
         self.timeControl.isHidden = false
     }
     var isseek:Bool = false
     @objc func slideEnd(){
         self.isseek = false
-        self.player?.play()
+        self.videoView.player?.play()
         self.timer?.invalidate()
         self.timer = Timer .scheduledTimer(withTimeInterval: 2, repeats: false, block: {[weak self] t in
             self?.timeControl.isHidden = true
         })
     }
     @objc func slideAction(){
-        self.player?.percent = Double(self.timeslider.value)
+        self.videoView.player?.percent = Double(self.timeslider.value)
         self.timeControl.isHidden = false
     }
     deinit {
         guard let ob = self.observer else { return }
-        self.player?.removeTimeObserver(ob)
+        self.videoView.player?.removeTimeObserver(ob)
     }
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.timer?.invalidate()

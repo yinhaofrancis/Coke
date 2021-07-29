@@ -12,8 +12,6 @@ public class CokeVideoPlayer:AVPlayer{
     private var lastPixelBuffer:CVPixelBuffer?
     public var output = AVPlayerItemVideoOutput(pixelBufferAttributes: [
         kCVPixelBufferPixelFormatTypeKey as String:CokeConfig.videoColorFormat,
-//        kCVPixelBufferCGImageCompatibilityKey as String:true,
-//        kCVPixelBufferCGBitmapContextCompatibilityKey as String:true,
         kCVPixelBufferMetalCompatibilityKey as String:true
         
     ])
