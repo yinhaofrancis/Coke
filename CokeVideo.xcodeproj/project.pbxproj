@@ -1,0 +1,621 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A9D1C9B626B3086500F4421B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9B526B3086500F4421B /* AppDelegate.swift */; };
+		A9D1C9BA26B3086500F4421B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9B926B3086500F4421B /* ViewController.swift */; };
+		A9D1C9BD26B3086500F4421B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D1C9BB26B3086500F4421B /* Main.storyboard */; };
+		A9D1C9BF26B3086600F4421B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9D1C9BE26B3086600F4421B /* Assets.xcassets */; };
+		A9D1C9D526B308B100F4421B /* Coke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D1C9CE26B308B100F4421B /* Coke.framework */; };
+		A9D1C9D626B308B100F4421B /* Coke.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A9D1C9CE26B308B100F4421B /* Coke.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9D1CA0026B3093800F4421B /* CokeCompute.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9DC26B3093800F4421B /* CokeCompute.swift */; };
+		A9D1CA0126B3093800F4421B /* CokeConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9DD26B3093800F4421B /* CokeConfiguration.swift */; };
+		A9D1CA0226B3093800F4421B /* CokeTextureRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9DE26B3093800F4421B /* CokeTextureRender.swift */; };
+		A9D1CA0326B3093800F4421B /* CokeDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9DF26B3093800F4421B /* CokeDisplay.swift */; };
+		A9D1CA0426B3093800F4421B /* CokeMetalFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9E026B3093800F4421B /* CokeMetalFilter.swift */; };
+		A9D1CA0526B3093800F4421B /* CokeVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9E126B3093800F4421B /* CokeVideoPlayer.swift */; };
+		A9D1CA0626B3093800F4421B /* CokeRender.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9E326B3093800F4421B /* CokeRender.metal */; };
+		A9D1CA0726B3093800F4421B /* CokeVideo.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9E426B3093800F4421B /* CokeVideo.metal */; };
+		A9D1CA0826B3093800F4421B /* CokeVideoTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9E526B3093800F4421B /* CokeVideoTrack.swift */; };
+		A9D1CA0926B3093800F4421B /* CokeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9E626B3093800F4421B /* CokeView.swift */; };
+		A9D1CA0E26B3093800F4421B /* CokeVideoEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9EE26B3093800F4421B /* CokeVideoEncoder.swift */; };
+		A9D1CA0F26B3093800F4421B /* CokePlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9EF26B3093800F4421B /* CokePlayerViewController.swift */; };
+		A9D1CA1026B3093800F4421B /* CokeGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F026B3093800F4421B /* CokeGallery.swift */; };
+		A9D1CA1126B3093800F4421B /* CokeDiskStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F226B3093800F4421B /* CokeDiskStorage.swift */; };
+		A9D1CA1226B3093800F4421B /* Coke.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F326B3093800F4421B /* Coke.swift */; };
+		A9D1CA1326B3093800F4421B /* CokeSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F426B3093800F4421B /* CokeSecurity.swift */; };
+		A9D1CA1426B3093800F4421B /* CokeVideoLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F526B3093800F4421B /* CokeVideoLoader.swift */; };
+		A9D1CA1526B3093800F4421B /* CokeDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F626B3093800F4421B /* CokeDownloader.swift */; };
+		A9D1CA1626B3093800F4421B /* CokeCookie.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F726B3093800F4421B /* CokeCookie.swift */; };
+		A9D1CA1E26B30ADB00F4421B /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1CA1D26B30ADB00F4421B /* PhotosViewController.swift */; };
+		A9D1CA2026B30B6B00F4421B /* Launch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D1CA1F26B30B6B00F4421B /* Launch.storyboard */; };
+		A9D1CA2226B31DFE00F4421B /* CokeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1CA2126B31DFE00F4421B /* CokeConfig.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A9D1C9D326B308B100F4421B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A9D1C9AA26B3086500F4421B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9D1C9CD26B308B100F4421B;
+			remoteInfo = Coke;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A9D1C9DA26B308B100F4421B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A9D1C9D626B308B100F4421B /* Coke.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		A9D1C9B226B3086500F4421B /* CokeVideo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CokeVideo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D1C9B526B3086500F4421B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A9D1C9B926B3086500F4421B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A9D1C9BC26B3086500F4421B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A9D1C9BE26B3086600F4421B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A9D1C9C326B3086600F4421B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A9D1C9CE26B308B100F4421B /* Coke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Coke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9D1C9D126B308B100F4421B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A9D1C9DC26B3093800F4421B /* CokeCompute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeCompute.swift; sourceTree = "<group>"; };
+		A9D1C9DD26B3093800F4421B /* CokeConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeConfiguration.swift; sourceTree = "<group>"; };
+		A9D1C9DE26B3093800F4421B /* CokeTextureRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeTextureRender.swift; sourceTree = "<group>"; };
+		A9D1C9DF26B3093800F4421B /* CokeDisplay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeDisplay.swift; sourceTree = "<group>"; };
+		A9D1C9E026B3093800F4421B /* CokeMetalFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeMetalFilter.swift; sourceTree = "<group>"; };
+		A9D1C9E126B3093800F4421B /* CokeVideoPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeVideoPlayer.swift; sourceTree = "<group>"; };
+		A9D1C9E326B3093800F4421B /* CokeRender.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = CokeRender.metal; sourceTree = "<group>"; };
+		A9D1C9E426B3093800F4421B /* CokeVideo.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = CokeVideo.metal; sourceTree = "<group>"; };
+		A9D1C9E526B3093800F4421B /* CokeVideoTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeVideoTrack.swift; sourceTree = "<group>"; };
+		A9D1C9E626B3093800F4421B /* CokeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeView.swift; sourceTree = "<group>"; };
+		A9D1C9EE26B3093800F4421B /* CokeVideoEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeVideoEncoder.swift; sourceTree = "<group>"; };
+		A9D1C9EF26B3093800F4421B /* CokePlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokePlayerViewController.swift; sourceTree = "<group>"; };
+		A9D1C9F026B3093800F4421B /* CokeGallery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeGallery.swift; sourceTree = "<group>"; };
+		A9D1C9F226B3093800F4421B /* CokeDiskStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeDiskStorage.swift; sourceTree = "<group>"; };
+		A9D1C9F326B3093800F4421B /* Coke.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coke.swift; sourceTree = "<group>"; };
+		A9D1C9F426B3093800F4421B /* CokeSecurity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeSecurity.swift; sourceTree = "<group>"; };
+		A9D1C9F526B3093800F4421B /* CokeVideoLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeVideoLoader.swift; sourceTree = "<group>"; };
+		A9D1C9F626B3093800F4421B /* CokeDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeDownloader.swift; sourceTree = "<group>"; };
+		A9D1C9F726B3093800F4421B /* CokeCookie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeCookie.swift; sourceTree = "<group>"; };
+		A9D1CA1D26B30ADB00F4421B /* PhotosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
+		A9D1CA1F26B30B6B00F4421B /* Launch.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Launch.storyboard; sourceTree = "<group>"; };
+		A9D1CA2126B31DFE00F4421B /* CokeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeConfig.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A9D1C9AF26B3086500F4421B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D1C9D526B308B100F4421B /* Coke.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D1C9CB26B308B100F4421B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A9D1C9A926B3086500F4421B = {
+			isa = PBXGroup;
+			children = (
+				A9D1C9B426B3086500F4421B /* CokeVideo */,
+				A9D1C9CF26B308B100F4421B /* Coke */,
+				A9D1C9B326B3086500F4421B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A9D1C9B326B3086500F4421B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A9D1C9B226B3086500F4421B /* CokeVideo.app */,
+				A9D1C9CE26B308B100F4421B /* Coke.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A9D1C9B426B3086500F4421B /* CokeVideo */ = {
+			isa = PBXGroup;
+			children = (
+				A9D1CA1D26B30ADB00F4421B /* PhotosViewController.swift */,
+				A9D1C9B526B3086500F4421B /* AppDelegate.swift */,
+				A9D1C9B926B3086500F4421B /* ViewController.swift */,
+				A9D1C9BB26B3086500F4421B /* Main.storyboard */,
+				A9D1C9BE26B3086600F4421B /* Assets.xcassets */,
+				A9D1CA1F26B30B6B00F4421B /* Launch.storyboard */,
+				A9D1C9C326B3086600F4421B /* Info.plist */,
+			);
+			path = CokeVideo;
+			sourceTree = "<group>";
+		};
+		A9D1C9CF26B308B100F4421B /* Coke */ = {
+			isa = PBXGroup;
+			children = (
+				A9D1C9F126B3093800F4421B /* Coke */,
+				A9D1C9DB26B3093800F4421B /* Metal */,
+				A9D1C9ED26B3093800F4421B /* Video */,
+				A9D1C9D126B308B100F4421B /* Info.plist */,
+			);
+			path = Coke;
+			sourceTree = "<group>";
+		};
+		A9D1C9DB26B3093800F4421B /* Metal */ = {
+			isa = PBXGroup;
+			children = (
+				A9D1C9DC26B3093800F4421B /* CokeCompute.swift */,
+				A9D1C9DD26B3093800F4421B /* CokeConfiguration.swift */,
+				A9D1C9DE26B3093800F4421B /* CokeTextureRender.swift */,
+				A9D1C9DF26B3093800F4421B /* CokeDisplay.swift */,
+				A9D1C9E026B3093800F4421B /* CokeMetalFilter.swift */,
+				A9D1C9E126B3093800F4421B /* CokeVideoPlayer.swift */,
+				A9D1C9E226B3093800F4421B /* shader */,
+				A9D1C9E526B3093800F4421B /* CokeVideoTrack.swift */,
+				A9D1C9E626B3093800F4421B /* CokeView.swift */,
+				A9D1CA2126B31DFE00F4421B /* CokeConfig.swift */,
+			);
+			path = Metal;
+			sourceTree = "<group>";
+		};
+		A9D1C9E226B3093800F4421B /* shader */ = {
+			isa = PBXGroup;
+			children = (
+				A9D1C9E326B3093800F4421B /* CokeRender.metal */,
+				A9D1C9E426B3093800F4421B /* CokeVideo.metal */,
+			);
+			path = shader;
+			sourceTree = "<group>";
+		};
+		A9D1C9ED26B3093800F4421B /* Video */ = {
+			isa = PBXGroup;
+			children = (
+				A9D1C9EE26B3093800F4421B /* CokeVideoEncoder.swift */,
+				A9D1C9EF26B3093800F4421B /* CokePlayerViewController.swift */,
+				A9D1C9F026B3093800F4421B /* CokeGallery.swift */,
+			);
+			path = Video;
+			sourceTree = "<group>";
+		};
+		A9D1C9F126B3093800F4421B /* Coke */ = {
+			isa = PBXGroup;
+			children = (
+				A9D1C9F226B3093800F4421B /* CokeDiskStorage.swift */,
+				A9D1C9F326B3093800F4421B /* Coke.swift */,
+				A9D1C9F426B3093800F4421B /* CokeSecurity.swift */,
+				A9D1C9F526B3093800F4421B /* CokeVideoLoader.swift */,
+				A9D1C9F626B3093800F4421B /* CokeDownloader.swift */,
+				A9D1C9F726B3093800F4421B /* CokeCookie.swift */,
+			);
+			path = Coke;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		A9D1C9C926B308B100F4421B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		A9D1C9B126B3086500F4421B /* CokeVideo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D1C9C626B3086600F4421B /* Build configuration list for PBXNativeTarget "CokeVideo" */;
+			buildPhases = (
+				A9D1C9AE26B3086500F4421B /* Sources */,
+				A9D1C9AF26B3086500F4421B /* Frameworks */,
+				A9D1C9B026B3086500F4421B /* Resources */,
+				A9D1C9DA26B308B100F4421B /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9D1C9D426B308B100F4421B /* PBXTargetDependency */,
+			);
+			name = CokeVideo;
+			productName = CokeVideo;
+			productReference = A9D1C9B226B3086500F4421B /* CokeVideo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A9D1C9CD26B308B100F4421B /* Coke */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9D1C9D726B308B100F4421B /* Build configuration list for PBXNativeTarget "Coke" */;
+			buildPhases = (
+				A9D1C9C926B308B100F4421B /* Headers */,
+				A9D1C9CA26B308B100F4421B /* Sources */,
+				A9D1C9CB26B308B100F4421B /* Frameworks */,
+				A9D1C9CC26B308B100F4421B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Coke;
+			productName = Coke;
+			productReference = A9D1C9CE26B308B100F4421B /* Coke.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A9D1C9AA26B3086500F4421B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1250;
+				LastUpgradeCheck = 1250;
+				TargetAttributes = {
+					A9D1C9B126B3086500F4421B = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
+					A9D1C9CD26B308B100F4421B = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
+				};
+			};
+			buildConfigurationList = A9D1C9AD26B3086500F4421B /* Build configuration list for PBXProject "CokeVideo" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A9D1C9A926B3086500F4421B;
+			productRefGroup = A9D1C9B326B3086500F4421B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A9D1C9B126B3086500F4421B /* CokeVideo */,
+				A9D1C9CD26B308B100F4421B /* Coke */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A9D1C9B026B3086500F4421B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D1CA2026B30B6B00F4421B /* Launch.storyboard in Resources */,
+				A9D1C9BF26B3086600F4421B /* Assets.xcassets in Resources */,
+				A9D1C9BD26B3086500F4421B /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D1C9CC26B308B100F4421B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A9D1C9AE26B3086500F4421B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D1CA1E26B30ADB00F4421B /* PhotosViewController.swift in Sources */,
+				A9D1C9BA26B3086500F4421B /* ViewController.swift in Sources */,
+				A9D1C9B626B3086500F4421B /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D1C9CA26B308B100F4421B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9D1CA1526B3093800F4421B /* CokeDownloader.swift in Sources */,
+				A9D1CA0626B3093800F4421B /* CokeRender.metal in Sources */,
+				A9D1CA0726B3093800F4421B /* CokeVideo.metal in Sources */,
+				A9D1CA0E26B3093800F4421B /* CokeVideoEncoder.swift in Sources */,
+				A9D1CA0926B3093800F4421B /* CokeView.swift in Sources */,
+				A9D1CA1226B3093800F4421B /* Coke.swift in Sources */,
+				A9D1CA1426B3093800F4421B /* CokeVideoLoader.swift in Sources */,
+				A9D1CA2226B31DFE00F4421B /* CokeConfig.swift in Sources */,
+				A9D1CA0F26B3093800F4421B /* CokePlayerViewController.swift in Sources */,
+				A9D1CA0326B3093800F4421B /* CokeDisplay.swift in Sources */,
+				A9D1CA1026B3093800F4421B /* CokeGallery.swift in Sources */,
+				A9D1CA1326B3093800F4421B /* CokeSecurity.swift in Sources */,
+				A9D1CA1126B3093800F4421B /* CokeDiskStorage.swift in Sources */,
+				A9D1CA1626B3093800F4421B /* CokeCookie.swift in Sources */,
+				A9D1CA0126B3093800F4421B /* CokeConfiguration.swift in Sources */,
+				A9D1CA0826B3093800F4421B /* CokeVideoTrack.swift in Sources */,
+				A9D1CA0526B3093800F4421B /* CokeVideoPlayer.swift in Sources */,
+				A9D1CA0026B3093800F4421B /* CokeCompute.swift in Sources */,
+				A9D1CA0426B3093800F4421B /* CokeMetalFilter.swift in Sources */,
+				A9D1CA0226B3093800F4421B /* CokeTextureRender.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A9D1C9D426B308B100F4421B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9D1C9CD26B308B100F4421B /* Coke */;
+			targetProxy = A9D1C9D326B308B100F4421B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A9D1C9BB26B3086500F4421B /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A9D1C9BC26B3086500F4421B /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A9D1C9C426B3086600F4421B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A9D1C9C526B3086600F4421B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A9D1C9C726B3086600F4421B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 27ZYBRBPV8;
+				INFOPLIST_FILE = CokeVideo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.CokeVideo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A9D1C9C826B3086600F4421B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 27ZYBRBPV8;
+				INFOPLIST_FILE = CokeVideo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.CokeVideo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A9D1C9D826B308B100F4421B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 27ZYBRBPV8;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Coke/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.Coke;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		A9D1C9D926B308B100F4421B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 27ZYBRBPV8;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Coke/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.Coke;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A9D1C9AD26B3086500F4421B /* Build configuration list for PBXProject "CokeVideo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D1C9C426B3086600F4421B /* Debug */,
+				A9D1C9C526B3086600F4421B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9D1C9C626B3086600F4421B /* Build configuration list for PBXNativeTarget "CokeVideo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D1C9C726B3086600F4421B /* Debug */,
+				A9D1C9C826B3086600F4421B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9D1C9D726B308B100F4421B /* Build configuration list for PBXNativeTarget "Coke" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D1C9D826B308B100F4421B /* Debug */,
+				A9D1C9D926B308B100F4421B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A9D1C9AA26B3086500F4421B /* Project object */;
+}
