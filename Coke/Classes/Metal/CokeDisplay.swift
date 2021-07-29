@@ -156,7 +156,6 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         guard let draw = self.nextDrawable() else { return  }
         do {
             try self.render.configuration.begin()
-//            self.render.ratio = Float(displayTexture.height) / Float(displayTexture.width)
             try self.render.render(texture: displayTexture, drawable: draw)
             try self.render.configuration.commit()
         } catch {

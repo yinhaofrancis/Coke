@@ -15,6 +15,10 @@ public class CokeTextureRender {
         public var location:simd_float4
         public var texture:simd_float2
     }
+    public struct WorldState{
+        public var world:simd_float4x4
+        public var camera:simd_float4x4
+    }
     public let configuration:CokeMetalConfiguration
     private let pipelineDescriptor:MTLRenderPipelineDescriptor
     private var pipelineState:MTLRenderPipelineState?
@@ -27,12 +31,11 @@ public class CokeTextureRender {
         
         self.pipelineDescriptor = pipelineDesc
         pipelineDesc.vertexDescriptor = self.vertexDescriptor;
+        self.scale(x: 0.9, y: 0.9, z: 1)
     }
     public var screenSize:CGSize = CGSize(width: 320, height: 480)
 
     public var rectangle:[vertex] {
-//        let w:Float = 1
-//        let h = Float(screenSize.width) / Float(screenSize.height) * ratio;
         let w:Float = 1
         let h:Float = 1
         return [
@@ -42,11 +45,16 @@ public class CokeTextureRender {
             vertex(location: simd_float4(-w, -h, 0, 1), texture: simd_float2(0, 1))
         ]
     }
+    public var worldState:WorldState = {
+        return WorldState(world: simd_float4x4(1), camera: simd_float4x4(1))
+    }()
     public var vertice:MTLBuffer?
-    
     
     public lazy var indexVertice:MTLBuffer? = {
         return self.configuration.device.makeBuffer(bytes: rectangleIndex, length: rectangleIndex.count * MemoryLayout<UInt32>.size, options: .storageModeShared)
+    }()
+    public lazy var stateBuffer:MTLBuffer? = {
+        return self.configuration.device.makeBuffer(bytes: &self.worldState, length: MemoryLayout.stride(ofValue: self.worldState), options: .storageModeShared)
     }()
     public lazy var samplerState:MTLSamplerState? = {
         let sample = MTLSamplerDescriptor()
@@ -74,7 +82,7 @@ public class CokeTextureRender {
         ]
     }
     
-    private var vp:MTLViewport?
+    private var viewPort:MTLViewport?
     public func render(image:CGImage,drawable:CAMetalDrawable) throws{
         
         let text = try MTKTextureLoader.init(device: self.configuration.device).newTexture(cgImage: image, options: nil)
@@ -92,17 +100,18 @@ public class CokeTextureRender {
         renderPass.colorAttachments[0].texture = drawable.texture
         
         guard let encoder = self.configuration.commandbuffer?.makeRenderCommandEncoder(descriptor: renderPass) else { throw NSError(domain: "start encoder fail", code: 0, userInfo: nil)}
-        if self.vp == nil{
-            self.vp = MTLViewport(originX: 0, originY: 0, width: Double(self.screenSize.width), height: Double(self.screenSize.height)
+        if self.viewPort == nil{
+            self.viewPort = MTLViewport(originX: 0, originY: 0, width: Double(self.screenSize.width), height: Double(self.screenSize.height)
                                   , znear: -1, zfar: 1)
         }
-        encoder.setViewport(self.vp!)
+        encoder.setViewport(self.viewPort!)
         if self.pipelineState == nil{
             self.pipelineState = try configuration.device.makeRenderPipelineState(descriptor: self.pipelineDescriptor)
         }
         guard let pipelinestate = self.pipelineState else { encoder.endEncoding();return}
         encoder.setRenderPipelineState(pipelinestate)
         encoder.setVertexBuffer(self.vertice, offset: 0, index: 0)
+        encoder.setVertexBuffer(self.stateBuffer, offset: 0, index: 1)
         encoder.setFragmentTexture(texture, index: 0)
         encoder.setFragmentSamplerState(self.samplerState, index: 0)
         if let indexb = self.indexVertice{
@@ -110,6 +119,15 @@ public class CokeTextureRender {
         }
         encoder.endEncoding()
         self.configuration.commandbuffer?.present(drawable)
+    }
+    public func scale(x:Float,y:Float,z:Float){
+        let a = simd_float4x4([
+            SIMD4(x,0,0,0),
+            SIMD4(0,y,0,0),
+            SIMD4(0,0,z,0),
+            SIMD4(0,0,0,1),
+        ])
+        self.worldState.world = a
     }
 }
 
