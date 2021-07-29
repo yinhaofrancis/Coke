@@ -165,5 +165,17 @@ class ViewController: UITableViewController,UISearchBarDelegate {
             throw error
         }
     }
+    
+    @IBAction func show(_ sender: Any) {
+        let vc:CokePlayerViewController = self.storyboard?.instantiateViewController(withIdentifier: "player") as! CokePlayerViewController
+        
+        self.present(vc, animated: true, completion: nil)
+        DispatchQueue.global().async {
+            let data = try! Data(contentsOf: URL(string: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpayposter.com%2Fposter_preview%2F1920x1200-hd-48029943.jpg&refer=http%3A%2F%2Fpayposter.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1630144314&t=31bae1063c7752ea541f3f1d97b08c64")!)
+            DispatchQueue.main.async {
+                vc.showImage(data: data)
+            }
+        }
+    }
 }
 

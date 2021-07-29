@@ -7,6 +7,7 @@
 
 import Metal
 import AVFoundation
+import MetalKit
 extension RunLoop.Mode{
     static var renderVideo:RunLoop.Mode = {
         let m = RunLoop.Mode.init("CokeVideoLayerRenderVideo")
@@ -147,6 +148,9 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
     }
     public func render(px:CVPixelBuffer,transform:CGAffineTransform){
         guard let texture = self.render.configuration.createTexture(img: px) else { return }
+        self.render(texture: texture, transform: transform)
+    }
+    public func render(texture:MTLTexture,transform:CGAffineTransform){
         guard let displayTexture = self.transformTexture(texture: texture,transform: transform) else { return }
         self.render.screenSize = self.showSize;
         guard let draw = self.nextDrawable() else { return  }
@@ -159,13 +163,38 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
             return
         }
     }
+    public func render(image:CGImageSource) throws {
+        guard let px = image.image(index: 0) else { return }
+        let text = try MTKTextureLoader.init(device: self.render.configuration.device).newTexture(cgImage: px, options: nil)
+        self.render(texture:text , transform: .identity)
+    }
+    public func render(data:Data){
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return }
+        do {
+            try self.render(image: source)
+        } catch {
+            print(error)
+        }
+    }
+
     public func basicConfig(){
         self.pixelFormat = .bgra8Unorm_srgb
         self.contentsScale = UIScreen.main.scale
         self.rasterizationScale = UIScreen.main.scale
     }
 }
-
+extension CGImageSource{
+    public var orientation:CGImagePropertyOrientation{
+        let i = CGImageSourceCopyProperties(self, nil)! as! Dictionary<CFString,UInt32>
+        return CGImagePropertyOrientation(rawValue: i[kCGImagePropertyOrientation] ?? 0)!
+    }
+    public func image(index:Int)->CGImage?{
+        guard let cgimg = CGImageSourceCreateImageAtIndex(self, index, nil) else{
+            return nil
+        }
+        return cgimg
+    }
+}
 
 
 public class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{

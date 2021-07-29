@@ -80,7 +80,7 @@
                     <navigationItem key="navigationItem" id="2Mm-Ub-LP8">
                         <barButtonItem key="leftBarButtonItem" title="Item" id="nlV-WP-gsD">
                             <connections>
-                                <segue destination="a5Q-Ls-9np" kind="show" id="70Q-Ya-RYX"/>
+                                <action selector="show:" destination="kJj-Ga-zE5" id="KZO-MN-SWn"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="rnb-3J-qlq">
@@ -112,40 +112,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jhL-fM-aHB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="955" y="-394"/>
-        </scene>
-        <!--Draw View Controller-->
-        <scene sceneID="M4a-Kn-VWy">
-            <objects>
-                <viewController id="a5Q-Ls-9np" customClass="DrawViewController" customModule="Coke_Example" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="dOV-XW-X4k"/>
-                        <viewControllerLayoutGuide type="bottom" id="2Ks-Nw-F2U"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Lxl-qt-Qf3">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TAb-gn-n8H" customClass="BackgroundRenderView" customModule="Coke">
-                                <rect key="frame" x="0.0" y="88" width="428" height="804"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="TAb-gn-n8H" firstAttribute="top" secondItem="dOV-XW-X4k" secondAttribute="bottom" id="Unm-zS-10x"/>
-                            <constraint firstAttribute="right" secondItem="TAb-gn-n8H" secondAttribute="right" id="lMG-Oi-ctQ"/>
-                            <constraint firstItem="2Ks-Nw-F2U" firstAttribute="top" secondItem="TAb-gn-n8H" secondAttribute="bottom" id="prg-2Q-s5T"/>
-                            <constraint firstItem="TAb-gn-n8H" firstAttribute="leading" secondItem="Lxl-qt-Qf3" secondAttribute="leading" id="tGm-5w-yvw"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="bjM-kz-zSh"/>
-                    <connections>
-                        <outlet property="back" destination="TAb-gn-n8H" id="0Kr-I3-MG3"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="pqK-7e-omx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-111" y="-1084"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="mBe-Sp-fvQ">

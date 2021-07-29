@@ -140,6 +140,9 @@ public class CokePlayerViewController:UIViewController{
             
         }
     }
+    public func showImage(data:Data){
+        self.videoView.videoLayer.render(data: data)
+    }
     public func play(item:AVPlayerItem){
         self.item = item
         self.player = CokeVideoPlayer(playerItem: self.item)
