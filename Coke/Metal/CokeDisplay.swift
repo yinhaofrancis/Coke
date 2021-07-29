@@ -210,6 +210,9 @@ extension CGImageSource{
 
 
 public class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
+
+    public var videoLoader:CokeVideoLoader?
+    
     public var player:CokeVideoPlayer?{
         get{
             self.videoLayer.cokePlayer
@@ -247,5 +250,19 @@ public class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
     }
     deinit {
         self.videoLayer.invalidate()
+    }
+    public func play(url:URL) {
+        do {
+            self.videoLoader = try CokeVideoLoader(url: url)
+            guard let asset = self.videoLoader?.asset else { return }
+            self.play(item: AVPlayerItem(asset: asset))
+            
+        } catch  {
+            
+        }
+    }
+    public func play(item:AVPlayerItem){
+        self.player = CokeVideoPlayer(playerItem: item)
+        self.player?.play()
     }
 }

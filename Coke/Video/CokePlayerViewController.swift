@@ -56,9 +56,11 @@ public class CokeSlider:UISlider{
 
 public class CokePlayerViewController:UIViewController{
     private var videoView:CokeVideoView<AVPlayerLayer> = CokeVideoView(frame: UIScreen.main.bounds)
-    public private(set) var item:AVPlayerItem?
+    public var item:AVPlayerItem?{
+        self.videoView.player?.currentItem
+    }
     public var timer:Timer?
-    public private(set) var videoLoader:CokeVideoLoader?
+    
     public override func viewDidAppear(_ animated: Bool) {
         super .viewDidAppear(animated)
         UIApplication.shared.isIdleTimerDisabled = true
@@ -123,38 +125,26 @@ public class CokePlayerViewController:UIViewController{
     private func currentTime(time:CMTime){
         guard let s = self.item?.duration.seconds else { return }
         let p = time.seconds / s
-        DispatchQueue.main.async {
-            self.timeslider.value = Float(p)
-        }
-    }
-    public func play(url:URL) {
-        do {
-            self.videoLoader = try CokeVideoLoader(url: url)
-            guard let asset = self.videoLoader?.asset else { return }
-            self.play(item: AVPlayerItem(asset: asset))
-        } catch  {
-            
-        }
-    }
-    public func showImage(data:Data){
-        self.videoView.videoLayer.render(data: data)
+        self.timeslider.value = Float(p)
     }
     public func play(item:AVPlayerItem){
-        self.item = item
-        self.videoView.player = CokeVideoPlayer(playerItem: self.item)
+        self.videoView.play(item: item)
+    }
+    public func play(url:URL) {
+        self.videoView.play(url: url)
         if let ob = self.observer{
             self.videoView.player?.removeTimeObserver(ob)
         }
-        self.observer = self.videoView.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.01, preferredTimescale: .max), queue: DispatchQueue.global(qos: .background), using: { [weak self]t in
+        self.observer = self.videoView.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.01, preferredTimescale: .max), queue: DispatchQueue.main, using: { [weak self]t in
             
             guard let ws = self else { return }
             if ws.isseek == false{
                 ws.currentTime(time: t)
             }
-            
-            
         })
-        self.videoView.player?.play()
+    }
+    public func showImage(data:Data){
+        self.videoView.videoLayer.render(data: data)
     }
     @objc func slideStart(){
         self.isseek = true
