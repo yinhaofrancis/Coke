@@ -25,8 +25,8 @@ public class CokeTextureRender {
     public init(configuration:CokeMetalConfiguration = CokeMetalConfiguration.defaultConfiguration)  {
         self.configuration = configuration
         let pipelineDesc = MTLRenderPipelineDescriptor()
-        pipelineDesc.vertexFunction = configuration.shaderLibrary.makeFunction(name: "vertexShader")
-        pipelineDesc.fragmentFunction = configuration.shaderLibrary.makeFunction(name: "fragmentShader")
+        pipelineDesc.vertexFunction = configuration.function(name: "vertexShader")
+        pipelineDesc.fragmentFunction = configuration.function(name: "fragmentShader")
         pipelineDesc.colorAttachments[0].pixelFormat = CokeConfig.metalColorFormat
         
         self.pipelineDescriptor = pipelineDesc

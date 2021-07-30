@@ -14,6 +14,8 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
     
     public init(url:URL) throws {
         self.downloader = try CokeSessionDownloader(url: url)
+        super.init()
+        self.image(se: 3,6,9) { _ in }
     }
     public var asset:AVAsset?{
         var c = URLComponents(string: self.downloader.url.absoluteString)
@@ -21,7 +23,6 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
         guard let url = c?.url else { return nil }
         let a = AVURLAsset(url: url)
         a.resourceLoader.setDelegate(self, queue: DispatchQueue(label: "CokeVideoLoader"))
-        self.image(se: 3,6,9) { _ in }
         return a
     }
     public func image(se:TimeInterval...,callback:@escaping (CGImage?)->Void){

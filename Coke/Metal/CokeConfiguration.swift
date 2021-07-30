@@ -16,9 +16,7 @@ public class CokeMetalConfiguration{
     public var device:MTLDevice
     public var queue:MTLCommandQueue
     
-    public var commandbuffer:MTLCommandBuffer?
-    
-    
+    public var commandbuffer:MTLCommandBuffer?    
     public init() throws{
         let device:MTLDevice? = MTLCreateSystemDefaultDevice()
         guard let dev = device else { throw NSError(domain: "can't create metal context", code: 0, userInfo: nil) }
@@ -40,10 +38,19 @@ public class CokeMetalConfiguration{
     
     public func commit() throws {
         self.commandbuffer?.commit()
-        self.commandbuffer?.waitUntilCompleted()
-        
+//        self.commandbuffer?.waitUntilCompleted()
     }
-    
+    public func function(name:String)->MTLFunction?{
+        if let a = self.map[name]{
+            return a
+        }else{
+            guard let f = self.shaderLibrary.makeFunction(name: name) else { return nil }
+
+            self.map[name] = f
+            return f
+        }
+    }
+    private var map:Map<String,MTLFunction> = Map()
     
     public static var defaultConfiguration:CokeMetalConfiguration{
         return try! CokeMetalConfiguration()
@@ -85,8 +92,6 @@ public class CokeMetalConfiguration{
     
     public func createCVPixelBuffer(img:CGImage)->CVPixelBuffer?{
         let option = [
-//            kCVPixelBufferCGImageCompatibilityKey:true,
-//            kCVPixelBufferCGBitmapContextCompatibilityKey:true,
             kCVPixelBufferMetalCompatibilityKey:true,
             kCVPixelBufferPixelFormatTypeKey:CokeConfig.videoColorFormat,
         ] as [CFString : Any]
@@ -138,5 +143,35 @@ public class CokeMetalConfiguration{
     public func createTexture(img:CGImage)->MTLTexture?{
         guard let a = self.createCVPixelBuffer(img: img) else { return nil }
         return self.createTexture(img: a)
+    }
+}
+public class Map<K:Hashable,V>{
+    private var dic:Dictionary<K,V> = Dictionary()
+    private var rw:UnsafeMutablePointer<pthread_rwlock_t> = .allocate(capacity: 1)
+    
+    public init(){
+        pthread_rwlock_init(self.rw, nil)
+    }
+    public subscript(key:K)->V?{
+        get{
+            pthread_rwlock_rdlock(self.rw)
+            let n = dic
+            pthread_rwlock_unlock(self.rw)
+            return n[key]
+        }
+        set{
+            pthread_rwlock_wrlock(self.rw)
+            self.dic[key] = newValue
+            pthread_rwlock_unlock(self.rw)
+        }
+    }
+    deinit {
+        pthread_rwlock_destroy(self.rw)
+        self.rw.deallocate()
+    }
+    public func clean(){
+        pthread_rwlock_wrlock(self.rw)
+        self.dic.removeAll()
+        pthread_rwlock_unlock(self.rw)
     }
 }

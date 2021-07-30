@@ -31,10 +31,10 @@ open class CokeView:UIView{
         }
     }
     public override class var layerClass: AnyClass{
-        if CokeView.memory() < 1200{
-            return AVPlayerLayer.self
-        }else{
+        if CokeView.useMetal{
             return CokeVideoLayer.self
+        }else{
+            return AVPlayerLayer.self
         }
     }
     public override init(frame: CGRect) {
@@ -80,6 +80,51 @@ open class CokeView:UIView{
         let mem_free:natural_t = vm_stat.free_count * UInt32(pagesize);
         let mem_total:natural_t  = mem_used + mem_free;
         return Double(mem_total) / 1024.0 / 1024.0;
+    }
+    public static var machine:String{
+        var ts = utsname()
+        uname(&ts)
+        return Mirror(reflecting: ts.machine).children.reduce(into: "") { r, i in
+            r.append(String(UnicodeScalar(UInt8(i.value as? Int8 ?? 0))))
+        }
+    }
+    public static var sysname:String{
+        var ts = utsname()
+        uname(&ts)
+        return Mirror(reflecting: ts.sysname).children.reduce(into: "") { r, i in
+            r.append(String(UnicodeScalar(UInt8(i.value as? Int8 ?? 0))))
+        }
+    }
+    public static var version:String{
+        var ts = utsname()
+        uname(&ts)
+        return Mirror(reflecting: ts.version).children.reduce(into: "") { r, i in
+            r.append(String(UnicodeScalar(UInt8(i.value as? Int8 ?? 0))))
+        }
+    }
+    public static var nodename:String{
+        var ts = utsname()
+        uname(&ts)
+        return Mirror(reflecting: ts.nodename).children.reduce(into: "") { r, i in
+            r.append(String(UnicodeScalar(UInt8(i.value as? Int8 ?? 0))))
+        }
+    }
+    public static var useMetal:Bool{
+        if self.machine.contains("iPhone"){
+            let str = self.machine
+            guard let v1 = self.machine[str.index(str.startIndex, offsetBy: 6) ..< str.endIndex].components(separatedBy: ",").first else {
+                return false
+            }
+            return Int(v1) ?? 0 > 6
+        }else if self.machine.contains("iPad"){
+            let str = self.machine
+            guard let v1 = self.machine[str.index(str.startIndex, offsetBy: 4) ..< str.endIndex].components(separatedBy: ",").first else {
+                return false
+            }
+            return Int(v1) ?? 0 > 4
+        }else{
+            return false
+        }
     }
     public required init?(coder: NSCoder) {
         super.init(coder: coder)

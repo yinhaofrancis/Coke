@@ -36,7 +36,6 @@ class ViewController: UITableViewController,UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.window.makeKeyAndVisible()
-        print(CokeView.memory())
         self.window.isUserInteractionEnabled = false;
         self.window.layer.addSublayer(dlayler)
         self.window.isHidden = false
@@ -107,10 +106,10 @@ class ViewController: UITableViewController,UISearchBarDelegate {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc:CokePlayerViewController = self.storyboard?.instantiateViewController(withIdentifier: "player") as! CokePlayerViewController
         self.imageShow(vc)
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
             vc.play(url: self.data[indexPath.row].url)
         }
-        self.present(vc, animated: true, completion: nil)
+        self.show(vc, sender: nil)
     }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -190,7 +189,7 @@ class ViewController: UITableViewController,UISearchBarDelegate {
     @IBAction func show(_ sender: Any) {
         let vc:CokePlayerViewController = self.storyboard?.instantiateViewController(withIdentifier: "player") as! CokePlayerViewController
         
-        self.present(vc, animated: true, completion: nil)
+        self.show(vc, sender: nil)
         imageShow(vc)
     }
 }

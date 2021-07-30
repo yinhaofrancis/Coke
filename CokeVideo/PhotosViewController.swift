@@ -34,7 +34,7 @@ class PhotosViewController: UIViewController {
     func play(item:AVPlayerItem){
         DispatchQueue.main.async {
             let a = CokePlayerViewController()
-            self.present(a, animated: true, completion: nil)
+            self.show(a, sender: nil)
             a.play(item: item)
         }
     }

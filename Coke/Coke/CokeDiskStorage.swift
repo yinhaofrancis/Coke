@@ -274,6 +274,7 @@ public class CokeDiskStorage:CokeStorage,CustomDebugStringConvertible {
                         self.header = CokeHeaderData(resourceType: "data", dataRanges: [], size: 0, lastRequest: Date(), status: 0, url: nil)
                     }
                 }
+                b.deallocate()
             }
         }catch{
             throw error

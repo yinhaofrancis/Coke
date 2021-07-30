@@ -25,8 +25,6 @@ public class CokeComputer{
     
     public func compute(name:String,pixelSize:MTLSize? = nil,buffers:[MTLBuffer] = [],textures:[MTLTexture] = []) throws{
         try self.startEncoder(name: name,callback: { (encoder) in
-            
-            
             if(textures.count > 0){
                 encoder .setTextures(textures, range: 0 ..< textures.count)
             }
@@ -48,7 +46,7 @@ public class CokeComputer{
     }
     public typealias EncoderBlock = (MTLComputeCommandEncoder) throws ->Void
     public func startEncoder(name:String,callback:EncoderBlock)throws{
-        guard let function = self.configuration.shaderLibrary.makeFunction(name: name) else {
+        guard let function = self.configuration.function(name: name) else {
             throw NSError(domain: "can't load function \(name)", code: 0, userInfo: nil)
         }
         let state = try self.device.makeComputePipelineState(function: function)
@@ -66,5 +64,4 @@ public class CokeComputer{
             encoder.setTextures(textures, range: 0 ..< textures.count)
         }
     }
-    
 }

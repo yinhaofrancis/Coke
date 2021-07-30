@@ -73,21 +73,26 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
 
     public var ob:Any?
     public var renderScale:Float = 1
-    public var queue = DispatchQueue(label: "CokeVideoLayer")
     public var cokePlayer:CokeVideoPlayer?{
         didSet{
             if self.cokePlayer != nil{
                 if self.timer == nil{
                     self.timer = CADisplayLink(target: self, selector: #selector(renderVideo))
-                    self.timer?.add(to: RunLoop.main, forMode: .default)
+                    self.thread = Thread(block: { [weak self] in
+                        self?.timer?.add(to:RunLoop.current , forMode: .default)
+                        RunLoop.current.run()
+                    })
+                    self.thread?.start()
                 }
                 self.device = self.render.configuration.device
                 self.ob = NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.cokePlayer, queue: .main) { [weak self] n in
                     self?.timer?.invalidate()
+                    self?.thread?.cancel()
                 }
             }else{
                 self.timer?.invalidate()
                 self.timer = nil
+                self.thread?.cancel()
                 guard let ob = self.ob else { return }
                 NotificationCenter.default.removeObserver(ob)
                 self.ob = nil
@@ -97,15 +102,13 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
     @objc func renderVideo(){
         
         if let pl = self.cokePlayer,let item = pl.currentItem{
-            self.queue.async {
-                if let pixelBuffer = self.getCurrentPixelBuffer(),item.status == .readyToPlay{
-                    self.render(pixelBuffer: pixelBuffer,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
-                }
+            if let pixelBuffer = autoreleasepool(invoking: {self.getCurrentPixelBuffer()}),item.status == .readyToPlay{
+                self.render(pixelBuffer: pixelBuffer,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
             }
         }else{
             self.timer?.invalidate()
             self.timer = nil
-            
+            self.thread?.cancel()
         }
     }
     func transformTexture(texture:MTLTexture,transform:CGAffineTransform)->MTLTexture?{
@@ -131,7 +134,8 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
     }()
     private var render:CokeTextureRender
     private var timer:CADisplayLink?
-    
+    private var thread:Thread?
+    private var runloop:RunLoop?
     public init(configuration:CokeMetalConfiguration = .defaultConfiguration) {
         self.render = CokeTextureRender(configuration: configuration)
         super.init()
@@ -151,6 +155,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
     required init?(coder: NSCoder) {
         self.render = CokeTextureRender(configuration: .defaultConfiguration)
         super.init(coder: coder)
+        
     }
     public override init() {
         self.render = CokeTextureRender(configuration: .defaultConfiguration)
@@ -158,24 +163,32 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
     }
     public func invalidate(){
         self.timer?.invalidate()
+        self.thread?.cancel()
+        self.timer = nil
     }
     public func render(pixelBuffer:CVPixelBuffer,transform:CGAffineTransform){
-        guard let texture = self.render.configuration.createTexture(img: pixelBuffer) else { return }
+        guard let texture = autoreleasepool(invoking: {self.render.configuration.createTexture(img: pixelBuffer)}) else { return }
         self.render(texture: texture, transform: transform)
     }
     public func render(texture:MTLTexture,transform:CGAffineTransform){
-        guard let displayTexture = self.transformTexture(texture: texture,transform: transform) else { return }
+        
+        guard let displayTexture = autoreleasepool(invoking: { self.transformTexture(texture: texture,transform: transform) }) else { return }
         self.render.screenSize = self.showSize;
-        guard let draw = self.nextDrawable() else { return  }
+        guard let draw = autoreleasepool(invoking: { self.nextDrawable() } ) else { return  }
         do {
-            try self.render.configuration.begin()
-            try self.render.render(texture: displayTexture, drawable: draw)
-            try self.render.configuration.commit()
+            try autoreleasepool {
+                try self.render.configuration.begin()
+                try self.render.render(texture: displayTexture, drawable: draw)
+                try self.render.configuration.commit()
+            }
         } catch {
             return
         }
     }
     public func render(image:CGImageSource) throws {
+        if let t = self.timer,t.isPaused == false{
+            return
+        }
         guard let px = image.image(index: 0) else { return }
         let text = try MTKTextureLoader.init(device: self.render.configuration.device).newTexture(cgImage: px, options: nil)
         self.render(texture:text , transform: .identity)
@@ -193,6 +206,11 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         self.pixelFormat = CokeConfig.metalColorFormat
         self.contentsScale = UIScreen.main.scale
         self.rasterizationScale = UIScreen.main.scale
+    }
+    deinit {
+        self.thread?.cancel()
+        self.timer?.invalidate()
+        self.timer = nil
     }
 }
 extension CGImageSource{
