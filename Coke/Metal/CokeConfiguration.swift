@@ -38,7 +38,6 @@ public class CokeMetalConfiguration{
     
     public func commit() throws {
         self.commandbuffer?.commit()
-//        self.commandbuffer?.waitUntilCompleted()
     }
     public func function(name:String)->MTLFunction?{
         if let a = self.map[name]{

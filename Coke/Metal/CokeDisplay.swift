@@ -100,15 +100,16 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         }
     }
     @objc func renderVideo(){
-        
-        if let pl = self.cokePlayer,let item = pl.currentItem{
-            if let pixelBuffer = autoreleasepool(invoking: {self.getCurrentPixelBuffer()}),item.status == .readyToPlay{
-                self.render(pixelBuffer: pixelBuffer,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
+        autoreleasepool {
+            if let pl = self.cokePlayer,let item = pl.currentItem{
+                if let pixelBuffer = self.getCurrentPixelBuffer(),item.status == .readyToPlay{
+                    self.render(pixelBuffer: pixelBuffer,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
+                }
+            }else{
+                self.timer?.invalidate()
+                self.timer = nil
+                self.thread?.cancel()
             }
-        }else{
-            self.timer?.invalidate()
-            self.timer = nil
-            self.thread?.cancel()
         }
     }
     func transformTexture(texture:MTLTexture,transform:CGAffineTransform)->MTLTexture?{
@@ -167,20 +168,18 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         self.timer = nil
     }
     public func render(pixelBuffer:CVPixelBuffer,transform:CGAffineTransform){
-        guard let texture = autoreleasepool(invoking: {self.render.configuration.createTexture(img: pixelBuffer)}) else { return }
+        guard let texture = self.render.configuration.createTexture(img: pixelBuffer) else { return }
         self.render(texture: texture, transform: transform)
     }
     public func render(texture:MTLTexture,transform:CGAffineTransform){
         
-        guard let displayTexture = autoreleasepool(invoking: { self.transformTexture(texture: texture,transform: transform) }) else { return }
+        guard let displayTexture = self.transformTexture(texture: texture,transform: transform) else { return }
         self.render.screenSize = self.showSize;
-        guard let draw = autoreleasepool(invoking: { self.nextDrawable() } ) else { return  }
+        guard let draw = self.nextDrawable() else { return  }
         do {
-            try autoreleasepool {
-                try self.render.configuration.begin()
-                try self.render.render(texture: displayTexture, drawable: draw)
-                try self.render.configuration.commit()
-            }
+            try self.render.configuration.begin()
+            try self.render.render(texture: displayTexture, drawable: draw)
+            try self.render.configuration.commit()
         } catch {
             return
         }
