@@ -36,6 +36,7 @@ class ViewController: UITableViewController,UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.window.makeKeyAndVisible()
+        print(CokeView.memory())
         self.window.isUserInteractionEnabled = false;
         self.window.layer.addSublayer(dlayler)
         self.window.isHidden = false
@@ -54,13 +55,21 @@ class ViewController: UITableViewController,UISearchBarDelegate {
         }        
         self.actions = [
             UITableViewRowAction(style: .destructive, title: "删除") { (a, index) in
-                self.tableView.performBatchUpdates {
+                if #available(iOS 11.0, *) {
+                    self.tableView.performBatchUpdates {
+                        let u = self.data.remove(at: index.row).url
+                        self.tableView.deleteRows(at: [index], with: .automatic)
+                        try? self.saveData()
+                        try? CokeVideoLoader(url: u).downloader.storage.delete()
+                    } completion: { (_) in
+                        
+                    }
+                } else {
                     let u = self.data.remove(at: index.row).url
-                    self.tableView.deleteRows(at: [index], with: .automatic)
+                    self.tableView.reloadData()
                     try? self.saveData()
                     try? CokeVideoLoader(url: u).downloader.storage.delete()
-                } completion: { (_) in
-                    
+                    // Fallback on earlier versions
                 }
             },
             UITableViewRowAction(style: .normal, title: "复制") { (a, index) in

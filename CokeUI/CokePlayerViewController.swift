@@ -55,7 +55,7 @@ public class CokeSlider:UISlider{
 
 
 public class CokePlayerViewController:UIViewController{
-    private var videoView:CokeVideoView<AVPlayerLayer> = CokeVideoView(frame: UIScreen.main.bounds)
+    private var videoView:CokeView = CokeView(frame: UIScreen.main.bounds)
     public var item:AVPlayerItem?{
         self.videoView.player?.currentItem
     }
@@ -81,16 +81,27 @@ public class CokePlayerViewController:UIViewController{
         self.videoView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraints(vl)
         self.view.addSubview(self.timeControl)
-        let a = [
-            self.timeControl.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,constant: 20),
-            self.timeControl.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,constant: -20),
-            self.timeControl.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,constant: -20)
-        ]
+        if #available(iOS 11.0, *) {
+            let a = [
+                self.timeControl.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor,constant: 20),
+                self.timeControl.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,constant: -20),
+                self.timeControl.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,constant: -20)
+            ]
+            self.view.addConstraints(a)
+        } else {
+            let a = [
+                self.timeControl.leadingAnchor.constraint(equalTo: self.view.leadingAnchor,constant: 20),
+                self.timeControl.trailingAnchor.constraint(equalTo: self.view.trailingAnchor,constant: -20),
+                self.timeControl.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,constant: -20)
+            ]
+            self.view.addConstraints(a)
+        }
+        
 
         self.timeControl.layer.masksToBounds = true;
         self.timeControl.layer.cornerRadius = 8
         self.timeControl.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        self.view .addConstraints(a)
+        
         self.timeslider .addTarget(self, action: #selector(self.slideAction), for: .valueChanged)
         self.timeslider.addTarget(self, action: #selector(self.slideStart), for: .touchDown)
         self.timeslider.addTarget(self, action: #selector(self.slideEnd), for: .touchUpInside)
@@ -129,6 +140,16 @@ public class CokePlayerViewController:UIViewController{
     }
     public func play(item:AVPlayerItem){
         self.videoView.play(item: item)
+        if let ob = self.observer{
+            self.videoView.player?.removeTimeObserver(ob)
+        }
+        self.observer = self.videoView.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.01, preferredTimescale: .max), queue: DispatchQueue.main, using: { [weak self]t in
+            
+            guard let ws = self else { return }
+            if ws.isseek == false{
+                ws.currentTime(time: t)
+            }
+        })
     }
     public func play(url:URL) {
         self.videoView.play(url: url)

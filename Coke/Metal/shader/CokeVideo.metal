@@ -15,7 +15,9 @@ struct renderUniform{
     float4x4 camera;
     float4x4 world;
 };
-
+struct RenderFragmentUniform{
+    half bias;
+};
 
 vertex CokeVertex vertexShader(
                                CokeVertexIn vertices [[stage_in]],
@@ -45,6 +47,8 @@ float2 createSampleCood(uint2 gid,float w,float h){
 enum fillType{
     scaleToFit,
     scaleToFill,
+    scaleToWidthFill,
+    scaleToHeightFill,
     Fill
 };
 
@@ -65,6 +69,10 @@ void imageFill(const texture2d<half, access::sample> from,
         targetSize = originSize * max(rw, rh);
     }else if(ft == Fill){
         targetSize = canvas;
+    } else if (ft == scaleToWidthFill){
+        targetSize = originSize * rw;
+    }else if (ft == scaleToHeightFill){
+        targetSize = originSize * rh;
     }
     
     float px = (canvas.x - targetSize.x) / 2.0;
@@ -82,12 +90,32 @@ kernel void imageScaleToFit(const texture2d<half, access::sample> from [[ textur
 {
     imageFill(from, to, gid, scaleToFit);
 }
+kernel void imageDark(const texture2d<half, access::sample> from [[ texture(0) ]],
+                            texture2d<half, access::write> to [[texture(1)]],
+                            device RenderFragmentUniform* param [[buffer(0)]],
+                            uint2 gid [[thread_position_in_grid]])
+{
+    half4 f = from.read(gid) * param->bias;
+    to.write(f, gid);
+}
 
 kernel void imageScaleToFill(const texture2d<half, access::sample> from [[ texture(0) ]],
                             texture2d<half, access::write> to [[texture(1)]],
                             uint2 gid [[thread_position_in_grid]])
 {
     imageFill(from, to, gid, scaleToFill);
+}
+kernel void imageScaleToWidthFill(const texture2d<half, access::sample> from [[ texture(0) ]],
+                            texture2d<half, access::write> to [[texture(1)]],
+                            uint2 gid [[thread_position_in_grid]])
+{
+    imageFill(from, to, gid, scaleToWidthFill);
+}
+kernel void imageScaleToHeightFill(const texture2d<half, access::sample> from [[ texture(0) ]],
+                            texture2d<half, access::write> to [[texture(1)]],
+                            uint2 gid [[thread_position_in_grid]])
+{
+    imageFill(from, to, gid, scaleToHeightFill);
 }
 kernel void imageTransform(const texture2d<half, access::sample> from [[ texture(0) ]],
                             texture2d<half, access::write> to [[texture(1)]],

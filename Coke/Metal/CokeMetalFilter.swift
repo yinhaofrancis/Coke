@@ -13,10 +13,13 @@ public protocol CokeMetalFilter{
     func filter(pixel:CVPixelBuffer)->CVPixelBuffer?
     func filterTexture(pixel:[MTLTexture],w:Float,h:Float)->MTLTexture?
 }
+public struct RenderFragmentUniform{
+    var bias:Float;
+};
 public class CokeGaussBackgroundFilter:CokeMetalFilter{
     public var hasBackground:Bool = true
     public func filter(pixel: CVPixelBuffer) -> CVPixelBuffer? {
-        guard let px1 = self.Coke.configuration.createTexture(img: pixel) else { return nil }
+        guard let px1 = self.coke.configuration.createTexture(img: pixel) else { return nil }
         guard let px = self.filterTexture(pixel: [px1], w: self.w, h: self.h) else { return nil }
         return CokeMetalConfiguration.createPixelBuffer(texture: px)
     }
@@ -33,25 +36,28 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
                 if(w / h == ow / oh){
                     return px1
                 }
-                guard let px2 = self.Coke.configuration.createTexture(width: Int(w), height: Int(h),store: .private) else { return nil }
-                guard let px3 = self.Coke.configuration.createTexture(width: Int(w), height: Int(h)) else { return nil }
-                try self.Coke.configuration.begin()
+                guard let px2 = self.coke.configuration.createTexture(width: Int(w), height: Int(h),store: .private) else { return nil }
+                guard let px3 = self.coke.configuration.createTexture(width: Int(w), height: Int(h),store: .private) else { return nil }
+                guard let px4 = self.coke.configuration.createTexture(width: Int(w), height: Int(h),store: .private) else { return nil }
+                guard let bias = self.buffer else { return nil }
+                try self.coke.configuration.begin()
                 
                 let psize =  MTLSize(width: Int(ow * max(h / oh , w / ow)), height: Int(oh * max(h / oh , w / ow)), depth: 1)
                 
                 
                 if self.hasBackground{
-                    try self.Coke.compute(name: "imageScaleToFill", pixelSize:psize, buffers: [], textures: [px1,px2])
-                    if let buffer = self.Coke.configuration.commandbuffer{
+                    try self.coke.compute(name: "imageScaleToHeightFill", pixelSize:psize, buffers: [], textures: [px1,px2])
+                    if let buffer = self.coke.configuration.commandbuffer{
                         self.blur.encode(commandBuffer: buffer, sourceTexture: px2, destinationTexture: px3)
                     }
-                    try self.Coke.compute(name: "imageScaleToFit", pixelSize: psize, buffers: [], textures: [px1,px3])
+                    try self.coke.compute(name: "imageDark", pixelSize: psize, buffers: [bias], textures: [px3,px4])
+                    try self.coke.compute(name: "imageScaleToWidthFill", pixelSize: psize, buffers: [], textures: [px1,px4])
                 }else{
-                    try self.Coke.compute(name: "imageScaleToFit", pixelSize: psize, buffers: [], textures: [px1,px3])
+                    try self.coke.compute(name: "imageScaleToFit", pixelSize: psize, buffers: [], textures: [px1,px4])
                 }
                 
-                try self.Coke.configuration.commit()
-                return px3
+                try self.coke.configuration.commit()
+                return px4
                 
             } catch  {
                 return nil
@@ -60,7 +66,7 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
     }
     public init?(configuration:CokeMetalConfiguration,sigma:Float = 30) {
         do {
-            self.Coke = try CokeComputer(configuration: configuration)
+            self.coke = try CokeComputer(configuration: configuration)
             self.blur = MPSImageGaussianBlur(device: configuration.device, sigma: sigma)
         } catch  {
             return nil
@@ -68,8 +74,12 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
     }
     public var w:Float = 720
     public var h:Float = 1280
-    public var Coke:CokeComputer
+    public var coke:CokeComputer
     public var blur:MPSImageGaussianBlur
+    public var bias:RenderFragmentUniform = RenderFragmentUniform(bias: 0.7)
+    public var buffer:MTLBuffer? {
+        self.coke.configuration.createBuffer(data: self.bias)
+    }
 }
 public class CokeTransformFilter:CokeMetalFilter{
     

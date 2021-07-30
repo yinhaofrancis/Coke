@@ -21,20 +21,18 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
         guard let url = c?.url else { return nil }
         let a = AVURLAsset(url: url)
         a.resourceLoader.setDelegate(self, queue: DispatchQueue(label: "CokeVideoLoader"))
-        AVAssetImageGenerator(asset: a).generateCGImagesAsynchronously(forTimes: [NSValue(time: CMTime(seconds: 5, preferredTimescale: .max))]) { (t, i, tt, re, e) in
-        }
+        self.image(se: 3,6,9) { _ in }
         return a
     }
-    public func image(se:TimeInterval,callback:@escaping (CGImage?)->Void){
+    public func image(se:TimeInterval...,callback:@escaping (CGImage?)->Void){
         guard let ass = self.asset else {
             DispatchQueue.main.async {
                 callback(nil)
             }
-            
             return
         }
-        
-        AVAssetImageGenerator(asset: ass).generateCGImagesAsynchronously(forTimes: [NSValue(time: CMTime(seconds: se, preferredTimescale: .max))]) { (t, i, tt, re, e) in
+        let times = se.map({NSValue(time: CMTime(seconds: $0, preferredTimescale: .max))})
+        AVAssetImageGenerator(asset: ass).generateCGImagesAsynchronously(forTimes: times) { (t, i, tt, re, e) in
             DispatchQueue.main.async {
                 callback(i)
             }

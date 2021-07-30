@@ -31,7 +31,7 @@ public class CokeTextureRender {
         
         self.pipelineDescriptor = pipelineDesc
         pipelineDesc.vertexDescriptor = self.vertexDescriptor;
-        self.scale(x: 0.9, y: 0.9, z: 1)
+        self.scale(x: 1, y: 1, z: 1)
     }
     public var screenSize:CGSize = CGSize(width: 320, height: 480)
 
@@ -48,13 +48,13 @@ public class CokeTextureRender {
     public var worldState:WorldState = {
         return WorldState(world: simd_float4x4(1), camera: simd_float4x4(1))
     }()
+    public var fragmentState:RenderFragmentUniform = {
+        return RenderFragmentUniform(bias: 0.5)
+    }()
     public var vertice:MTLBuffer?
     
     public lazy var indexVertice:MTLBuffer? = {
         return self.configuration.device.makeBuffer(bytes: rectangleIndex, length: rectangleIndex.count * MemoryLayout<UInt32>.size, options: .storageModeShared)
-    }()
-    public lazy var stateBuffer:MTLBuffer? = {
-        return self.configuration.device.makeBuffer(bytes: &self.worldState, length: MemoryLayout.stride(ofValue: self.worldState), options: .storageModeShared)
     }()
     public lazy var samplerState:MTLSamplerState? = {
         let sample = MTLSamplerDescriptor()
@@ -111,7 +111,7 @@ public class CokeTextureRender {
         guard let pipelinestate = self.pipelineState else { encoder.endEncoding();return}
         encoder.setRenderPipelineState(pipelinestate)
         encoder.setVertexBuffer(self.vertice, offset: 0, index: 0)
-        encoder.setVertexBuffer(self.stateBuffer, offset: 0, index: 1)
+        encoder.setVertexBytes(&self.worldState, length: MemoryLayout.stride(ofValue: self.worldState), index: 1)
         encoder.setFragmentTexture(texture, index: 0)
         encoder.setFragmentSamplerState(self.samplerState, index: 0)
         if let indexb = self.indexVertice{

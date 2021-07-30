@@ -8,102 +8,159 @@
 import Metal
 import MetalKit
 import Foundation
-import simd
+import UIKit
+import AVFoundation
 
-
-public struct Point{
-    public var x:Float
-    public var y:Float
-    public init(x:Float, y:Float){
-        self.x = x
-        self.y = y
-    }
-}
-public struct Size{
-    public var w:Float
-    public var h:Float
-    public init(w:Float, h:Float){
-        self.w = w
-        self.h = h
-    }
-}
-public struct Rect{
-    public var location:Point
-    public var size:Size
-    public init(x:Float,y:Float,w:Float,h:Float){
-        self.location = Point(x:x,y:y)
-        self.size = Size(w:w,h:h)
-    }
-}
-
-public protocol CokeLayer{
-    var frame:Rect { get set }
-    var bound:Rect { get set }
-    var zPosion:Float { get set }
-    var backgroundColor:simd_float4 { get set }
+open class CokeView:UIView{
+    public var videoLoader:CokeVideoLoader?
     
-    var pipelineDescriptor:MTLRenderPipelineDescriptor { get }
-}
-
-public struct vertex{
-    public var location: simd_float4
-    public var texture: simd_float2
-    public init(location:simd_float4,texture:simd_float2){
-        self.location = location
-        self.texture = texture
+    public var player:CokeVideoPlayer?{
+        get{
+            self.videoLayer.cokePlayer
+        }
+        set{
+            self.videoLayer.cokePlayer = newValue
+        }
     }
-}
-
-extension CokeLayer{
-    public var vertice:[vertex]{
-        let bound = UIScreen.main.bounds
-        let x1 = self.frame.location.x / Float(bound.size.width)
-        let y1 = self.frame.location.y / Float(bound.size.height)
+    public var filter:CokeMetalFilter?{
+        get{
+            return self.videoLayer.videoFilter
+        }
+        set{
+            self.videoLayer.videoFilter = newValue
+        }
+    }
+    public override class var layerClass: AnyClass{
+        if CokeView.memory() < 1200{
+            return AVPlayerLayer.self
+        }else{
+            return CokeVideoLayer.self
+        }
+    }
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.backgroundColor = UIColor.black
+        self.videoLayer.basicConfig()
         
-        let w1 = self.frame.size.w / Float(bound.size.width)
-        let h1 = self.frame.size.h / Float(bound.size.height)
+        self.filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
+
+    }
+    public static func systemCheck<T,W>(model1:Int32,model2:Int32,type:T.Type,map:((UnsafeMutablePointer<T>)->W))->W?{
+        let model = UnsafeMutablePointer<Int32>.allocate(capacity: 2)
+        model.assign(repeating: model1, count: 1)
+        model.advanced(by: 1).assign(repeating: model2, count: 1)
+        var count:Int = 1024
+        let b = UnsafeMutableRawPointer.allocate(byteCount: 1024, alignment: 1)
+        let rs = sysctl(model, 2, b, &count, nil, 0)
+        if(rs == 0){
+            return map(b.assumingMemoryBound(to: type))
+        }
+        return nil
+    }
+    public static func systemCheck(model1:Int32,model2:Int32)->String?{
+        self.systemCheck(model1: model1, model2: model2, type: CChar.self) { t in
+            String(cString: t)
+        }
+    }
+    public static func memory() -> Double{
+        var host_port:mach_port_t = 0
+        var host_size:mach_msg_type_number_t = 0
+        var pagesize:vm_size_t = 0
+        host_port = mach_host_self();
+        host_size = mach_msg_type_number_t(MemoryLayout<vm_statistics_data_t>.size / MemoryLayout<integer_t>.size)
+        host_page_size(host_port, &pagesize);
+        var vm_stat:vm_statistics_data_t = vm_statistics_data_t();
+        let pointer = host_info_t.allocate(capacity: Int(host_size))
+        if(host_statistics(host_port,HOST_VM_INFO, pointer, &host_size) != KERN_SUCCESS) {
+            print("Failed to fetch vm statistics")
+            
+        }
+        memcpy(&vm_stat, pointer, MemoryLayout.size(ofValue: vm_stat))
+        let mem_used:natural_t = (vm_stat.active_count + vm_stat.inactive_count + vm_stat.wire_count) * UInt32(pagesize);
+        let mem_free:natural_t = vm_stat.free_count * UInt32(pagesize);
+        let mem_total:natural_t  = mem_used + mem_free;
+        return Double(mem_total) / 1024.0 / 1024.0;
+    }
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.backgroundColor = UIColor.black
+        self.videoLayer.basicConfig()
+    }
+    public var videoLayer:CokeVideoDisplayer{
+        return self.layer as! CokeVideoDisplayer
+    }
+    deinit {
+        self.videoLayer.invalidate()
+    }
+    public func play(url:URL) {
+        do {
+            self.videoLoader = try CokeVideoLoader(url: url)
+            guard let asset = self.videoLoader?.asset else { return }
+            self.play(item: AVPlayerItem(asset: asset))
+            
+        } catch  {
+            
+        }
+    }
+    public func play(item:AVPlayerItem){
+        self.player = CokeVideoPlayer(playerItem: item)
+        self.player?.play()
+    }
+}
+
+open class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
+    public var videoLoader:CokeVideoLoader?
+    
+    public var player:CokeVideoPlayer?{
+        get{
+            self.videoLayer.cokePlayer
+        }
+        set{
+            self.videoLayer.cokePlayer = newValue
+        }
+    }
+    public var filter:CokeMetalFilter?{
+        get{
+            return self.videoLayer.videoFilter
+        }
+        set{
+            self.videoLayer.videoFilter = newValue
+        }
+    }
+    public override class var layerClass: AnyClass{
+        return layer.self
+    }
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.backgroundColor = UIColor.black
+        self.videoLayer.basicConfig()
         
-        let v = [
-            vertex(location: simd_float4(x: x1 - 1, y: y1 - 1, z: zPosion,w: 1), texture: simd_float2(x: 0, y: 0)),
-            vertex(location: simd_float4(x: x1 - 1 + w1, y: y1 - 1, z: zPosion,w: 1), texture: simd_float2(x: 1, y: 0)),
-            vertex(location: simd_float4(x: x1 - 1, y: y1 - 1 + h1, z: zPosion,w: 1), texture: simd_float2(x: 0, y: 1)),
-            vertex(location: simd_float4(x: x1 - 1 + w1, y: y1 - 1 + h1, z: zPosion,w: 1), texture: simd_float2(x: 1, y: 1)),
-        ]
-        return v
+        self.filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
+
     }
-    public func verticsBuffer(device:MTLDevice)->MTLBuffer?{
-        return device.makeBuffer(bytes: self.vertice, length: MemoryLayout<vertex>.stride * vertice.count, options: .storageModeShared)
+    public required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.backgroundColor = UIColor.black
+        self.videoLayer.basicConfig()
     }
-    
-    public func indexVertice(device:MTLDevice)->MTLBuffer? {
-        return device.makeBuffer(bytes: rectangleIndex, length: rectangleIndex.count * MemoryLayout<UInt32>.stride, options: .storageModeShared)
+    public var videoLayer:layer{
+        return self.layer as! layer
     }
-    public var rectangleIndex:[UInt32]{
-        [
-            0,1,2,3
-        ]
+    deinit {
+        self.videoLayer.invalidate()
+    }
+    public func play(url:URL) {
+        do {
+            self.videoLoader = try CokeVideoLoader(url: url)
+            guard let asset = self.videoLoader?.asset else { return }
+            self.play(item: AVPlayerItem(asset: asset))
+            
+        } catch  {
+            
+        }
+    }
+    public func play(item:AVPlayerItem){
+        self.player = CokeVideoPlayer(playerItem: item)
+        self.player?.play()
     }
 }
-
-public struct CokeView:CokeLayer{
-    public var pipelineDescriptor: MTLRenderPipelineDescriptor
-    
-    public var frame: Rect
-    
-    public var bound: Rect
-    
-    public var zPosion: Float = 1
-    
-    public var backgroundColor: simd_float4 = simd_float4(x: 1, y: 1, z: 1, w: 1)
-    
-    public init(frame:Rect,configuration:CokeMetalConfiguration,vertex:String,fragment:String) {
-        self.frame = frame
-        bound = Rect(x: 0, y: 0, w: frame.size.w, h: frame.size.h)
-        let pipelineDesc = MTLRenderPipelineDescriptor()
-        pipelineDesc.vertexFunction = configuration.shaderLibrary.makeFunction(name: vertex)
-        pipelineDesc.fragmentFunction = configuration.shaderLibrary.makeFunction(name: fragment)
-        pipelineDesc.colorAttachments[0].pixelFormat = CokeConfig.metalColorFormat
-        self.pipelineDescriptor = pipelineDesc
-    }
-}
-
