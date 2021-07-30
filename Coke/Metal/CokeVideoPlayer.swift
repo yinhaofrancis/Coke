@@ -44,7 +44,7 @@ public class CokeVideoPlayer:AVPlayer{
             self.lastPixelBuffer = self.output.copyPixelBuffer(forItemTime: time, itemTimeForDisplay: &ptime);
             return self.lastPixelBuffer
         }
-        return nil
+        return self.lastPixelBuffer
     }
     public var percent:Double{
         get{
