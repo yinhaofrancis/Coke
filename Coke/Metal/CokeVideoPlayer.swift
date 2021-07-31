@@ -9,7 +9,7 @@ import UIKit
 import AVFoundation
 
 public class CokeVideoPlayer:AVPlayer{
-    private var lastPixelBuffer:(CVPixelBuffer,CMTime)?
+    public static weak var running:CokeVideoPlayer?
     public var output = AVPlayerItemVideoOutput(pixelBufferAttributes: [
         kCVPixelBufferPixelFormatTypeKey as String:CokeConfig.videoColorFormat,
         kCVPixelBufferMetalCompatibilityKey as String:true
@@ -17,6 +17,8 @@ public class CokeVideoPlayer:AVPlayer{
     ])
     public var currentPresentTransform:CGAffineTransform = .identity
     public override func play() {
+        Self.running?.pause()
+        Self.running = self
         if let ass = self.currentItem?.asset{
             ass.loadValuesAsynchronously(forKeys: ["tracks","playable"], completionHandler: {
                 if ass.statusOfValue(forKey: "tracks", error: nil) == .loaded{
@@ -42,10 +44,9 @@ public class CokeVideoPlayer:AVPlayer{
         if let time = self.currentItem?.currentTime(), self.output.hasNewPixelBuffer(forItemTime: time){
             var ptime = CMTime.zero
             guard let px = self.output.copyPixelBuffer(forItemTime: time, itemTimeForDisplay: &ptime) else { return nil }
-            self.lastPixelBuffer = (px,ptime)
-            return lastPixelBuffer
+            return (px,ptime)
         }
-        return self.lastPixelBuffer
+        return nil
     }
     public var percent:Double{
         get{

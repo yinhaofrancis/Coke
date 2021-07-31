@@ -18,12 +18,23 @@ extension RunLoop.Mode{
 public protocol CokeVideoDisplayer:AnyObject{
     var cokePlayer:CokeVideoPlayer? {get set}
     func invalidate()
-    func basicConfig()
+    func basicConfig(rect:CGRect)
     var videoFilter:CokeMetalFilter? { get set }
     func render(image:CGImageSource) throws
     func render(data:Data)
+    func render(image:CGImage) throws
+    func resume()
 }
 extension AVPlayerLayer:CokeVideoDisplayer{
+    public func resume() {
+        self.player?.play()
+    }
+    
+    public func render(image: CGImage) {
+        self.contentsGravity = CALayerContentsGravity.resizeAspect
+        self.contents = image
+    }
+    
     
     
     public var videoFilter: CokeMetalFilter? {
@@ -43,9 +54,8 @@ extension AVPlayerLayer:CokeVideoDisplayer{
         }
     }
     public func render(image: CGImageSource) throws {
-        guard let px = image.image(index: 0) else { return }
-        self.contentsGravity = CALayerContentsGravity.resizeAspect
-        self.contents = px
+        guard let px = image.image(index: 0) else { throw NSError(domain: "no image", code: 0, userInfo: nil) }
+        self.render(image: px)
     }
     public var cokePlayer: CokeVideoPlayer? {
         get{
@@ -57,15 +67,18 @@ extension AVPlayerLayer:CokeVideoDisplayer{
     }
     
     public func invalidate() {
-        
+        self.player?.pause()
     }
     
-    public func basicConfig() {
-        
+    public func basicConfig(rect:CGRect) {
+        self.frame = rect
     }
 }
 #if Coke
 public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
+    public func resume() {
+        FrameTicker.shared.addCallback(sender: self, sel: #selector(renderVideo))
+    }
     public var videoFilter: CokeMetalFilter?
     
     public var showSize:CGSize{
@@ -74,30 +87,11 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
 
     
     public var renderScale:Float = 1
-    
     public var cokePlayer:CokeVideoPlayer?{
         didSet{
             if self.cokePlayer != nil{
-                if self.timer == nil{
-                    self.timer = CADisplayLink(target: self, selector: #selector(renderVideo))
-                    self.thread = Thread(block: { [weak self] in
-                        self?.timer?.add(to:RunLoop.current , forMode: .default)
-                        RunLoop.current.run()
-                    })
-                    self.thread?.start()
-                }
+                FrameTicker.shared.addCallback(sender: self, sel: #selector(renderVideo))
                 self.device = self.render.configuration.device
-                self.ob = NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.cokePlayer, queue: .main) { [weak self] n in
-                    self?.timer?.invalidate()
-                    self?.thread?.cancel()
-                }
-            }else{
-                self.timer?.invalidate()
-                self.timer = nil
-                self.thread?.cancel()
-                guard let ob = self.ob else { return }
-                NotificationCenter.default.removeObserver(ob)
-                self.ob = nil
             }
         }
     }
@@ -108,9 +102,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
                     self.render(pixelBuffer: pixelBuffer,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
                 }
             }else{
-                self.timer?.invalidate()
-                self.timer = nil
-                self.thread?.cancel()
+                
             }
         }
     }
@@ -136,10 +128,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         return CokeTransformFilter(configuration: .defaultConfiguration)!
     }()
     private var render:CokeTextureRender
-    private var timer:CADisplayLink?
-    private var thread:Thread?
-    private var runloop:RunLoop?
-    private var ob:Any?
+    private var lastPixel:MTLTexture?
     public init(configuration:CokeMetalConfiguration = .defaultConfiguration) {
         self.render = CokeTextureRender(configuration: configuration)
         super.init()
@@ -149,7 +138,6 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         if let lay = layer as? CokeVideoLayer{
             self.videoFilter = lay.videoFilter
             self.render = lay.render
-            self.timer = lay.timer
             self.renderScale = lay.renderScale
             super.init(layer: layer)
         }else{
@@ -166,12 +154,12 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         super.init()
     }
     public func invalidate(){
-        self.timer?.invalidate()
-        self.thread?.cancel()
-        self.timer = nil
+        self.cokePlayer?.pause()
+        FrameTicker.shared.cancel()
     }
     public func render(pixelBuffer:CVPixelBuffer,transform:CGAffineTransform){
         guard let texture = self.render.configuration.createTexture(img: pixelBuffer) else { return }
+        self.lastPixel = texture
         self.render(texture: texture, transform: transform)
     }
     public func render(texture:MTLTexture,transform:CGAffineTransform){
@@ -188,11 +176,12 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         }
     }
     public func render(image:CGImageSource) throws {
-        if let t = self.timer,t.isPaused == false{
-            return
-        }
         guard let px = image.image(index: 0) else { return }
-        let text = try MTKTextureLoader.init(device: self.render.configuration.device).newTexture(cgImage: px, options: nil)
+        try self.render(image: px)
+    }
+    public func render(image: CGImage) throws {
+        let text = try MTKTextureLoader.init(device: self.render.configuration.device).newTexture(cgImage: image, options: nil)
+        self.lastPixel = text
         self.render(texture:text , transform: .identity)
     }
     public func render(data:Data){
@@ -203,16 +192,22 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
             print(error)
         }
     }
+    
 
-    public func basicConfig(){
+    public func basicConfig(rect:CGRect){
+        self.frame = rect
         self.pixelFormat = CokeConfig.metalColorFormat
         self.contentsScale = UIScreen.main.scale
         self.rasterizationScale = UIScreen.main.scale
-    }
-    deinit {
-        self.thread?.cancel()
-        self.timer?.invalidate()
-        self.timer = nil
+        guard let px = self.lastPixel else { return }
+        guard let run = FrameTicker.shared.runloop else {
+            self.render(texture: px, transform: self.cokePlayer?.currentPresentTransform ?? .identity)
+            return
+        }
+        run.perform {
+            self.render(texture: px , transform: self.cokePlayer?.currentPresentTransform ?? .identity)
+        }
+        
     }
 }
 #endif
@@ -230,24 +225,31 @@ extension CGImageSource{
 }
 
 public class CokeSampleLayer:CALayer,CokeVideoDisplayer{
+    public func resume() {
+        FrameTicker.slowShared.addCallback(sender: self, sel: #selector(renderBackground))
+        self.cokePlayer?.play()
+    }
     
-    private var mainDisplay:AVPlayerLayer = AVPlayerLayer()
-
+    
+    private var mainDisplay:AVPlayerLayer = AVPlayerLayer()    
     public var cokePlayer:CokeVideoPlayer?{
         didSet{
             self.mainDisplay.cokePlayer = self.cokePlayer
+            FrameTicker.slowShared.addCallback(sender: self, sel: #selector(renderBackground))
         }
     }
     
     public func invalidate(){
         self.cokePlayer?.pause()
+        FrameTicker.slowShared.cancel()
     }
     
-    public func basicConfig(){
+    public func basicConfig(rect:CGRect){
         self.contentsScale = UIScreen.main.scale
         self.rasterizationScale = UIScreen.main.scale
+        self.frame = rect
     }
-    var ccontent:CIContext = CIContext()
+    
     
     public var videoFilter: CokeMetalFilter?
     
@@ -258,12 +260,85 @@ public class CokeSampleLayer:CALayer,CokeVideoDisplayer{
         }
     }
     public func render(data:Data){
-        self.mainDisplay.render(data: data)
-        
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return }
+        do {
+            try self.render(image: source)
+        } catch {
+            print(error)
+        }
+    }
+    @objc public func renderBackground(){
+        guard let px = self.cokePlayer?.copyPixelbuffer() else { return }
+        guard let img = self.filter(img:CIImage(cvImageBuffer: px.0)) else { return }
+        try? self.render(image: img)
     }
     public func render(image: CGImageSource) throws {
         try self.mainDisplay.render(image: image)
         guard let cgimg = CGImageSourceCreateImageAtIndex(image, 0, nil) else { throw NSError(domain: "fail", code: 0, userInfo: nil)}
+        try self.render(image: cgimg)
+    }
+    public func render(image:CGImage) throws{
+        self.contentsGravity = .resizeAspectFill
+        let cimg =  self.filter(img: CIImage(cgImage: image))
+        self.masksToBounds = true
+        DispatchQueue.main.async {
+            self.contents = cimg
+        }
     }
     
+    private var context:CIContext = CIContext(eaglContext: EAGLContext(api: .openGLES3)!)
+    private func filter(img:CIImage,radius:CGFloat = 60,exp:CGFloat = -2)->CGImage?{
+        let filter = CIFilter(name: "CIGaussianBlur")
+        let expfilter = CIFilter(name: "CIExposureAdjust")
+        filter?.setValue(radius, forKey: "inputRadius")
+        expfilter?.setValue(exp, forKey: "inputEV")
+        filter?.setValue(img, forKey: kCIInputImageKey)
+        expfilter?.setValue(filter?.outputImage, forKey: kCIInputImageKey)
+        guard let ciimg = expfilter?.outputImage else { return nil }
+        return context.createCGImage(ciimg, from: img.extent)
+    }
+    
+}
+
+public class FrameTicker{
+    private var timer:CADisplayLink?
+    private var thread:Thread?
+    public var runloop:RunLoop?
+    private var framesPerSecond:Int?
+    private weak var sender:AnyObject?
+    private var sel:Selector?
+    public static let shared:FrameTicker = FrameTicker()
+    public static let slowShared:FrameTicker = FrameTicker(framesPerSecond: 1)
+
+    public func addCallback(sender:AnyObject?,sel:Selector){
+        self.sender = sender
+        self.sel = sel
+        if timer == nil{
+            self.timer = CADisplayLink(target: self, selector: #selector(callback))
+            
+            if let fs = self.framesPerSecond{
+                self.timer?.preferredFramesPerSecond = fs
+            }
+            
+            self.thread = Thread(block: { [weak self] in
+                self?.timer?.add(to:RunLoop.current , forMode: .default)
+                self?.runloop  = RunLoop.current
+                self?.callback()
+                RunLoop.current.run()
+            })
+            self.thread?.start()
+        }
+    }
+    init(framesPerSecond:Int? = nil) {
+        self.framesPerSecond = framesPerSecond
+    }
+    public func cancel(){
+        self.timer?.invalidate()
+        thread?.cancel()
+        self.timer = nil
+        self.sender = nil
+    }
+    @objc func callback(){
+        _ = self.sender?.perform(self.sel)
+    }
 }

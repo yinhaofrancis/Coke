@@ -44,7 +44,7 @@ open class CokeView:UIView{
     public override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.black
-        self.videoLayer.basicConfig()
+        self.videoLayer.basicConfig(rect: self.bounds)
         #if Coke
         if CokeView.useMetal{
             self.filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
@@ -57,6 +57,7 @@ open class CokeView:UIView{
         
 
     }
+
     public static func systemCheck<T,W>(model1:Int32,model2:Int32,type:T.Type,map:((UnsafeMutablePointer<T>)->W))->W?{
         let model = UnsafeMutablePointer<Int32>.allocate(capacity: 2)
         model.assign(repeating: model1, count: 1)
@@ -141,8 +142,9 @@ open class CokeView:UIView{
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.backgroundColor = UIColor.black
-        self.videoLayer.basicConfig()
+        self.videoLayer.basicConfig(rect: self.bounds)
     }
+    
     public var videoLayer:CokeVideoDisplayer{
         return self.layer as! CokeVideoDisplayer
     }
@@ -162,6 +164,10 @@ open class CokeView:UIView{
     public func play(item:AVPlayerItem){
         self.player = CokeVideoPlayer(playerItem: item)
         self.player?.play()
+    }
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        self.videoLayer.basicConfig(rect: self.bounds)
     }
 }
 #if Coke
@@ -190,7 +196,7 @@ open class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
     public override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.black
-        self.videoLayer.basicConfig()
+        self.videoLayer.basicConfig(rect: self.bounds)
         
         self.filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
 
@@ -198,7 +204,7 @@ open class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.backgroundColor = UIColor.black
-        self.videoLayer.basicConfig()
+        self.videoLayer.basicConfig(rect: self.bounds)
     }
     public var videoLayer:layer{
         return self.layer as! layer

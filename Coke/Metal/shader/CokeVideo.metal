@@ -16,7 +16,7 @@ struct renderUniform{
     float4x4 world;
 };
 struct RenderFragmentUniform{
-    half bias;
+    float bias;
 };
 
 vertex CokeVertex vertexShader(
@@ -90,13 +90,12 @@ kernel void imageScaleToFit(const texture2d<half, access::sample> from [[ textur
 {
     imageFill(from, to, gid, scaleToFit);
 }
-kernel void imageDark(const texture2d<half, access::sample> from [[ texture(0) ]],
+kernel void imageExposure(const texture2d<half, access::sample> from [[ texture(0) ]],
                             texture2d<half, access::write> to [[texture(1)]],
                             device RenderFragmentUniform* param [[buffer(0)]],
                             uint2 gid [[thread_position_in_grid]])
 {
-    half4 f = from.read(gid) * param->bias;
-    to.write(f, gid);
+    to.write(from.read(gid) * pow(2.0, param->bias), gid);
 }
 
 kernel void imageScaleToFill(const texture2d<half, access::sample> from [[ texture(0) ]],
