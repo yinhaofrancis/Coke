@@ -38,7 +38,7 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
                 }
                 guard let px2 = self.coke.configuration.createTexture(width: Int(w), height: Int(h),store: .private) else { return nil }
                 guard let px3 = self.coke.configuration.createTexture(width: Int(w), height: Int(h),store: .private) else { return nil }
-                guard let px4 = self.coke.configuration.createTexture(width: Int(w), height: Int(h),store: .private) else { return nil }
+                guard let px4 = self.coke.configuration.createTexture(width: Int(w), height: Int(h),store: renderImediatly ? .private : .shared) else { return nil }
                 guard let bias = self.buffer else { return nil }
                 try self.coke.configuration.begin()
                 
@@ -64,10 +64,11 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
             }
         }
     }
-    public init?(configuration:CokeMetalConfiguration,sigma:Float = 30) {
+    public init?(configuration:CokeMetalConfiguration,sigma:Float = 30,imediately:Bool = true) {
         do {
             self.coke = try CokeComputer(configuration: configuration)
             self.blur = MPSImageGaussianBlur(device: configuration.device, sigma: sigma)
+            self.renderImediatly = imediately
         } catch  {
             return nil
         }
@@ -77,6 +78,7 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
     public var coke:CokeComputer
     public var blur:MPSImageGaussianBlur
     public var bias:RenderFragmentUniform = RenderFragmentUniform(bias: 0.7)
+    public var renderImediatly:Bool
     public var buffer:MTLBuffer? {
         self.coke.configuration.createBuffer(data: self.bias)
     }

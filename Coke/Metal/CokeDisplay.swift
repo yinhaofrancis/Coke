@@ -24,11 +24,7 @@ public protocol CokeVideoDisplayer:AnyObject{
     func render(data:Data)
 }
 extension AVPlayerLayer:CokeVideoDisplayer{
-    public func render(image: CGImageSource) throws {
-        guard let px = image.image(index: 0) else { return }
-        self.contentsGravity = CALayerContentsGravity.resizeAspect
-        self.contents = px
-    }
+    
     
     public var videoFilter: CokeMetalFilter? {
         get {
@@ -46,7 +42,11 @@ extension AVPlayerLayer:CokeVideoDisplayer{
             print(error)
         }
     }
-    
+    public func render(image: CGImageSource) throws {
+        guard let px = image.image(index: 0) else { return }
+        self.contentsGravity = CALayerContentsGravity.resizeAspect
+        self.contents = px
+    }
     public var cokePlayer: CokeVideoPlayer? {
         get{
             return self.player as? CokeVideoPlayer
@@ -64,6 +64,7 @@ extension AVPlayerLayer:CokeVideoDisplayer{
         
     }
 }
+#if Coke
 public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
     public var videoFilter: CokeMetalFilter?
     
@@ -71,8 +72,9 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         return CGSize(width: self.frame.size.width * UIScreen.main.scale , height: self.frame.size.height * UIScreen.main.scale)
     }
 
-    public var ob:Any?
+    
     public var renderScale:Float = 1
+    
     public var cokePlayer:CokeVideoPlayer?{
         didSet{
             if self.cokePlayer != nil{
@@ -125,7 +127,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         return result
     }
     func getCurrentPixelBuffer()->CVPixelBuffer?{
-        return self.cokePlayer?.copyPixelbuffer()
+        return self.cokePlayer?.copyPixelbuffer()?.0
     }
     public func clean(){
         self.render.vertice = nil
@@ -137,6 +139,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
     private var timer:CADisplayLink?
     private var thread:Thread?
     private var runloop:RunLoop?
+    private var ob:Any?
     public init(configuration:CokeMetalConfiguration = .defaultConfiguration) {
         self.render = CokeTextureRender(configuration: configuration)
         super.init()
@@ -212,6 +215,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         self.timer = nil
     }
 }
+#endif
 extension CGImageSource{
     public var orientation:CGImagePropertyOrientation{
         let i = CGImageSourceCopyProperties(self, nil)! as! Dictionary<CFString,UInt32>
@@ -223,4 +227,43 @@ extension CGImageSource{
         }
         return cgimg
     }
+}
+
+public class CokeSampleLayer:CALayer,CokeVideoDisplayer{
+    
+    private var mainDisplay:AVPlayerLayer = AVPlayerLayer()
+
+    public var cokePlayer:CokeVideoPlayer?{
+        didSet{
+            self.mainDisplay.cokePlayer = self.cokePlayer
+        }
+    }
+    
+    public func invalidate(){
+        self.cokePlayer?.pause()
+    }
+    
+    public func basicConfig(){
+        self.contentsScale = UIScreen.main.scale
+        self.rasterizationScale = UIScreen.main.scale
+    }
+    var ccontent:CIContext = CIContext()
+    
+    public var videoFilter: CokeMetalFilter?
+    
+    public override var frame: CGRect{
+        didSet{
+            self.mainDisplay.frame = self.bounds
+            self.addSublayer(mainDisplay)
+        }
+    }
+    public func render(data:Data){
+        self.mainDisplay.render(data: data)
+        
+    }
+    public func render(image: CGImageSource) throws {
+        try self.mainDisplay.render(image: image)
+        guard let cgimg = CGImageSourceCreateImageAtIndex(image, 0, nil) else { throw NSError(domain: "fail", code: 0, userInfo: nil)}
+    }
+    
 }

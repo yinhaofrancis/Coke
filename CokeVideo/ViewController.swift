@@ -104,7 +104,7 @@ class ViewController: UITableViewController,UISearchBarDelegate {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc:CokePlayerViewController = self.storyboard?.instantiateViewController(withIdentifier: "player") as! CokePlayerViewController
         self.imageShow(vc)
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+        DispatchQueue.main.async {
             vc.play(url: self.data[indexPath.row].url)
         }
         self.show(vc, sender: nil)

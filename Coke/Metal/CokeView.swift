@@ -31,18 +31,30 @@ open class CokeView:UIView{
         }
     }
     public override class var layerClass: AnyClass{
+        #if Coke
         if CokeView.useMetal{
             return CokeVideoLayer.self
         }else{
-            return AVPlayerLayer.self
+            return CokeSampleLayer.self
         }
+        #else
+        return CokeSampleLayer.self
+        #endif
     }
     public override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.black
         self.videoLayer.basicConfig()
+        #if Coke
+        if CokeView.useMetal{
+            self.filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
+        }else{
+            self.filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration,imediately: false)
+        }
+        #else
+        self.filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration,imediately: false)
+        #endif
         
-        self.filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
 
     }
     public static func systemCheck<T,W>(model1:Int32,model2:Int32,type:T.Type,map:((UnsafeMutablePointer<T>)->W))->W?{
@@ -152,7 +164,7 @@ open class CokeView:UIView{
         self.player?.play()
     }
 }
-
+#if Coke
 open class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
     public var videoLoader:CokeVideoLoader?
     
@@ -209,3 +221,4 @@ open class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
         self.player?.play()
     }
 }
+#endif

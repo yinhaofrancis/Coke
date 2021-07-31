@@ -9,7 +9,7 @@ import UIKit
 import AVFoundation
 
 public class CokeVideoPlayer:AVPlayer{
-    private var lastPixelBuffer:CVPixelBuffer?
+    private var lastPixelBuffer:(CVPixelBuffer,CMTime)?
     public var output = AVPlayerItemVideoOutput(pixelBufferAttributes: [
         kCVPixelBufferPixelFormatTypeKey as String:CokeConfig.videoColorFormat,
         kCVPixelBufferMetalCompatibilityKey as String:true
@@ -38,11 +38,12 @@ public class CokeVideoPlayer:AVPlayer{
         
     }
     
-    public func copyPixelbuffer()->CVPixelBuffer?{
+    public func copyPixelbuffer()->(CVPixelBuffer,CMTime)?{
         if let time = self.currentItem?.currentTime(), self.output.hasNewPixelBuffer(forItemTime: time){
             var ptime = CMTime.zero
-            self.lastPixelBuffer = self.output.copyPixelBuffer(forItemTime: time, itemTimeForDisplay: &ptime);
-            return self.lastPixelBuffer
+            guard let px = self.output.copyPixelBuffer(forItemTime: time, itemTimeForDisplay: &ptime) else { return nil }
+            self.lastPixelBuffer = (px,ptime)
+            return lastPixelBuffer
         }
         return self.lastPixelBuffer
     }
