@@ -96,14 +96,12 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         }
     }
     @objc func renderVideo(){
-        autoreleasepool {
-            if let pl = self.cokePlayer,let item = pl.currentItem{
-                if let pixelBuffer = self.getCurrentPixelBuffer(),item.status == .readyToPlay{
-                    self.render(pixelBuffer: pixelBuffer,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
-                }
-            }else{
-                
+        if let pl = self.cokePlayer,let item = pl.currentItem{
+            if let pixelBuffer = self.getCurrentPixelBuffer() ,item.status == .readyToPlay{
+                self.render(pixelBuffer: pixelBuffer,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
             }
+        }else{
+            
         }
     }
     func transformTexture(texture:MTLTexture,transform:CGAffineTransform)->MTLTexture?{
@@ -204,8 +202,9 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
             self.render(texture: px, transform: self.cokePlayer?.currentPresentTransform ?? .identity)
             return
         }
-        run.perform {
-            self.render(texture: px , transform: self.cokePlayer?.currentPresentTransform ?? .identity)
+        run.perform { [weak self] in
+            guard let s = self else { return }
+            s.render(texture: px , transform: s.cokePlayer?.currentPresentTransform ?? .identity)
         }
         
     }
@@ -320,10 +319,10 @@ public class FrameTicker{
                 self.timer?.preferredFramesPerSecond = fs
             }
             
-            self.thread = Thread(block: { [weak self] in
-                self?.timer?.add(to:RunLoop.current , forMode: .default)
-                self?.runloop  = RunLoop.current
-                self?.callback()
+            self.thread = Thread(block: {
+                self.timer?.add(to:RunLoop.current , forMode: .default)
+                self.runloop  = RunLoop.current
+                self.callback()
                 RunLoop.current.run()
             })
             self.thread?.start()
@@ -337,6 +336,7 @@ public class FrameTicker{
         thread?.cancel()
         self.timer = nil
         self.sender = nil
+        CFRunLoopStop(self.runloop?.getCFRunLoop())
     }
     @objc func callback(){
         _ = self.sender?.perform(self.sel)
