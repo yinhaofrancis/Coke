@@ -30,10 +30,11 @@ class PhotosViewController: UIViewController {
             self?.track = try? CokeAssetVideoTrack(asset: ass)
             let filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration ,imediately: false)
             self?.track?.filter = filter
-            filter?.w = 720
-            filter?.h = 960
             
-            try? self?.track?.export(w: 720, h: 960, callback: { u, s in
+            filter?.w = 720
+            filter?.h = 1280
+            
+            try? self?.track?.export(w: 720, h: 1280, callback: { u, s in
                 guard let url = u else { return }
                 DispatchQueue.main.async {
                     let a = AVPlayerViewController()
