@@ -163,6 +163,7 @@ public class CokePlayerViewController:UIViewController{
                 ws.currentTime(time: t)
             }
         })
+        self.videoView.play()
     }
     public func showImage(data:Data){
         self.videoView.videoLayer.render(data: data)

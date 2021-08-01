@@ -33,7 +33,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="1PU-7s-LwT">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.098039215690000001" green="0.098039215690000001" blue="0.098039215690000001" alpha="1" colorSpace="calibratedRGB"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" searchBarStyle="minimal" placeholder="输入URL,多个URL用空格分开" showsCancelButton="YES" id="Qrg-Zb-lxb">
                             <rect key="frame" x="0.0" y="0.0" width="428" height="51"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -70,6 +70,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="lU7-P6-1Vn" kind="show" identifier="detail" id="ZdM-GI-aVg"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -93,6 +96,50 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d8B-w7-gOf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="110" y="-393"/>
+        </scene>
+        <!--Detail View Controller-->
+        <scene sceneID="0Da-tg-TaB">
+            <objects>
+                <tableViewController id="lU7-P6-1Vn" customClass="DetailViewController" customModule="CokeVideo" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" pagingEnabled="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="KvL-cW-8kJ">
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="690" id="Jhg-h4-im1" customClass="DetailCell" customModule="CokeVideo" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="24.333333969116211" width="428" height="690"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Jhg-h4-im1" id="jji-ng-ZuQ">
+                                    <rect key="frame" x="0.0" y="0.0" width="428" height="690"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r24-xL-a6b" customClass="CokeView" customModule="Coke">
+                                            <rect key="frame" x="0.0" y="0.0" width="428" height="690"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        </view>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="r24-xL-a6b" secondAttribute="bottom" id="FZc-Gp-P2U"/>
+                                        <constraint firstAttribute="trailing" secondItem="r24-xL-a6b" secondAttribute="trailing" id="La2-N1-d1c"/>
+                                        <constraint firstItem="r24-xL-a6b" firstAttribute="leading" secondItem="jji-ng-ZuQ" secondAttribute="leading" id="oyS-LG-zyU"/>
+                                        <constraint firstItem="r24-xL-a6b" firstAttribute="top" secondItem="jji-ng-ZuQ" secondAttribute="top" id="yI7-KW-j58"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="videoView" destination="r24-xL-a6b" id="Q96-4Y-ACu"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="lU7-P6-1Vn" id="zJY-FP-acz"/>
+                            <outlet property="delegate" destination="lU7-P6-1Vn" id="T1m-uG-vdC"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="4An-hC-kWK"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="s1E-yw-kVv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="140.18691588785046" y="414.03887688984884"/>
         </scene>
         <!--Photos View Controller-->
         <scene sceneID="asf-s8-a1F">
@@ -130,6 +177,7 @@
             <point key="canvasLocation" x="-812" y="-393"/>
         </scene>
     </scenes>
+    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

@@ -17,6 +17,7 @@ extension RunLoop.Mode{
 }
 public protocol CokeVideoDisplayer:AnyObject{
     var cokePlayer:CokeVideoPlayer? {get set}
+    var showCover:Bool { get set }
     func invalidate()
     func basicConfig(rect:CGRect)
     var videoFilter:CokeMetalFilter? { get set }
@@ -26,6 +27,15 @@ public protocol CokeVideoDisplayer:AnyObject{
     func resume()
 }
 extension AVPlayerLayer:CokeVideoDisplayer{
+    public var showCover: Bool {
+        get {
+            return false
+        }
+        set {
+            
+        }
+    }
+    
     public func resume() {
         self.player?.play()
     }
@@ -76,6 +86,8 @@ extension AVPlayerLayer:CokeVideoDisplayer{
 }
 #if Coke
 public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
+    public var showCover: Bool = false
+    
     public func resume() {
         FrameTicker.shared.addCallback(sender: self, sel: #selector(renderVideo))
     }
@@ -90,8 +102,8 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
     public var cokePlayer:CokeVideoPlayer?{
         didSet{
             if self.cokePlayer != nil{
-                FrameTicker.shared.addCallback(sender: self, sel: #selector(renderVideo))
                 self.device = self.render.configuration.device
+                self.renderDefaultCover()
             }
         }
     }
@@ -100,8 +112,6 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
             if let pixelBuffer = self.getCurrentPixelBuffer() ,item.status == .readyToPlay{
                 self.render(pixelBuffer: pixelBuffer,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
             }
-        }else{
-            
         }
     }
     func transformTexture(texture:MTLTexture,transform:CGAffineTransform)->MTLTexture?{
@@ -178,7 +188,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         try self.render(image: px)
     }
     public func render(image: CGImage) throws {
-        let text = try MTKTextureLoader.init(device: self.render.configuration.device).newTexture(cgImage: image, options: nil)
+        let text = try MTKTextureLoader.init(device: self.render.configuration.device).newTexture(cgImage: image, options: [.SRGB:false])
         self.lastPixel = text
         self.render(texture:text , transform: .identity)
     }
@@ -190,7 +200,18 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
             print(error)
         }
     }
-    
+    public func renderDefaultCover(){
+        guard let asset = self.cokePlayer?.currentItem?.asset else { return }
+        guard let t = self.cokePlayer?.currentItem?.currentTime() else { return }
+//        let pixelBuffer = self.cokePlayer?.copyPixelbuffer(current: CMTime(seconds: 1, preferredTimescale: .max))
+//        self.render(pixelBuffer: pixelBuffer!.0,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
+        AVAssetImageGenerator.init(asset: asset).generateCGImagesAsynchronously(forTimes: [NSValue(time: t)]) { _, img, _, _, _ in
+            
+            guard let image = img else { return }
+            try? self.render(image: image)
+            print(image)
+        }
+    }
 
     public func basicConfig(rect:CGRect){
         self.frame = rect
@@ -224,6 +245,7 @@ extension CGImageSource{
 }
 
 public class CokeSampleLayer:CALayer,CokeVideoDisplayer{
+    public var showCover: Bool = false
     public func resume() {
         FrameTicker.slowShared.addCallback(sender: self, sel: #selector(renderBackground))
         self.cokePlayer?.play()
@@ -320,7 +342,7 @@ public class FrameTicker{
             }
             
             self.thread = Thread(block: {
-                self.timer?.add(to:RunLoop.current , forMode: .default)
+                self.timer?.add(to:RunLoop.current , forMode: .common)
                 self.runloop  = RunLoop.current
                 self.callback()
                 RunLoop.current.run()
@@ -336,7 +358,8 @@ public class FrameTicker{
         thread?.cancel()
         self.timer = nil
         self.sender = nil
-        CFRunLoopStop(self.runloop?.getCFRunLoop())
+        guard let rl = self.runloop?.getCFRunLoop() else { return  }
+        CFRunLoopStop(rl)
     }
     @objc func callback(){
         _ = self.sender?.perform(self.sel)

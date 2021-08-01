@@ -163,7 +163,14 @@ open class CokeView:UIView{
     }
     public func play(item:AVPlayerItem){
         self.player = CokeVideoPlayer(playerItem: item)
+        
+    }
+    public func play(){
         self.player?.play()
+        self.videoLayer.resume()
+    }
+    public func pause(){
+        self.player?.pause()
     }
     open override func layoutSubviews() {
         super.layoutSubviews()

@@ -38,6 +38,8 @@ class ViewController: UITableViewController,UISearchBarDelegate {
         self.window.layer.addSublayer(dlayler)
         self.window.isHidden = false
         self.window.alpha = 1
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
         dlayler.frame = UIScreen.main.bounds
         do {
             let url = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("back")
@@ -101,13 +103,13 @@ class ViewController: UITableViewController,UISearchBarDelegate {
         cell.imageView?.image = UIImage(data: self.data[indexPath.row].image)
         return cell
     }
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc:CokePlayerViewController = self.storyboard?.instantiateViewController(withIdentifier: "player") as! CokePlayerViewController
-        DispatchQueue.main.async {
-            vc.play(url: self.data[indexPath.row].url)
-        }
-        self.present(vc, animated: true, completion: nil)
-    }
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        let vc:CokePlayerViewController = self.storyboard?.instantiateViewController(withIdentifier: "player") as! CokePlayerViewController
+//        DispatchQueue.main.async {
+//            vc.play(url: self.data[indexPath.row].url)
+//        }
+//        self.present(vc, animated: true, completion: nil)
+//    }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
@@ -188,6 +190,13 @@ class ViewController: UITableViewController,UISearchBarDelegate {
         
         self.show(vc, sender: nil)
         imageShow(vc)
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "detail"{
+            let des:DetailViewController = segue.destination as! DetailViewController
+            des.model = self.data
+            des.index = self.tableView.indexPathForSelectedRow
+        }
     }
 }
 
