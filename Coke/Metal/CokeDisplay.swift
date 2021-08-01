@@ -201,15 +201,14 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         }
     }
     public func renderDefaultCover(){
-        guard let asset = self.cokePlayer?.currentItem?.asset else { return }
-        guard let t = self.cokePlayer?.currentItem?.currentTime() else { return }
-//        let pixelBuffer = self.cokePlayer?.copyPixelbuffer(current: CMTime(seconds: 1, preferredTimescale: .max))
-//        self.render(pixelBuffer: pixelBuffer!.0,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
-        AVAssetImageGenerator.init(asset: asset).generateCGImagesAsynchronously(forTimes: [NSValue(time: t)]) { _, img, _, _, _ in
-            
-            guard let image = img else { return }
-            try? self.render(image: image)
-            print(image)
+        if self.showCover {
+            guard let asset = self.cokePlayer?.currentItem?.asset else { return }
+            guard let t = self.cokePlayer?.currentItem?.currentTime() else { return }
+            AVAssetImageGenerator.init(asset: asset).generateCGImagesAsynchronously(forTimes: [NSValue(time: t)]) { _, img, _, _, _ in
+                
+                guard let image = img else { return }
+                try? self.render(image: image)
+            }
         }
     }
 
@@ -257,6 +256,7 @@ public class CokeSampleLayer:CALayer,CokeVideoDisplayer{
         didSet{
             self.mainDisplay.cokePlayer = self.cokePlayer
             FrameTicker.slowShared.addCallback(sender: self, sel: #selector(renderBackground))
+            
         }
     }
     
@@ -318,7 +318,17 @@ public class CokeSampleLayer:CALayer,CokeVideoDisplayer{
         guard let ciimg = expfilter?.outputImage else { return nil }
         return context.createCGImage(ciimg, from: img.extent)
     }
-    
+    public func renderDefaultCover(){
+        if self.showCover {
+            guard let asset = self.cokePlayer?.currentItem?.asset else { return }
+            guard let t = self.cokePlayer?.currentItem?.currentTime() else { return }
+            AVAssetImageGenerator.init(asset: asset).generateCGImagesAsynchronously(forTimes: [NSValue(time: t)]) { _, img, _, _, _ in
+                
+                guard let image = img else { return }
+                try? self.render(image: image)
+            }
+        }
+    }
 }
 
 public class FrameTicker{
@@ -364,4 +374,5 @@ public class FrameTicker{
     @objc func callback(){
         _ = self.sender?.perform(self.sel)
     }
+    
 }
