@@ -9,11 +9,7 @@ import Foundation
 import VideoToolbox
 import AVFoundation
 public class CokeVideoEncoder{
-    
-    private struct Con{
-        weak var ws:CokeVideoEncoder?
-    }
-    private var wcon:Con
+
     public func handleBuffer(sampleBuffer: CMSampleBuffer) {
         self.encode(buffer: sampleBuffer)
     }
@@ -22,12 +18,10 @@ public class CokeVideoEncoder{
     
     private var callback:((Data?)->Void)?
     public init(width:Int32,height:Int32,quality:Float = 0.25) throws {
-        self.wcon = Con()
-        self.wcon.ws = self
         let err = VTCompressionSessionCreate(allocator: nil, width: width, height: height, codecType: kCMVideoCodecType_H264, encoderSpecification: nil, imageBufferAttributes: nil, compressedDataAllocator: nil, outputCallback: { outputCallbackRefCon, sourceFrameRefCon, status, infoFlags, sampleBuffer in
-            let e = outputCallbackRefCon?.assumingMemoryBound(to: CokeVideoEncoder.Con.self).pointee.ws
+            let e = outputCallbackRefCon?.assumingMemoryBound(to: CokeVideoEncoder.self).pointee
             e?.callback(sourceFrameRefCon: sourceFrameRefCon, status: status, infoFlags: infoFlags, sampleBuffer: sampleBuffer)
-        }, refcon: &self.wcon, compressionSessionOut: &self.session)
+        }, refcon: Unmanaged.passUnretained(self).toOpaque(), compressionSessionOut: &self.session)
         
         if err == errSecSuccess{
             guard let sess = self.session else { throw NSError(domain: "compress Session", code: 0, userInfo: nil) }

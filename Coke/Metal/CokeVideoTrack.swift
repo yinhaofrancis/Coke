@@ -8,7 +8,7 @@
 
 import Foundation
 import AVFoundation
-
+import CoreImage
 extension CMSampleBuffer{
     public var currentTime:CMTime{
         if #available(iOS 13.0, *) {

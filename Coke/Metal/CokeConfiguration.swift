@@ -36,8 +36,12 @@ public class CokeMetalConfiguration{
         self.commandbuffer = commandbuffer
     }
     
-    public func commit() throws {
+    public func commit(sync:Bool = false) throws {
         self.commandbuffer?.commit()
+        if sync {
+            self.commandbuffer?.waitUntilCompleted()
+        }
+        
     }
     public func function(name:String)->MTLFunction?{
         if let a = self.map[name]{

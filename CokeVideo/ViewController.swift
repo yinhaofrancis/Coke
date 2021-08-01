@@ -24,23 +24,20 @@ class Model:Codable{
 class ViewController: UITableViewController,UISearchBarDelegate {
 
     public var loader:CokeVideoLoader?
+    public var track:CokeAssetVideoTrack?
     public var actions:[UITableViewRowAction]?
     public var data:[Model] = []
     public var url:URL?
     public var timer:Timer?
     public var window:UIWindow = UIWindow(frame: UIScreen.main.bounds)
-    public var dlayler:AVPlayerLayer = AVPlayerLayer()
-    public var player:AVPlayer?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.window.makeKeyAndVisible()
         self.window.isUserInteractionEnabled = false;
-        self.window.layer.addSublayer(dlayler)
         self.window.isHidden = false
         self.window.alpha = 1
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
-        dlayler.frame = UIScreen.main.bounds
         do {
             let url = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("back")
             self.url = url
@@ -75,19 +72,20 @@ class ViewController: UITableViewController,UISearchBarDelegate {
                 let u = self.data[index.row].url
                 UIPasteboard.general.url = u
             },
-            UITableViewRowAction(style: .normal, title: "下载") { (a, index) in
-                let u = self.data[index.row].url
-                try? CokeVideoLoader(url: u).downloader.download {
-                    
-                }
-            },
+//            UITableViewRowAction(style: .normal, title: "下载") { (a, index) in
+//                let u = self.data[index.row].url
+//                self
+//            },
             UITableViewRowAction(style: .normal, title: "Display") { (a, index) in
-                let u = self.data[index.row].url
-                let i = AVPlayerItem(asset: AVAsset(url: u))
-                self.player = AVPlayer(playerItem: i)
-                self.dlayler.player = self.player
-                self.player?.play()
-                
+                let url = self.data[index.row].url
+                self.loader = try? CokeVideoLoader(url: url)
+                guard let ass = self.loader?.asset else { return }
+                let a = AVPlayerViewController()
+                a.player = CokeVideoPlayer(playerItem: AVPlayerItem(asset: ass))
+                DispatchQueue.main.async {
+                    self.present(a, animated: true, completion: nil)
+                    a.player?.play()
+                }
             }
         ]
         

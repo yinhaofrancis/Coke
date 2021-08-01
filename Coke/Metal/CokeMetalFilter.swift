@@ -47,16 +47,16 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
                 
                 if self.hasBackground{
                     try self.coke.compute(name: "imageScaleToHeightFill", pixelSize:psize, buffers: [], textures: [px1,px2])
+                    try self.coke.compute(name: "imageExposure", pixelSize: psize, buffers: [bias], textures: [px2,px3])
                     if let buffer = self.coke.configuration.commandbuffer{
-                        self.blur.encode(commandBuffer: buffer, sourceTexture: px2, destinationTexture: px3)
+                        self.blur.encode(commandBuffer: buffer, sourceTexture: px3, destinationTexture: px4)
                     }
-                    try self.coke.compute(name: "imageExposure", pixelSize: psize, buffers: [bias], textures: [px3,px4])
                     try self.coke.compute(name: "imageScaleToWidthFill", pixelSize: psize, buffers: [], textures: [px1,px4])
                 }else{
                     try self.coke.compute(name: "imageScaleToFit", pixelSize: psize, buffers: [], textures: [px1,px4])
                 }
                 
-                try self.coke.configuration.commit()
+                try self.coke.configuration.commit(sync: !self.renderImediatly)
                 return px4
                 
             } catch  {
@@ -64,7 +64,7 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
             }
         }
     }
-    public init?(configuration:CokeMetalConfiguration,sigma:Float = 30,imediately:Bool = true) {
+    public init?(configuration:CokeMetalConfiguration,sigma:Float = 20,imediately:Bool = true) {
         do {
             self.coke = try CokeComputer(configuration: configuration)
             self.blur = MPSImageGaussianBlur(device: configuration.device, sigma: sigma)
@@ -77,7 +77,7 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
     public var h:Float = 1280
     public var coke:CokeComputer
     public var blur:MPSImageGaussianBlur
-    public var bias:RenderFragmentUniform = RenderFragmentUniform(bias: -3)
+    public var bias:RenderFragmentUniform = RenderFragmentUniform(bias: -1)
     public var renderImediatly:Bool
     public lazy var buffer:MTLBuffer? = {
         self.coke.configuration.createBuffer(data: self.bias)
