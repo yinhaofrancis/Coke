@@ -86,7 +86,7 @@ extension AVPlayerLayer:CokeVideoDisplayer{
 }
 #if Coke
 public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
-    public var showCover: Bool = false
+    public var showCover: Bool = true
     
     public func resume() {
         FrameTicker.shared.addCallback(sender: self, sel: #selector(renderVideo))
