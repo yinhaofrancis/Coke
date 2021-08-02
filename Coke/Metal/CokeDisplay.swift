@@ -217,15 +217,6 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         self.pixelFormat = CokeConfig.metalColorFormat
         self.contentsScale = UIScreen.main.scale
         self.rasterizationScale = UIScreen.main.scale
-//        guard let px = self.lastPixel else { return }
-//        guard let run = FrameTicker.shared.runloop else {
-//            self.render(texture: px, transform: self.cokePlayer?.currentPresentTransform ?? .identity)
-//            return
-//        }
-//        run.perform { [weak self] in
-//            guard let s = self else { return }
-//            s.render(texture: px , transform: s.cokePlayer?.currentPresentTransform ?? .identity)
-//        }
     }
 }
 #endif

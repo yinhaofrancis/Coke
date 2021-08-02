@@ -43,7 +43,9 @@ public class CokeVideoPlayer:AVPlayer{
     public func copyPixelbuffer()->(CVPixelBuffer,CMTime)?{
         if let time = self.currentItem?.currentTime(), self.output.hasNewPixelBuffer(forItemTime: time){
             var ptime = CMTime.zero
-            guard let px = self.output.copyPixelBuffer(forItemTime: time, itemTimeForDisplay: &ptime) else { return nil }
+            guard let px = self.output.copyPixelBuffer(forItemTime: time, itemTimeForDisplay: &ptime) else {
+                return nil
+            }
             return (px,ptime)
         }
         return nil
