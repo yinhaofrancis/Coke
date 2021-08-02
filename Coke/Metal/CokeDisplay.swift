@@ -188,9 +188,12 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         try self.render(image: px)
     }
     public func render(image: CGImage) throws {
-        let text = try MTKTextureLoader.init(device: self.render.configuration.device).newTexture(cgImage: image, options: [.SRGB:false])
-        self.lastPixel = text
-        self.render(texture:text , transform: .identity)
+        FrameTicker.shared.runloop?.perform { [weak self] in
+            guard let ws = self else  { return }
+            guard let text = try? MTKTextureLoader.init(device: ws.render.configuration.device).newTexture(cgImage: image, options: [.SRGB:false]) else { return }
+            ws.lastPixel = text
+            ws.render(texture:text , transform: .identity)
+        }
     }
     public func render(data:Data){
         guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return }
