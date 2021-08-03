@@ -35,10 +35,14 @@ open class CokeView:UIView{
         if CokeView.useMetal{
             return CokeVideoLayer.self
         }else{
-            return CokeSampleLayer.self
+            return AVPlayerLayer.self
         }
         #else
-        return CokeSampleLayer.self
+        if CokeView.useMetal{
+            return CokeSampleLayer.self
+        }else{
+            return AVPlayerLayer.self
+        }
         #endif
     }
     public override init(frame: CGRect) {
