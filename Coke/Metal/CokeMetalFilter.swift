@@ -110,7 +110,7 @@ public class CokeTransformFilter:CokeMetalFilter{
                                                 simd_float3(0, -1,0),
                                                 simd_float3(1, 0, 0),
                                                 simd_float3(0, w, 1)])
-                guard let px3 = self.Coke.configuration.createTexture(width: Int(w), height: Int(h)) else { return nil }
+                guard let px3 = self.Coke.configuration.createTexture(width: Int(w), height: Int(h),store: .private) else { return nil }
                 try self.Coke.configuration.begin()
                 if(self.buffer == nil){
                     self.buffer = self.Coke.configuration.createBuffer(data: self.transform)

@@ -301,7 +301,7 @@ public class CokeSampleLayer:CALayer,CokeVideoDisplayer{
     }
     
     private var context:CIContext = CIContext(eaglContext: EAGLContext(api: .openGLES3)!)
-    private func filter(img:CIImage,radius:CGFloat = 30,exp:CGFloat = -2)->CGImage?{
+    private func filter(img:CIImage,radius:CGFloat = 20,exp:CGFloat = -1)->CGImage?{
         let filter = CIFilter(name: "CIGaussianBlur")
         let expfilter = CIFilter(name: "CIExposureAdjust")
         filter?.setValue(radius, forKey: "inputRadius")
@@ -332,7 +332,7 @@ public class FrameTicker{
     private weak var sender:AnyObject?
     private var sel:Selector?
     public static let shared:FrameTicker = FrameTicker()
-    public static let slowShared:FrameTicker = FrameTicker(framesPerSecond: 10)
+    public static let slowShared:FrameTicker = FrameTicker(framesPerSecond: 25)
 
     public func addCallback(sender:AnyObject?,sel:Selector){
         self.sender = sender
