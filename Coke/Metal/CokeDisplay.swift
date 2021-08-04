@@ -224,14 +224,13 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
     }
 
     public func basicConfig(rect:CGRect){
-        
-        self.frame = rect
         self.pixelFormat = CokeConfig.metalColorFormat
         self.contentsScale = UIScreen.main.scale
         self.rasterizationScale = UIScreen.main.scale
-        if frame.size != rect.size{
-            renderLast()
+        if self.cokePlayer?.rate == 0{
+            self.renderLast()
         }
+        
     }
 }
 #endif
