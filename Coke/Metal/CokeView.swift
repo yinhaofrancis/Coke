@@ -166,7 +166,8 @@ open class CokeView:UIView{
         }
     }
     public func play(item:AVPlayerItem){
-        self.player = CokeVideoPlayer(playerItem: item)
+        CokeVideoPlayer.shared.replaceCurrentItem(with: item)
+        self.player = CokeVideoPlayer.shared
         
     }
     public func play(){
@@ -234,7 +235,8 @@ open class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
         }
     }
     public func play(item:AVPlayerItem){
-        self.player = CokeVideoPlayer(playerItem: item)
+        CokeVideoPlayer.shared.replaceCurrentItem(with: item)
+        self.player = CokeVideoPlayer.shared
         self.player?.play()
     }
 }

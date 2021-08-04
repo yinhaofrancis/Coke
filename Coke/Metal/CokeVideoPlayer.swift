@@ -9,7 +9,7 @@ import UIKit
 import AVFoundation
 
 public class CokeVideoPlayer:AVPlayer{
-    public static weak var running:CokeVideoPlayer?
+    public static var shared:CokeVideoPlayer = CokeVideoPlayer()
     public var output = AVPlayerItemVideoOutput(pixelBufferAttributes: [
         kCVPixelBufferPixelFormatTypeKey as String:CokeConfig.videoColorFormat,
         kCVPixelBufferMetalCompatibilityKey as String:true
@@ -17,8 +17,6 @@ public class CokeVideoPlayer:AVPlayer{
     ])
     public var currentPresentTransform:CGAffineTransform = .identity
     public override func play() {
-        Self.running?.pause()
-        Self.running = self
         if let ass = self.currentItem?.asset{
             ass.loadValuesAsynchronously(forKeys: ["tracks","playable"], completionHandler: {
                 if ass.statusOfValue(forKey: "tracks", error: nil) == .loaded{

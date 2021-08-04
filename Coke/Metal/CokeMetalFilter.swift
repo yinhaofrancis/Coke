@@ -56,7 +56,7 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
                     try self.coke.compute(name: "imageScaleToFit", pixelSize: psize, buffers: [], textures: [px1,px4])
                 }
                 
-                try self.coke.configuration.commit(sync: !self.renderImediatly)
+                try self.coke.configuration.commit()
                 return px4
                 
             } catch  {

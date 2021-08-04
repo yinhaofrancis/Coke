@@ -81,7 +81,8 @@ class ViewController: UITableViewController,UISearchBarDelegate {
                 self.loader = try? CokeVideoLoader(url: url)
                 guard let ass = self.loader?.asset else { return }
                 let a = AVPlayerViewController()
-                a.player = CokeVideoPlayer(playerItem: AVPlayerItem(asset: ass))
+                CokeVideoPlayer.shared.replaceCurrentItem(with: AVPlayerItem(asset: ass))
+                a.player = CokeVideoPlayer.shared
                 DispatchQueue.main.async {
                     self.present(a, animated: true, completion: nil)
                     a.player?.play()
@@ -101,14 +102,6 @@ class ViewController: UITableViewController,UISearchBarDelegate {
         cell.imageView?.image = UIImage(data: self.data[indexPath.row].image)
         return cell
     }
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let vc:CokePlayerViewController = self.storyboard?.instantiateViewController(withIdentifier: "player") as! CokePlayerViewController
-//        DispatchQueue.main.async {
-//            vc.play(url: self.data[indexPath.row].url)
-//        }
-//        self.present(vc, animated: true, completion: nil)
-//    }
-
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
