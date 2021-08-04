@@ -114,6 +114,14 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
             }
         }
     }
+    func renderLast() {
+        
+        FrameTicker.shared.runloop?.perform { [weak self] in
+            guard let last = self?.lastPixel else { return }
+            self?.render(texture: last,transform: self?.cokePlayer?.currentPresentTransform ?? .identity)
+        }
+        
+    }
     func transformTexture(texture:MTLTexture,transform:CGAffineTransform)->MTLTexture?{
         var result:MTLTexture?
         result = texture
@@ -220,6 +228,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         self.pixelFormat = CokeConfig.metalColorFormat
         self.contentsScale = UIScreen.main.scale
         self.rasterizationScale = UIScreen.main.scale
+        renderLast()
     }
 }
 #endif
