@@ -93,9 +93,6 @@ class DetailViewController: UITableViewController {
     func play(){
         
         guard let index = self.tableView.indexPathForRow(at: CGPoint(x: self.tableView.contentOffset.x, y: self.tableView.contentOffset.y + 1)) else { return }
-        if self.index == index {
-            return
-        }
         self.index = index
         self.playIndex(index: index)
     }

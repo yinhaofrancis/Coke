@@ -13,7 +13,7 @@ import AVFoundation
 
 open class CokeView:UIView{
     public var videoLoader:CokeVideoLoader?
-    
+    private var item:AVPlayerItem?
     public var player:CokeVideoPlayer?{
         get{
             self.videoLayer.cokePlayer
@@ -167,10 +167,13 @@ open class CokeView:UIView{
     }
     public func play(item:AVPlayerItem){
         CokeVideoPlayer.shared.replaceCurrentItem(with: item)
+        CokeVideoPlayer.shared.pause()
         self.player = CokeVideoPlayer.shared
         
+        self.item = item
     }
     public func play(){
+        self.player?.replaceCurrentItem(with: self.item)
         self.player?.play()
         self.videoLayer.resume()
     }
@@ -185,7 +188,7 @@ open class CokeView:UIView{
 #if Coke
 open class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
     public var videoLoader:CokeVideoLoader?
-    
+    private var item:AVPlayerItem?
     public var player:CokeVideoPlayer?{
         get{
             self.videoLayer.cokePlayer
@@ -236,8 +239,22 @@ open class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
     }
     public func play(item:AVPlayerItem){
         CokeVideoPlayer.shared.replaceCurrentItem(with: item)
+        CokeVideoPlayer.shared.pause()
         self.player = CokeVideoPlayer.shared
+        
+        self.item = item
+    }
+    public func play(){
+        self.player?.replaceCurrentItem(with: self.item)
         self.player?.play()
+        self.videoLayer.resume()
+    }
+    public func pause(){
+        self.player?.pause()
+    }
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        self.videoLayer.basicConfig(rect: self.bounds)
     }
 }
 #endif

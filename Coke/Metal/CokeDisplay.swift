@@ -116,7 +116,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
     }
     func renderLast() {
         
-        FrameTicker.shared.runloop?.perform { [weak self] in
+        FrameTicker.shared.perform { [weak self] in
             guard let last = self?.lastPixel else { return }
             self?.render(texture: last,transform: self?.cokePlayer?.currentPresentTransform ?? .identity)
         }
@@ -171,7 +171,6 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
     }
     public func invalidate(){
         self.cokePlayer?.pause()
-        FrameTicker.shared.cancel()
     }
     public func render(pixelBuffer:CVPixelBuffer,transform:CGAffineTransform){
         guard let texture = self.render.configuration.createTexture(img: pixelBuffer) else { return }
@@ -196,7 +195,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         try self.render(image: px)
     }
     public func render(image: CGImage) throws {
-        FrameTicker.shared.runloop?.perform { [weak self] in
+        FrameTicker.shared.perform { [weak self] in
             guard let ws = self else  { return }
             guard let text = try? MTKTextureLoader.init(device: ws.render.configuration.device).newTexture(cgImage: image, options: [.SRGB:false]) else { return }
             ws.lastPixel = text
@@ -266,7 +265,6 @@ public class CokeSampleLayer:CALayer,CokeVideoDisplayer{
     
     public func invalidate(){
         self.cokePlayer?.pause()
-        FrameTicker.slowShared.cancel()
     }
     
     public func basicConfig(rect:CGRect){
@@ -336,9 +334,9 @@ public class CokeSampleLayer:CALayer,CokeVideoDisplayer{
 }
 
 public class FrameTicker{
-    private var timer:CADisplayLink?
-    private var thread:Thread?
-    public var runloop:RunLoop?
+    private var timer:CADisplayLink!
+    private var thread:Thread!
+    private var runloop:RunLoop!
     private var framesPerSecond:Int?
     private weak var sender:AnyObject?
     private var sel:Selector?
@@ -348,6 +346,19 @@ public class FrameTicker{
     public func addCallback(sender:AnyObject?,sel:Selector){
         self.sender = sender
         self.sel = sel
+    }
+    public func perform(_ call:@escaping ()->Void){
+        if let rp = self.runloop{
+            rp.perform(call)
+        }
+    }
+    init(framesPerSecond:Int? = nil) {
+        
+        let lock:UnsafeMutablePointer<pthread_mutex_t> = .allocate(capacity: 1)
+        pthread_mutex_init(lock, nil)
+        
+        pthread_mutex_lock(lock)
+        self.framesPerSecond = framesPerSecond
         if timer == nil{
             self.timer = CADisplayLink(target: self, selector: #selector(callback))
             
@@ -359,21 +370,14 @@ public class FrameTicker{
                 self.timer?.add(to:RunLoop.current , forMode: .common)
                 self.runloop  = RunLoop.current
                 self.callback()
+                pthread_mutex_unlock(lock)
                 RunLoop.current.run()
             })
             self.thread?.start()
         }
-    }
-    init(framesPerSecond:Int? = nil) {
-        self.framesPerSecond = framesPerSecond
-    }
-    public func cancel(){
-        self.timer?.invalidate()
-        thread?.cancel()
-        self.timer = nil
-        self.sender = nil
-        guard let rl = self.runloop?.getCFRunLoop() else { return  }
-        CFRunLoopStop(rl)
+        pthread_mutex_lock(lock)
+        pthread_mutex_destroy(lock)
+        lock.deallocate()
     }
     @objc func callback(){
         _ = self.sender?.perform(self.sel)

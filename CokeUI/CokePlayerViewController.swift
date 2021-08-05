@@ -55,7 +55,7 @@ public class CokeSlider:UISlider{
 
 
 public class CokePlayerViewController:UIViewController{
-    private var videoView:CokeView = CokeView(frame: UIScreen.main.bounds)
+    private var videoView:CokeVideoView = CokeVideoView<CokeVideoLayer>()
     public var item:AVPlayerItem?{
         self.videoView.player?.currentItem
     }
