@@ -82,6 +82,8 @@ class DetailViewController: UITableViewController {
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if decelerate == false {
             self.play()
+        }else{
+            scrollView.isScrollEnabled = false
         }
     }
     override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
@@ -91,7 +93,7 @@ class DetailViewController: UITableViewController {
         self.play()
     }
     func play(){
-        
+        self.tableView.isScrollEnabled = true
         guard let index = self.tableView.indexPathForRow(at: CGPoint(x: self.tableView.contentOffset.x, y: self.tableView.contentOffset.y + 1)) else { return }
         self.index = index
         self.playIndex(index: index)
