@@ -144,6 +144,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         return CokeTransformFilter(configuration: .defaultConfiguration)!
     }()
     private var render:CokeTextureRender
+    private var observer:Any?
     private var lastPixel:MTLTexture?
     public init(configuration:CokeMetalConfiguration = .defaultConfiguration) {
         self.render = CokeTextureRender(configuration: configuration)
@@ -156,6 +157,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
             self.render = lay.render
             self.renderScale = lay.renderScale
             super.init(layer: layer)
+            self.startNotificationScreen()
         }else{
             fatalError()
         }
@@ -163,14 +165,26 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
     required init?(coder: NSCoder) {
         self.render = CokeTextureRender(configuration: .defaultConfiguration)
         super.init(coder: coder)
-        
+        self.startNotificationScreen()
     }
     public override init() {
         self.render = CokeTextureRender(configuration: .defaultConfiguration)
         super.init()
+        self.startNotificationScreen()
     }
     public func invalidate(){
         self.cokePlayer?.pause()
+    }
+    private func startNotificationScreen(){
+        self.observer = NotificationCenter.default.addObserver(forName: UIDevice.orientationDidChangeNotification, object: nil, queue: .main) {[weak self] n in
+            self?.renderLast()
+        }
+    }
+    private func stopNotificationScreen(){
+        if let ob = self.observer{
+            NotificationCenter.default.removeObserver(ob)
+        }
+        
     }
     public func render(pixelBuffer:CVPixelBuffer,transform:CGAffineTransform){
         guard let texture = self.render.configuration.createTexture(img: pixelBuffer) else { return }
@@ -226,10 +240,9 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         self.pixelFormat = CokeConfig.metalColorFormat
         self.contentsScale = UIScreen.main.scale
         self.rasterizationScale = UIScreen.main.scale
-        if self.cokePlayer?.rate == 0{
-            self.renderLast()
-        }
-        
+    }
+    deinit {
+        self.stopNotificationScreen()
     }
 }
 #endif

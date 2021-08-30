@@ -167,10 +167,10 @@ open class CokeView:UIView{
     }
     public func play(item:AVPlayerItem){
         CokeVideoPlayer.shared.replaceCurrentItem(with: item)
-        CokeVideoPlayer.shared.pause()
         self.player = CokeVideoPlayer.shared
         
         self.item = item
+        self.play()
     }
     public func play(){
         self.player?.replaceCurrentItem(with: self.item)

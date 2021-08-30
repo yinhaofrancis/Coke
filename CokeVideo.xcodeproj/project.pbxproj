@@ -214,6 +214,7 @@
 		A9D1C9DB26B3093800F4421B /* Metal */ = {
 			isa = PBXGroup;
 			children = (
+				A9D1C9E626B3093800F4421B /* CokeView.swift */,
 				A9D1CA2126B31DFE00F4421B /* CokeConfig.swift */,
 				A9D1C9DC26B3093800F4421B /* CokeCompute.swift */,
 				A9D1C9DD26B3093800F4421B /* CokeConfiguration.swift */,
@@ -223,7 +224,6 @@
 				A9D1C9E126B3093800F4421B /* CokeVideoPlayer.swift */,
 				A9D1C9E526B3093800F4421B /* CokeVideoTrack.swift */,
 				A9D1C9E226B3093800F4421B /* shader */,
-				A9D1C9E626B3093800F4421B /* CokeView.swift */,
 			);
 			path = Metal;
 			sourceTree = "<group>";
