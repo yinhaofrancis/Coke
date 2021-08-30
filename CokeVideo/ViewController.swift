@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 import Coke
 import AVKit
+import Accelerate
 
 class Model:Codable{
     var name:String

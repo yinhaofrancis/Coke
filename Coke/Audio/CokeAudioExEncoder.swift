@@ -6,7 +6,6 @@
 //
 
 import AudioToolbox
-import CoreMedia
 
 public let CokeAudioEncoderOutputBufferSize:UInt32 = 32 * 1024
 
@@ -64,6 +63,8 @@ public class CokeAudioEncoder:AudioOutputProtocol,AudioProducerProtocol{
     
     public var buffer:CokeAudioBuffer?
     
+    var sem:DispatchSemaphore = DispatchSemaphore(value: 1)
+    
     //输入
     public func handleAudioBuffer(node: AudioNodeProtocol, buffer: CokeAudioBuffer) {
         if self.buffer == nil{
@@ -76,18 +77,7 @@ public class CokeAudioEncoder:AudioOutputProtocol,AudioProducerProtocol{
             self.convertBuffer()
         }
     }
-    public func handleAudioBuffer(buffer: CokeAudioBuffer) {
-        if self.buffer == nil{
-            self.buffer = buffer
-        }else{
-            self.buffer?.data.append(buffer.data)
-        }
-        guard let bf = self.buffer else { return }
-        if(bf.data.count > valuePack){
-            self.convertBuffer()
-        }
-    }
-    private func convertBuffer(){
+    public func convertBuffer(){
         if self.convert == nil{
             return
         }
