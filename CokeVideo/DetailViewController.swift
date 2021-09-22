@@ -72,7 +72,7 @@ class DetailViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:DetailCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DetailCell
-        cell.videoView.play(url: self.model[indexPath.row].url)
+        cell.videoView.loadUrl(url: self.model[indexPath.row].url)
         return cell
     }
     override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -92,6 +92,9 @@ class DetailViewController: UITableViewController {
     override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         self.play()
     }
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        CokeVideoPlayer.shared.pause()
+    }
     func play(){
         self.tableView.isScrollEnabled = true
         guard let index = self.tableView.indexPathForRow(at: CGPoint(x: self.tableView.contentOffset.x, y: self.tableView.contentOffset.y + 1)) else { return }
@@ -100,7 +103,7 @@ class DetailViewController: UITableViewController {
     }
     func playIndex(index:IndexPath) {
         guard let cell = self.tableView.cellForRow(at: index) as? DetailCell else { return }
+        cell.videoView.pause()
         cell.videoView.play()
     }
-    
 }

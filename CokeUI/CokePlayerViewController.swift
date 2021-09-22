@@ -55,7 +55,7 @@ public class CokeSlider:UISlider{
 
 
 public class CokePlayerViewController:UIViewController{
-    private var videoView:CokeVideoView = CokeVideoView<CokeVideoLayer>()
+    private var videoView:CokeView = CokeView()
     public var item:AVPlayerItem?{
         self.videoView.player?.currentItem
     }
@@ -152,7 +152,8 @@ public class CokePlayerViewController:UIViewController{
         })
     }
     public func play(url:URL) {
-        self.videoView.play(url: url)
+        self.videoView.loadUrl(url: url)
+        self.videoView.play()
         if let ob = self.observer{
             self.videoView.player?.removeTimeObserver(ob)
         }

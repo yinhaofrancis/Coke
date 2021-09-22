@@ -64,7 +64,7 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
             }
         }
     }
-    public init?(configuration:CokeMetalConfiguration,sigma:Float = 20,imediately:Bool = true) {
+    public init?(configuration:CokeMetalConfiguration,sigma:Float = 80,imediately:Bool = true) {
         do {
             self.coke = try CokeComputer(configuration: configuration)
             self.blur = MPSImageGaussianBlur(device: configuration.device, sigma: sigma)

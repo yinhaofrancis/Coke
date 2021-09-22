@@ -105,6 +105,8 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
                 self.device = self.render.configuration.device
                 self.renderDefaultCover()
             }
+            self.cokePlayer?.display = nil
+            self.cokePlayer?.display = self
         }
     }
     @objc func renderVideo(){

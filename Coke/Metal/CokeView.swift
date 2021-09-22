@@ -14,7 +14,7 @@ import AVFoundation
 open class CokeView:UIView{
     public var videoLoader:CokeVideoLoader?
     private var item:AVPlayerItem?
-    public var player:CokeVideoPlayer?{
+    var player:CokeVideoPlayer?{
         get{
             self.videoLayer.cokePlayer
         }
@@ -48,6 +48,7 @@ open class CokeView:UIView{
     public override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.black
+        self.player = CokeVideoPlayer()
         self.videoLayer.basicConfig(rect: self.bounds)
         #if Coke
         if CokeView.useMetal{
@@ -146,6 +147,7 @@ open class CokeView:UIView{
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.backgroundColor = UIColor.black
+        self.player = CokeVideoPlayer()
         self.videoLayer.basicConfig(rect: self.bounds)
     }
     
@@ -155,24 +157,26 @@ open class CokeView:UIView{
     deinit {
         self.videoLayer.invalidate()
     }
-    public func play(url:URL) {
+    public func loadUrl(url:URL){
         do {
             self.videoLoader = try CokeVideoLoader(url: url)
-            guard let asset = self.videoLoader?.asset else { return }
-            self.play(item: AVPlayerItem(asset: asset))
-            
+            if let asset = self.videoLoader?.asset{
+                self.item = AVPlayerItem(asset: asset)
+            }
+            self.videoLoader?.image(se: 0, callback: { img in
+                guard let ig = img else { return }
+                try? self.videoLayer.render(image: ig)
+            })
         } catch  {
             
         }
     }
     public func play(item:AVPlayerItem){
-        CokeVideoPlayer.shared.replaceCurrentItem(with: item)
-        self.player = CokeVideoPlayer.shared
-        
         self.item = item
         self.play()
     }
     public func play(){
+        
         self.player?.replaceCurrentItem(with: self.item)
         self.player?.play()
         self.videoLayer.resume()
@@ -189,7 +193,7 @@ open class CokeView:UIView{
 open class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
     public var videoLoader:CokeVideoLoader?
     private var item:AVPlayerItem?
-    public var player:CokeVideoPlayer?{
+    private var player:CokeVideoPlayer?{
         get{
             self.videoLayer.cokePlayer
         }
@@ -211,6 +215,7 @@ open class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
     public override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.black
+        self.player = CokeVideoPlayer()
         self.videoLayer.basicConfig(rect: self.bounds)
         
         self.filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
@@ -219,6 +224,7 @@ open class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.backgroundColor = UIColor.black
+        self.player = CokeVideoPlayer()
         self.videoLayer.basicConfig(rect: self.bounds)
     }
     public var videoLayer:layer{
@@ -237,15 +243,23 @@ open class CokeVideoView<layer:CALayer & CokeVideoDisplayer>:UIView{
             
         }
     }
+    public func loadUrl(url:URL){
+        do {
+            self.videoLoader = try CokeVideoLoader(url: url)
+            if let asset = self.videoLoader?.asset{
+                self.item = AVPlayerItem(asset: asset)
+            }
+        } catch  {
+            
+        }
+    }
     public func play(item:AVPlayerItem){
-        CokeVideoPlayer.shared.replaceCurrentItem(with: item)
-        CokeVideoPlayer.shared.pause()
-        self.player = CokeVideoPlayer.shared
-        
         self.item = item
+        self.play()
     }
     public func play(){
         self.player?.replaceCurrentItem(with: self.item)
+        self.player?.pause()
         self.player?.play()
         self.videoLayer.resume()
     }
