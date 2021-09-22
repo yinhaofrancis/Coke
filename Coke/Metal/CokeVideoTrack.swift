@@ -145,19 +145,19 @@ public class CokeAssetVideoTrack{
         self.writer = try AVAssetWriter(url: url, fileType: .mp4)
         let compress:[String:Any] = [
             AVVideoAverageBitRateKey:self.videoBitRate,
-            AVVideoExpectedSourceFrameRateKey:self.videoFrameRate,
+            AVVideoExpectedSourceFrameRateKey:self.videoFrameRate
         ]
         
         var vset:[String:Any] = [
             AVVideoWidthKey:w,
             AVVideoHeightKey:h,
-            AVVideoCompressionPropertiesKey:compress,
         ]
+        vset[AVVideoCompressionPropertiesKey] = compress
         if #available(iOS 11.0, *) {
-            
-            vset[AVVideoCodecKey] = AVVideoCodecType.h264
+            vset[AVVideoCodecKey] = AVVideoCodecType.hevc
         } else {
             vset[AVVideoCodecKey] = AVVideoCodecH264
+            
             // Fallback on earlier versions
         }
         guard let videoTracks = loadAsset(type: .video, setting: vset)  else { throw NSError(domain: "video config fail", code: 0, userInfo: nil)}
