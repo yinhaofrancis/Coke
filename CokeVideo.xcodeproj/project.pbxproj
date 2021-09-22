@@ -78,7 +78,6 @@
 /* Begin PBXFileReference section */
 		A94CC66D26B398ED00494732 /* CokeUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CokeUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A94CC67026B398ED00494732 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A9B1F52026B4C40900E157A4 /* simulator.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = simulator.xcconfig; sourceTree = "<group>"; };
 		A9B1F52126B6380500E157A4 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		A9B1F52426B6CD2100E157A4 /* CokeAudioEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeAudioEncoder.swift; sourceTree = "<group>"; };
 		A9B1F52526B6CD2100E157A4 /* CokeAudioRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeAudioRecorder.swift; sourceTree = "<group>"; };
@@ -166,7 +165,6 @@
 		A9D1C9A926B3086500F4421B = {
 			isa = PBXGroup;
 			children = (
-				A9B1F52026B4C40900E157A4 /* simulator.xcconfig */,
 				A9D1C9B426B3086500F4421B /* CokeVideo */,
 				A9D1C9CF26B308B100F4421B /* Coke */,
 				A94CC66E26B398ED00494732 /* CokeUI */,
@@ -478,7 +476,6 @@
 /* Begin XCBuildConfiguration section */
 		A94CC67726B398ED00494732 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A9B1F52026B4C40900E157A4 /* simulator.xcconfig */;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -537,7 +534,6 @@
 		};
 		A9D1C9C426B3086600F4421B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A9B1F52026B4C40900E157A4 /* simulator.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
@@ -656,7 +652,6 @@
 		};
 		A9D1C9C726B3086600F4421B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A9B1F52026B4C40900E157A4 /* simulator.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -701,7 +696,6 @@
 		};
 		A9D1C9D826B308B100F4421B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A9B1F52026B4C40900E157A4 /* simulator.xcconfig */;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_STYLE = Automatic;

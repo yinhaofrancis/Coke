@@ -14,15 +14,11 @@ class DetailCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        #if Coke
         if CokeView.useMetal{
             self.videoView.filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
         }else{
             self.videoView.filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration,imediately: false)
         }
-        #else
-        self.videoView.filter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration,imediately: false)
-        #endif
     }
 }
 
