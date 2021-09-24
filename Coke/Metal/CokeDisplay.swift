@@ -134,7 +134,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         return result
     }
     func getCurrentPixelBuffer()->CVPixelBuffer?{
-        return self.cokePlayer?.copyPixelbuffer()?.0
+        return self.cokePlayer?.copyPixelbuffer()
     }
     public func clean(){
         self.render.vertice = nil
@@ -303,7 +303,7 @@ public class CokeSampleLayer:CALayer,CokeVideoDisplayer{
     }
     @objc public func renderBackground(){
         guard let px = self.cokePlayer?.copyPixelbuffer() else { return }
-        guard let img = self.filter(img:CIImage(cvImageBuffer: px.0)) else { return }
+        guard let img = self.filter(img:CIImage(cvImageBuffer: px)) else { return }
         try? self.render(image: img)
     }
     public func render(image: CGImageSource) throws {
@@ -384,6 +384,8 @@ public class FrameTicker{
                 pthread_mutex_unlock(lock)
                 RunLoop.current.run()
             })
+            self.thread.threadPriority = 1.0
+            self.thread.qualityOfService = .userInteractive
             self.thread?.start()
         }
         pthread_mutex_lock(lock)

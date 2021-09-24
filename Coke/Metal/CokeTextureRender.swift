@@ -96,7 +96,7 @@ public class CokeTextureRender {
         }
         renderPass.colorAttachments[0].clearColor = MTLClearColor(red: 1, green: 1, blue: 1, alpha: 1)
         renderPass.colorAttachments[0].storeAction = .store
-        renderPass.colorAttachments[0].loadAction = .clear
+        renderPass.colorAttachments[0].loadAction = .load
         renderPass.colorAttachments[0].texture = drawable.texture
         
         guard let encoder = self.configuration.commandbuffer?.makeRenderCommandEncoder(descriptor: renderPass) else { throw NSError(domain: "start encoder fail", code: 0, userInfo: nil)}
