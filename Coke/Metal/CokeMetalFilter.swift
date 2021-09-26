@@ -19,9 +19,11 @@ public struct RenderFragmentUniform{
 public class CokeGaussBackgroundFilter:CokeMetalFilter{
     public var hasBackground:Bool
     public func filter(pixel: CVPixelBuffer) -> CVPixelBuffer? {
-        guard let px1 = self.coke.configuration.createTexture(img: pixel) else { return nil }
-        guard let px = self.filterTexture(pixel: [px1], w: self.w, h: self.h) else { return nil }
-        return CokeMetalConfiguration.createPixelBuffer(texture: px)
+        autoreleasepool {
+            guard let px1 = self.coke.configuration.createTexture(img: pixel) else { return nil }
+            guard let px = self.filterTexture(pixel: [px1], w: self.w, h: self.h) else { return nil }
+            return CokeMetalConfiguration.createPixelBuffer(texture: px)
+        }
     }
     
     public func filterTexture(pixel:[MTLTexture],w:Float,h:Float)->MTLTexture?{
@@ -44,7 +46,11 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
                 
                 let psize =  MTLSize(width: Int(ow * max(h / oh , w / ow)), height: Int(oh * max(h / oh , w / ow)), depth: 1)
                 
-                
+//                if #available(iOS 13.0, *){
+//                
+//                }else{
+//                    self.hasBackground = false
+//                }
                 if self.hasBackground{
                     try self.coke.compute(name: "imageScaleToHeightFill", buffer: buffer, pixelSize:psize, buffers: [], textures: [px1,px2])
                     try self.coke.compute(name: "imageExposure", buffer: buffer, pixelSize: psize, buffers: [bias], textures: [px2,px3])

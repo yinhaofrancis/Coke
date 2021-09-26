@@ -107,9 +107,11 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         }
     }
     @objc func renderVideo(){
-        if let pl = self.cokePlayer,let item = pl.currentItem{
-            if let pixelBuffer = self.getCurrentPixelBuffer() ,item.status == .readyToPlay{
-                self.render(pixelBuffer: pixelBuffer,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
+        autoreleasepool {
+            if let pl = self.cokePlayer,let item = pl.currentItem{
+                if let pixelBuffer = self.getCurrentPixelBuffer() ,item.status == .readyToPlay{
+                    self.render(pixelBuffer: pixelBuffer,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
+                }
             }
         }
     }
@@ -353,7 +355,14 @@ public class FrameTicker{
     private var sel:Selector?
     public static let shared:FrameTicker = FrameTicker()
     public static let slowShared:FrameTicker = FrameTicker(framesPerSecond: 25)
-    private var queue:DispatchQueue = DispatchQueue(label: "FrameTicker", qos: .userInitiated, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
+    private var queue:DispatchQueue = {
+        if #available(iOS 13.0, *){
+            return DispatchQueue(label: "FrameTicker", qos: .userInitiated, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
+        }else{
+            return DispatchQueue(label: "FrameTicker", qos: .userInitiated, attributes: .init(rawValue: 0), autoreleaseFrequency: .inherit, target: nil)
+        }
+        
+    }()
     public func addCallback(sender:AnyObject?,sel:Selector){
         self.sender = sender
         self.sel = sel

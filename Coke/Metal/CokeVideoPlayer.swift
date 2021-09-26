@@ -39,13 +39,15 @@ public class CokeVideoPlayer:AVPlayer{
     }
     
     public func copyPixelbuffer()->CVPixelBuffer?{
-        if let time = self.currentItem?.currentTime(), self.output.hasNewPixelBuffer(forItemTime: time){
-            guard let px = self.output.copyPixelBuffer(forItemTime: time, itemTimeForDisplay:nil) else {
-                return nil
+        autoreleasepool {
+            if let time = self.currentItem?.currentTime(), self.output.hasNewPixelBuffer(forItemTime: time){
+                guard let px = self.output.copyPixelBuffer(forItemTime: time, itemTimeForDisplay:nil) else {
+                    return nil
+                }
+                return px
             }
-            return px
+            return nil
         }
-        return nil
     }
     public var percent:Double{
         get{
