@@ -17,7 +17,7 @@ public struct RenderFragmentUniform{
     var bias:Float;
 };
 public class CokeGaussBackgroundFilter:CokeMetalFilter{
-    public var hasBackground:Bool = true
+    public var hasBackground:Bool
     public func filter(pixel: CVPixelBuffer) -> CVPixelBuffer? {
         guard let px1 = self.coke.configuration.createTexture(img: pixel) else { return nil }
         guard let px = self.filterTexture(pixel: [px1], w: self.w, h: self.h) else { return nil }
@@ -40,23 +40,21 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
                 guard let px3 = self.coke.configuration.createTexture(width: Int(w), height: Int(h),store: .private) else { return nil }
                 guard let px4 = self.coke.configuration.createTexture(width: Int(w), height: Int(h),store: renderImediatly ? .private : .shared) else { return nil }
                 guard let bias = self.buffer else { return nil }
-                try self.coke.configuration.begin()
+                let buffer = try self.coke.configuration.begin()
                 
                 let psize =  MTLSize(width: Int(ow * max(h / oh , w / ow)), height: Int(oh * max(h / oh , w / ow)), depth: 1)
                 
                 
                 if self.hasBackground{
-                    try self.coke.compute(name: "imageScaleToHeightFill", pixelSize:psize, buffers: [], textures: [px1,px2])
-                    try self.coke.compute(name: "imageExposure", pixelSize: psize, buffers: [bias], textures: [px2,px3])
-                    if let buffer = self.coke.configuration.commandbuffer{
-                        self.blur.encode(commandBuffer: buffer, sourceTexture: px3, destinationTexture: px4)
-                    }
-                    try self.coke.compute(name: "imageScaleToWidthFill", pixelSize: psize, buffers: [], textures: [px1,px4])
+                    try self.coke.compute(name: "imageScaleToHeightFill", buffer: buffer, pixelSize:psize, buffers: [], textures: [px1,px2])
+                    try self.coke.compute(name: "imageExposure", buffer: buffer, pixelSize: psize, buffers: [bias], textures: [px2,px3])
+                    self.blur.encode(commandBuffer: buffer, sourceTexture: px3, destinationTexture: px4)
+                    try self.coke.compute(name: "imageScaleToWidthFill",buffer:buffer, pixelSize: psize, buffers: [], textures: [px1,px4])
                 }else{
-                    try self.coke.compute(name: "imageScaleToFit", pixelSize: psize, buffers: [], textures: [px1,px4])
+                    try self.coke.compute(name: "imageScaleToFit",buffer:buffer, pixelSize: psize, buffers: [], textures: [px1,px4])
                 }
                 
-                try self.coke.configuration.commit()
+                try self.coke.configuration.commit(buffer: buffer)
                 return px4
                 
             } catch  {
@@ -64,11 +62,12 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
             }
         }
     }
-    public init?(configuration:CokeMetalConfiguration,sigma:Float = 40,imediately:Bool = true) {
+    public init?(configuration:CokeMetalConfiguration,sigma:Float = 40,imediately:Bool = true,hasBackground:Bool = true) {
         do {
             self.coke = try CokeComputer(configuration: configuration)
             self.blur = MPSImageGaussianBlur(device: configuration.device, sigma: sigma)
             self.renderImediatly = imediately
+            self.hasBackground = hasBackground
         } catch  {
             return nil
         }
@@ -111,14 +110,14 @@ public class CokeTransformFilter:CokeMetalFilter{
                                                 simd_float3(1, 0, 0),
                                                 simd_float3(0, w, 1)])
                 guard let px3 = self.Coke.configuration.createTexture(width: Int(w), height: Int(h),store: .private) else { return nil }
-                try self.Coke.configuration.begin()
+                let cmdbuffer = try self.Coke.configuration.begin()
                 if(self.buffer == nil){
                     self.buffer = self.Coke.configuration.createBuffer(data: self.transform)
                 }
                 if let buffer = self.buffer{
-                    try self.Coke.compute(name: "imageTransform", pixelSize: MTLSize(width: Int(w), height: Int(h), depth: 1), buffers: [buffer], textures: [px1,px3])
+                    try self.Coke.compute(name: "imageTransform",buffer: cmdbuffer, pixelSize: MTLSize(width: Int(w), height: Int(h), depth: 1), buffers: [buffer], textures: [px1,px3])
                 }
-                try self.Coke.configuration.commit()
+                try self.Coke.configuration.commit(buffer: cmdbuffer)
                 return px3
                 
             } catch  {

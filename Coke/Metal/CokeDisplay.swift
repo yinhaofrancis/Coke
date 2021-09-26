@@ -196,9 +196,9 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         self.render.screenSize = self.showSize;
         guard let draw = self.nextDrawable() else { return  }
         do {
-            try self.render.configuration.begin()
-            try self.render.render(texture: displayTexture, drawable: draw)
-            try self.render.configuration.commit()
+            let buffer = try self.render.configuration.begin()
+            try self.render.render(texture: displayTexture, drawable: draw, buffer: buffer)
+            try self.render.configuration.commit(buffer: buffer)
         } catch {
             return
         }
@@ -353,7 +353,7 @@ public class FrameTicker{
     private var sel:Selector?
     public static let shared:FrameTicker = FrameTicker()
     public static let slowShared:FrameTicker = FrameTicker(framesPerSecond: 25)
-
+    private var queue:DispatchQueue = DispatchQueue(label: "FrameTicker", qos: .userInitiated, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
     public func addCallback(sender:AnyObject?,sel:Selector){
         self.sender = sender
         self.sel = sel
@@ -393,7 +393,9 @@ public class FrameTicker{
         lock.deallocate()
     }
     @objc func callback(){
-        _ = self.sender?.perform(self.sel)
+        self.queue.async {
+            _ = self.sender?.perform(self.sel)
+        }
     }
     
 }

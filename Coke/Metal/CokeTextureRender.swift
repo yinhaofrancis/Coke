@@ -83,13 +83,13 @@ public class CokeTextureRender {
     }
     
     private var viewPort:MTLViewport?
-    public func render(image:CGImage,drawable:CAMetalDrawable) throws{
+    public func render(image:CGImage,drawable:CAMetalDrawable,buffer:MTLCommandBuffer) throws{
         
         let text = try MTKTextureLoader.init(device: self.configuration.device).newTexture(cgImage: image, options: nil)
-        try self.render(texture: text, drawable: drawable)
+        try self.render(texture: text, drawable: drawable,buffer:buffer)
     }
     
-    public func render(texture:MTLTexture,drawable:CAMetalDrawable) throws{
+    public func render(texture:MTLTexture,drawable:CAMetalDrawable,buffer:MTLCommandBuffer) throws{
         let renderPass = MTLRenderPassDescriptor()
         if(self.vertice == nil){
             self.vertice = self.configuration.device.makeBuffer(bytes: rectangle, length: MemoryLayout<vertex>.stride * rectangle.count, options: .storageModeShared)
@@ -99,7 +99,7 @@ public class CokeTextureRender {
         renderPass.colorAttachments[0].loadAction = .load
         renderPass.colorAttachments[0].texture = drawable.texture
         
-        guard let encoder = self.configuration.commandbuffer?.makeRenderCommandEncoder(descriptor: renderPass) else { throw NSError(domain: "start encoder fail", code: 0, userInfo: nil)}
+        guard let encoder = buffer.makeRenderCommandEncoder(descriptor: renderPass) else { throw NSError(domain: "start encoder fail", code: 0, userInfo: nil)}
         if self.viewPort == nil{
             self.viewPort = MTLViewport(originX: 0, originY: 0, width: Double(self.screenSize.width), height: Double(self.screenSize.height)
                                   , znear: -1, zfar: 1)
@@ -118,7 +118,7 @@ public class CokeTextureRender {
             encoder.drawIndexedPrimitives(type: .triangleStrip, indexCount: rectangleIndex.count, indexType: .uint32, indexBuffer: indexb, indexBufferOffset: 0)
         }
         encoder.endEncoding()
-        self.configuration.commandbuffer?.present(drawable)
+        buffer.present(drawable)
     }
     public func scale(x:Float,y:Float,z:Float){
         let a = simd_float4x4([

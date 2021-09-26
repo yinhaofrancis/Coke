@@ -23,8 +23,8 @@ public class CokeComputer{
         self.configuration = configuration
     }
     
-    public func compute(name:String,pixelSize:MTLSize? = nil,buffers:[MTLBuffer] = [],textures:[MTLTexture] = []) throws{
-        try self.startEncoder(name: name,callback: { (encoder) in
+    public func compute(name:String,buffer:MTLCommandBuffer,pixelSize:MTLSize? = nil,buffers:[MTLBuffer] = [],textures:[MTLTexture] = []) throws{
+        try self.startEncoder(name: name,cmdBuffer: buffer,callback: { (encoder) in
             if(textures.count > 0){
                 encoder .setTextures(textures, range: 0 ..< textures.count)
             }
@@ -45,14 +45,11 @@ public class CokeComputer{
         })
     }
     public typealias EncoderBlock = (MTLComputeCommandEncoder) throws ->Void
-    public func startEncoder(name:String,callback:EncoderBlock)throws{
+    public func startEncoder(name:String,cmdBuffer:MTLCommandBuffer,callback:EncoderBlock)throws{
         guard let function = self.configuration.function(name: name) else {
             throw NSError(domain: "can't load function \(name)", code: 0, userInfo: nil)
         }
         let state = try self.device.makeComputePipelineState(function: function)
-        guard let cmdBuffer = self.configuration.commandbuffer else {
-            throw NSError(domain: "you should call begin before startEncorder", code: 0, userInfo: nil)
-        }
         guard let encoder = cmdBuffer.makeComputeCommandEncoder() else {
             throw NSError(domain: "you should create command Encoder", code: 0, userInfo: nil)
         }
