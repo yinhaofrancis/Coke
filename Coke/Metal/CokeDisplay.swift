@@ -403,7 +403,9 @@ public class FrameTicker{
     }
     @objc func callback(){
         self.queue.async {
-            _ = self.sender?.perform(self.sel)
+            if let sel = self.sel{
+                self.sender?.perform(sel)
+            }
         }
     }
     
