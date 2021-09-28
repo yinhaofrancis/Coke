@@ -40,10 +40,11 @@ public class CokeMetalConfiguration{
     }
     
     public func commit(buffer:MTLCommandBuffer) {
-        self.threadLimit.wait()
-        buffer.commit()
-        buffer.waitUntilCompleted()
-        self.threadLimit.signal()
+        if self.threadLimit.wait(timeout: .now() + .milliseconds(1)) == .success{
+            buffer.commit()
+            buffer.waitUntilCompleted()
+            self.threadLimit.signal()
+        }
     }
     public func function(name:String)->MTLFunction?{
         if let a = self.map[name]{
