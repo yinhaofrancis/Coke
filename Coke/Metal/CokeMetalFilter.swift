@@ -46,11 +46,7 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
                 
                 let psize =  MTLSize(width: Int(ow * max(h / oh , w / ow)), height: Int(oh * max(h / oh , w / ow)), depth: 1)
                 
-//                if #available(iOS 13.0, *){
-//                
-//                }else{
-//                    self.hasBackground = false
-//                }
+
                 if self.hasBackground{
                     try self.coke.compute(name: "imageScaleToHeightFill", buffer: buffer, pixelSize:psize, buffers: [], textures: [px1,px2])
                     try self.coke.compute(name: "imageExposure", buffer: buffer, pixelSize: psize, buffers: [bias], textures: [px2,px3])
@@ -60,7 +56,7 @@ public class CokeGaussBackgroundFilter:CokeMetalFilter{
                     try self.coke.compute(name: "imageScaleToFit",buffer:buffer, pixelSize: psize, buffers: [], textures: [px1,px4])
                 }
                 
-                try self.coke.configuration.commit(buffer: buffer)
+                self.coke.configuration.commit(buffer: buffer)
                 return px4
                 
             } catch  {
@@ -123,7 +119,7 @@ public class CokeTransformFilter:CokeMetalFilter{
                 if let buffer = self.buffer{
                     try self.Coke.compute(name: "imageTransform",buffer: cmdbuffer, pixelSize: MTLSize(width: Int(w), height: Int(h), depth: 1), buffers: [buffer], textures: [px1,px3])
                 }
-                try self.Coke.configuration.commit(buffer: cmdbuffer)
+                self.Coke.configuration.commit(buffer: cmdbuffer)
                 return px3
                 
             } catch  {

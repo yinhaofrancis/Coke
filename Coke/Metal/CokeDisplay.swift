@@ -200,7 +200,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         do {
             let buffer = try self.render.configuration.begin()
             try self.render.render(texture: displayTexture, drawable: draw, buffer: buffer)
-            try self.render.configuration.commit(buffer: buffer)
+            self.render.configuration.commit(buffer: buffer)
         } catch {
             return
         }
@@ -322,7 +322,7 @@ public class CokeSampleLayer:CALayer,CokeVideoDisplayer{
         }
     }
     
-    private var context:CIContext = CIContext(eaglContext: EAGLContext(api: .openGLES3)!)
+    private var context:CIContext = CIContext()
     private func filter(img:CIImage,radius:CGFloat = 20,exp:CGFloat = -1)->CGImage?{
         let filter = CIFilter(name: "CIGaussianBlur")
         let expfilter = CIFilter(name: "CIExposureAdjust")

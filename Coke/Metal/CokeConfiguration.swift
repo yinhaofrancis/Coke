@@ -38,7 +38,8 @@ public class CokeMetalConfiguration{
         return commandbuffer
     }
     
-    public func commit(buffer:MTLCommandBuffer) throws {
+    public func commit(buffer:MTLCommandBuffer) {
+        
         buffer.commit()
         buffer.waitUntilCompleted()
     }
