@@ -356,12 +356,7 @@ public class FrameTicker{
     public static let shared:FrameTicker = FrameTicker()
     public static let slowShared:FrameTicker = FrameTicker(framesPerSecond: 25)
     private var queue:DispatchQueue = {
-        if #available(iOS 13.0, *){
-            return DispatchQueue(label: "FrameTicker", qos: .userInitiated, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
-        }else{
-            return DispatchQueue(label: "FrameTicker", qos: .userInitiated, attributes: .init(rawValue: 0), autoreleaseFrequency: .inherit, target: nil)
-        }
-        
+        return DispatchQueue(label: "FrameTicker", qos: .userInitiated, attributes: .init(rawValue: 0), autoreleaseFrequency: .inherit, target: nil)
     }()
     public func addCallback(sender:AnyObject?,sel:Selector){
         self.sender = sender
