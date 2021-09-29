@@ -146,6 +146,7 @@ open class CokeView:UIView{
     }
     public func loadUrl(url:URL){
         do {
+            self.videoLayer.clean()
             self.videoLoader = try CokeVideoLoader(url: url)
             if let asset = self.videoLoader?.asset{
                 self.item = AVPlayerItem(asset: asset)

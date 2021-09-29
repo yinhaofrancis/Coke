@@ -25,8 +25,13 @@ public protocol CokeVideoDisplayer:AnyObject{
     func render(data:Data)
     func render(image:CGImage) throws
     func resume()
+    func clean()
 }
 extension AVPlayerLayer:CokeVideoDisplayer{
+    public func clean() {
+        
+    }
+    
     public var showCover: Bool {
         get {
             return false
@@ -91,7 +96,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         FrameTicker.shared.addCallback(sender: self, sel: #selector(renderVideo))
     }
     public var videoFilter: CokeMetalFilter?
-    
+    public var pixelBuffer:CVPixelBuffer?
     public var showSize:CGSize{
         return CGSize(width: self.frame.size.width * UIScreen.main.scale , height: self.frame.size.height * UIScreen.main.scale)
     }
@@ -110,7 +115,11 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         autoreleasepool {
             if let pl = self.cokePlayer,let item = pl.currentItem{
                 if let pixelBuffer = self.getCurrentPixelBuffer() ,item.status == .readyToPlay{
+                    self.pixelBuffer = pixelBuffer
                     self.render(pixelBuffer: pixelBuffer,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
+                }else{
+                    guard let px = self.pixelBuffer else { return }
+                    self.render(pixelBuffer: px,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
                 }
             }
         }
@@ -139,7 +148,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         return self.cokePlayer?.copyPixelbuffer()
     }
     public func clean(){
-        self.render.vertice = nil
+        self.pixelBuffer = nil
     }
     lazy private var videoTransformFilter:CokeMetalFilter = {
         return CokeTransformFilter(configuration: .defaultConfiguration)!
@@ -260,6 +269,10 @@ extension CGImageSource{
 }
 
 public class CokeSampleLayer:CALayer,CokeVideoDisplayer{
+    public func clean() {
+        
+    }
+    
     public var showCover: Bool = false
     public func resume() {
         FrameTicker.slowShared.addCallback(sender: self, sel: #selector(renderBackground))
