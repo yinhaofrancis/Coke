@@ -275,7 +275,7 @@ public class CokeSampleLayer:CALayer,CokeVideoDisplayer{
     
     public var showCover: Bool = false
     public func resume() {
-        FrameTicker.slowShared.addCallback(sender: self, sel: #selector(renderBackground))
+        FrameTicker.shared.addCallback(sender: self, sel: #selector(renderBackground))
         self.cokePlayer?.play()
     }
     
@@ -284,7 +284,7 @@ public class CokeSampleLayer:CALayer,CokeVideoDisplayer{
     public var cokePlayer:CokeVideoPlayer?{
         didSet{
             self.mainDisplay.cokePlayer = self.cokePlayer
-            FrameTicker.slowShared.addCallback(sender: self, sel: #selector(renderBackground))
+            FrameTicker.shared.addCallback(sender: self, sel: #selector(renderBackground))
             
         }
     }
@@ -367,7 +367,6 @@ public class FrameTicker{
     private weak var sender:AnyObject?
     private var sel:Selector?
     public static let shared:FrameTicker = FrameTicker()
-    public static let slowShared:FrameTicker = FrameTicker(framesPerSecond: 25)
     private var queue:DispatchQueue = {
         return DispatchQueue(label: "FrameTicker", qos: .userInitiated, attributes: .init(rawValue: 0), autoreleaseFrequency: .inherit, target: nil)
     }()

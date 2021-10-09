@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A91BF42227046247002F5246 /* CokeTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91BF42127046247002F5246 /* CokeTask.swift */; };
 		A94CC67426B398ED00494732 /* CokeUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A94CC66D26B398ED00494732 /* CokeUI.framework */; };
 		A94CC67526B398ED00494732 /* CokeUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A94CC66D26B398ED00494732 /* CokeUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A9B1F52226B6380500E157A4 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B1F52126B6380500E157A4 /* DetailViewController.swift */; };
@@ -76,6 +77,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A91BF42127046247002F5246 /* CokeTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeTask.swift; sourceTree = "<group>"; };
 		A94CC66D26B398ED00494732 /* CokeUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CokeUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A94CC67026B398ED00494732 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9B1F52126B6380500E157A4 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
@@ -141,6 +143,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A91BF4202704622A002F5246 /* BackgroundTask */ = {
+			isa = PBXGroup;
+			children = (
+				A91BF42127046247002F5246 /* CokeTask.swift */,
+			);
+			path = BackgroundTask;
+			sourceTree = "<group>";
+		};
 		A94CC66E26B398ED00494732 /* CokeUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -200,6 +210,7 @@
 		A9D1C9CF26B308B100F4421B /* Coke */ = {
 			isa = PBXGroup;
 			children = (
+				A91BF4202704622A002F5246 /* BackgroundTask */,
 				A9B1F52326B6CD2100E157A4 /* Audio */,
 				A9D1C9F126B3093800F4421B /* Coke */,
 				A9D1C9DB26B3093800F4421B /* Metal */,
@@ -427,6 +438,7 @@
 				A9D1CA0E26B3093800F4421B /* CokeVideoEncoder.swift in Sources */,
 				A9D1CA0926B3093800F4421B /* CokeView.swift in Sources */,
 				A9B1F52926B6CD2100E157A4 /* CokeAudioRecorder.swift in Sources */,
+				A91BF42227046247002F5246 /* CokeTask.swift in Sources */,
 				A9D1CA1226B3093800F4421B /* Coke.swift in Sources */,
 				A9D1CA1426B3093800F4421B /* CokeVideoLoader.swift in Sources */,
 				A9D1CA2226B31DFE00F4421B /* CokeConfig.swift in Sources */,
@@ -660,7 +672,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W8LHF9DL7C;
 				INFOPLIST_FILE = CokeVideo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -682,7 +694,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W8LHF9DL7C;
 				INFOPLIST_FILE = CokeVideo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
