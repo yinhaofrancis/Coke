@@ -15,7 +15,6 @@ import CoreVideo
 public class CokeMetalConfiguration{
     public var device:MTLDevice
     public var queue:MTLCommandQueue
-    public var threadLimit = DispatchSemaphore(value: 1)
     public init() throws{
         let device:MTLDevice? = MTLCreateSystemDefaultDevice()
         guard let dev = device else { throw NSError(domain: "can't create metal context", code: 0, userInfo: nil) }
@@ -31,7 +30,6 @@ public class CokeMetalConfiguration{
     public var shaderLibrary:MTLLibrary!
     
     public func begin() throws ->MTLCommandBuffer {
-        self.threadLimit.wait()
         guard let commandbuffer = self.queue.makeCommandBuffer() else { throw NSError(domain: " can't create command buffer", code: 0, userInfo: nil)}
         commandbuffer.enqueue()
         return commandbuffer
@@ -39,7 +37,7 @@ public class CokeMetalConfiguration{
     
     public func commit(buffer:MTLCommandBuffer) {
         buffer.commit()
-        self.threadLimit.signal()
+        buffer.waitUntilCompleted()
     }
     public func function(name:String)->MTLFunction?{
         if let a = self.map[name]{

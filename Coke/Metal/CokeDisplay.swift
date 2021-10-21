@@ -368,7 +368,7 @@ public class FrameTicker{
     private var sel:Selector?
     public static let shared:FrameTicker = FrameTicker()
     private var queue:DispatchQueue = {
-        return DispatchQueue(label: "FrameTicker", qos: .userInitiated, attributes: .init(rawValue: 0), autoreleaseFrequency: .inherit, target: nil)
+        return DispatchQueue(label: "FrameTicker", qos: .userInitiated, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
     }()
     public func addCallback(sender:AnyObject?,sel:Selector){
         self.sender = sender
