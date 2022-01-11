@@ -42,6 +42,7 @@
 		A9D1CA1E26B30ADB00F4421B /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1CA1D26B30ADB00F4421B /* PhotosViewController.swift */; };
 		A9D1CA2026B30B6B00F4421B /* Launch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D1CA1F26B30B6B00F4421B /* Launch.storyboard */; };
 		A9D1CA2226B31DFE00F4421B /* CokeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1CA2126B31DFE00F4421B /* CokeConfig.swift */; };
+		A9F8267C278D953E004BFDC7 /* CokeCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F8267B278D953E004BFDC7 /* CokeCamera.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,6 +115,7 @@
 		A9D1CA1D26B30ADB00F4421B /* PhotosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 		A9D1CA1F26B30B6B00F4421B /* Launch.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Launch.storyboard; sourceTree = "<group>"; };
 		A9D1CA2126B31DFE00F4421B /* CokeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeConfig.swift; sourceTree = "<group>"; };
+		A9F8267B278D953E004BFDC7 /* CokeCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeCamera.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -248,6 +250,7 @@
 		A9D1C9ED26B3093800F4421B /* Video */ = {
 			isa = PBXGroup;
 			children = (
+				A9F8267B278D953E004BFDC7 /* CokeCamera.swift */,
 				A9D1C9EE26B3093800F4421B /* CokeVideoEncoder.swift */,
 			);
 			path = Video;
@@ -453,6 +456,7 @@
 				A9D1CA0526B3093800F4421B /* CokeVideoPlayer.swift in Sources */,
 				A9D1CA0026B3093800F4421B /* CokeCompute.swift in Sources */,
 				A9B1F52826B6CD2100E157A4 /* CokeAudioEncoder.swift in Sources */,
+				A9F8267C278D953E004BFDC7 /* CokeCamera.swift in Sources */,
 				A9B1F52A26B6CD2100E157A4 /* CokeAudioPlayer.swift in Sources */,
 				A9D1CA0426B3093800F4421B /* CokeMetalFilter.swift in Sources */,
 				A9D1CA0226B3093800F4421B /* CokeTextureRender.swift in Sources */,
