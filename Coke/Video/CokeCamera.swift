@@ -91,5 +91,10 @@ public class CokeCamera:NSObject,AVCaptureVideoDataOutputSampleBufferDelegate{
     }
 }
 
-
-
+public class VideoDisplayLayer:AVSampleBufferDisplayLayer,VideoOutputData{
+    public func outputVideoFrame(frame: CMSampleBuffer) {
+        self.enqueue(frame)
+    }
+    
+    
+}

@@ -36,6 +36,7 @@ public struct H264Configuration:VideoEncoderConfiguration{
         var qulity:Float = 0.25
         VTSessionSetProperty(tool, key: kVTCompressionPropertyKey_Quality, value: CFNumberCreate(kCFAllocatorDefault, .floatType, &qulity));
     }
+    public init() {}
 }
 public struct JpegConfiguration:VideoEncoderConfiguration{
 
@@ -55,6 +56,7 @@ public struct JpegConfiguration:VideoEncoderConfiguration{
         var qulity:Float = 0.25
         VTSessionSetProperty(tool, key: kVTCompressionPropertyKey_Quality, value: CFNumberCreate(kCFAllocatorDefault, .floatType, &qulity));
     }
+    public init() {}
 }
 public struct HevcConfiguration:VideoEncoderConfiguration{
 
@@ -72,9 +74,8 @@ public struct HevcConfiguration:VideoEncoderConfiguration{
         
         var bitRateLimit:Int32 = ve.w * ve.h * 3 * 4;
         VTSessionSetProperty(tool, key:kVTCompressionPropertyKey_DataRateLimits, value:CFNumberCreate(kCFAllocatorDefault, .sInt32Type, &bitRateLimit));
-        var qulity:Float = 0.25
-        VTSessionSetProperty(tool, key: kVTCompressionPropertyKey_Quality, value: CFNumberCreate(kCFAllocatorDefault, .floatType, &qulity));
     }
+    public init() {}
 }
 
 public class VideoEncoder:VideoOutputData{
@@ -93,7 +94,6 @@ public class VideoEncoder:VideoOutputData{
         self.w = 1
         self.h = 1
         self.config = configuration ?? JpegConfiguration()
-        try self.start()
     }
     func start() throws{
         if umSelf == nil{
@@ -127,19 +127,20 @@ public class VideoEncoder:VideoOutputData{
         VTCompressionSessionCompleteFrames(session, untilPresentationTimeStamp: .invalid)
     }
     public func encode(buffer:CVPixelBuffer,presentationTimeStamp:CMTime,during:CMTime){
-        guard let ses = self.session else { return }
-        guard let ws = self.umSelf else { return }
         if CVPixelBufferGetWidth(buffer) - Int(self.w) != 0 ||
             CVPixelBufferGetHeight(buffer) - Int(self.h) != 0{
             self.w = Int32(CVPixelBufferGetWidth(buffer))
             self.h = Int32(CVPixelBufferGetHeight(buffer))
             do{
                 try self.start()
+                guard nil != self.session else { return }
             }catch{
                 return
             }
         }
+        guard let ses = self.session else { return }
         var flag:VTEncodeInfoFlags = VTEncodeInfoFlags.frameDropped
+        guard let ws = self.umSelf else { return }
         VTCompressionSessionEncodeFrame(ses, imageBuffer: buffer, presentationTimeStamp: presentationTimeStamp, duration: during, frameProperties: nil, sourceFrameRefcon: ws.toOpaque(), infoFlagsOut: &flag)
     }
 }

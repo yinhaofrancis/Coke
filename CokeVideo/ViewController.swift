@@ -190,5 +190,9 @@ class ViewController: UITableViewController,UISearchBarDelegate {
             des.index = self.tableView.indexPathForSelectedRow
         }
     }
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        super.motionEnded(motion, with: event)
+        self.present(CameraVC(), animated: true, completion: nil)
+    }
 }
 
