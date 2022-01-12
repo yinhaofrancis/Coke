@@ -43,6 +43,8 @@
 		A9D1CA2026B30B6B00F4421B /* Launch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D1CA1F26B30B6B00F4421B /* Launch.storyboard */; };
 		A9D1CA2226B31DFE00F4421B /* CokeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1CA2126B31DFE00F4421B /* CokeConfig.swift */; };
 		A9F8267C278D953E004BFDC7 /* CokeCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F8267B278D953E004BFDC7 /* CokeCamera.swift */; };
+		A9F8267E278E745D004BFDC7 /* CokeDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F8267D278E745D004BFDC7 /* CokeDecoder.swift */; };
+		A9F82680278E748F004BFDC7 /* CokeEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F8267F278E748F004BFDC7 /* CokeEncoder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,6 +118,8 @@
 		A9D1CA1F26B30B6B00F4421B /* Launch.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Launch.storyboard; sourceTree = "<group>"; };
 		A9D1CA2126B31DFE00F4421B /* CokeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeConfig.swift; sourceTree = "<group>"; };
 		A9F8267B278D953E004BFDC7 /* CokeCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeCamera.swift; sourceTree = "<group>"; };
+		A9F8267D278E745D004BFDC7 /* CokeDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeDecoder.swift; sourceTree = "<group>"; };
+		A9F8267F278E748F004BFDC7 /* CokeEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeEncoder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -252,6 +256,8 @@
 			children = (
 				A9F8267B278D953E004BFDC7 /* CokeCamera.swift */,
 				A9D1C9EE26B3093800F4421B /* CokeVideoEncoder.swift */,
+				A9F8267D278E745D004BFDC7 /* CokeDecoder.swift */,
+				A9F8267F278E748F004BFDC7 /* CokeEncoder.swift */,
 			);
 			path = Video;
 			sourceTree = "<group>";
@@ -435,6 +441,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9F8267E278E745D004BFDC7 /* CokeDecoder.swift in Sources */,
 				A9D1CA1526B3093800F4421B /* CokeDownloader.swift in Sources */,
 				A9D1CA0726B3093800F4421B /* CokeVideo.metal in Sources */,
 				A9B1F52B26B6CD2100E157A4 /* CokeAudioNode.swift in Sources */,
@@ -453,6 +460,7 @@
 				A9D1CA1626B3093800F4421B /* CokeCookie.swift in Sources */,
 				A9D1CA0126B3093800F4421B /* CokeConfiguration.swift in Sources */,
 				A9D1CA0826B3093800F4421B /* CokeVideoTrack.swift in Sources */,
+				A9F82680278E748F004BFDC7 /* CokeEncoder.swift in Sources */,
 				A9D1CA0526B3093800F4421B /* CokeVideoPlayer.swift in Sources */,
 				A9D1CA0026B3093800F4421B /* CokeCompute.swift in Sources */,
 				A9B1F52826B6CD2100E157A4 /* CokeAudioEncoder.swift in Sources */,
