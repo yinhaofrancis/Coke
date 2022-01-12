@@ -53,10 +53,11 @@ public struct JpegConfiguration:VideoEncoderConfiguration{
         
         var bitRateLimit:Int32 = ve.w * ve.h * 3 * 4;
         VTSessionSetProperty(tool, key:kVTCompressionPropertyKey_DataRateLimits, value:CFNumberCreate(kCFAllocatorDefault, .sInt32Type, &bitRateLimit));
-        var qulity:Float = 0.25
+        var qulity:Float = self.quality
         VTSessionSetProperty(tool, key: kVTCompressionPropertyKey_Quality, value: CFNumberCreate(kCFAllocatorDefault, .floatType, &qulity));
     }
-    public init() {}
+    public var quality:Float
+    public init(quality:Float) {self.quality = quality}
 }
 public struct HevcConfiguration:VideoEncoderConfiguration{
 
@@ -93,7 +94,7 @@ public class VideoEncoder:VideoOutputData{
     public init(configuration:VideoEncoderConfiguration? = nil)throws {
         self.w = 1
         self.h = 1
-        self.config = configuration ?? JpegConfiguration()
+        self.config = configuration ?? JpegConfiguration(quality: 0.5)
     }
     func start() throws{
         if umSelf == nil{

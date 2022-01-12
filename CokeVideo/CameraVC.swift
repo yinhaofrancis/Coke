@@ -12,7 +12,7 @@ public class CameraVC:UIViewController{
         try! CokeCamera(dataOut: self.encoder)
     }()
     lazy var  encoder:VideoEncoder = {
-        let a = try! VideoEncoder(configuration: H264Configuration())
+        let a = try! VideoEncoder()
         a.dataOut = layer
         return a
     }()
