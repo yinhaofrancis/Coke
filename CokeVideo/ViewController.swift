@@ -33,6 +33,7 @@ class ViewController: UITableViewController,UISearchBarDelegate {
     public var window:UIWindow = UIWindow(frame: UIScreen.main.bounds)
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.window.makeKeyAndVisible()
         self.window.isUserInteractionEnabled = false;
         self.window.isHidden = false
@@ -47,6 +48,17 @@ class ViewController: UITableViewController,UISearchBarDelegate {
             }
             let data = try Data(contentsOf: url)
             self.data = try JSONDecoder().decode([Model].self, from: data)
+            if (self.data.count == 0){
+                DispatchQueue.main.async {
+                    self.process(str: "http://www.heishenhua.com/video/b1/gamesci_2021.mp4")
+                    self.process(str: "http://www.heishenhua.com/video/preview/video_Day1.mp4")
+                    self.process(str: "http://www.heishenhua.com/video/preview/video_Day2.mp4")
+                    self.process(str: "http://www.heishenhua.com/video/preview/video_Day3.mp4")
+                    self.process(str: "http://www.heishenhua.com/video/preview/video_Day4.mp4")
+                    self.process(str: "http://www.heishenhua.com/video/preview/video_Day5.mp4")
+                    self.process(str: "http://www.heishenhua.com/video/preview/video_Day6.mp4")
+                }
+            }
         }catch{
             
         }        
