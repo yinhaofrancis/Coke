@@ -47,8 +47,7 @@ class ViewController: UITableViewController,UISearchBarDelegate {
                 FileManager.default.createFile(atPath: url.path, contents: nil, attributes: nil)
             }
             let data = try Data(contentsOf: url)
-            self.data = try JSONDecoder().decode([Model].self, from: data)
-            if (self.data.count == 0){
+            if data.count == 0{
                 DispatchQueue.main.async {
                     self.process(str: "http://www.heishenhua.com/video/b1/gamesci_2021.mp4")
                     self.process(str: "http://www.heishenhua.com/video/preview/video_Day1.mp4")
@@ -58,6 +57,8 @@ class ViewController: UITableViewController,UISearchBarDelegate {
                     self.process(str: "http://www.heishenhua.com/video/preview/video_Day5.mp4")
                     self.process(str: "http://www.heishenhua.com/video/preview/video_Day6.mp4")
                 }
+            }else{
+                self.data = try JSONDecoder().decode([Model].self, from: data)
             }
         }catch{
             

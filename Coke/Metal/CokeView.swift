@@ -68,23 +68,7 @@ open class CokeView:UIView{
         }
     }
     public static func memory() -> Double{
-        var host_port:mach_port_t = 0
-        var host_size:mach_msg_type_number_t = 0
-        var pagesize:vm_size_t = 0
-        host_port = mach_host_self();
-        host_size = mach_msg_type_number_t(MemoryLayout<vm_statistics_data_t>.size / MemoryLayout<integer_t>.size)
-        host_page_size(host_port, &pagesize);
-        var vm_stat:vm_statistics_data_t = vm_statistics_data_t();
-        let pointer = host_info_t.allocate(capacity: Int(host_size))
-        if(host_statistics(host_port,HOST_VM_INFO, pointer, &host_size) != KERN_SUCCESS) {
-            print("Failed to fetch vm statistics")
-            
-        }
-        memcpy(&vm_stat, pointer, MemoryLayout.size(ofValue: vm_stat))
-        let mem_used:natural_t = (vm_stat.active_count + vm_stat.inactive_count + vm_stat.wire_count) * UInt32(pagesize);
-        let mem_free:natural_t = vm_stat.free_count * UInt32(pagesize);
-        let mem_total:natural_t  = mem_used + mem_free;
-        return Double(mem_total) / 1024.0 / 1024.0;
+        Double(ProcessInfo.processInfo.physicalMemory) / 1024 / 1024
     }
     public static var machine:String{
         var ts = utsname()

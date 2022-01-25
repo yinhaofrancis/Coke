@@ -96,7 +96,6 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         FrameTicker.shared.addCallback(sender: self, sel: #selector(renderVideo))
     }
     public var videoFilter: CokeMetalFilter?
-    public var pixelBuffer:CVPixelBuffer?
     public var showSize:CGSize{
         return CGSize(width: self.frame.size.width * UIScreen.main.scale , height: self.frame.size.height * UIScreen.main.scale)
     }
@@ -115,11 +114,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         autoreleasepool {
             if let pl = self.cokePlayer,let item = pl.currentItem{
                 if let pixelBuffer = self.getCurrentPixelBuffer() ,item.status == .readyToPlay{
-                    self.pixelBuffer = pixelBuffer
                     self.render(pixelBuffer: pixelBuffer,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
-                }else{
-                    guard let px = self.pixelBuffer else { return }
-                    self.render(pixelBuffer: px,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
                 }
             }
         }
@@ -148,7 +143,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         return self.cokePlayer?.copyPixelbuffer()
     }
     public func clean(){
-        self.pixelBuffer = nil
+     
     }
     lazy private var videoTransformFilter:CokeMetalFilter = {
         return CokeTransformFilter(configuration: .defaultConfiguration)!
@@ -253,6 +248,8 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
     }
     deinit {
         self.stopNotificationScreen()
+        FrameTicker.shared.close()
+        FrameTicker.shared = FrameTicker()
     }
 }
 extension CGImageSource{
@@ -366,7 +363,7 @@ public class FrameTicker{
     private var framesPerSecond:Int?
     private weak var sender:AnyObject?
     private var sel:Selector?
-    public static let shared:FrameTicker = FrameTicker()
+    public static var shared:FrameTicker = FrameTicker()
     private var queue:DispatchQueue = {
         return DispatchQueue(label: "FrameTicker", qos: .userInitiated, attributes: .init(rawValue: 0), autoreleaseFrequency: .inherit, target: nil)
     }()
@@ -393,10 +390,10 @@ public class FrameTicker{
                 self.timer?.preferredFramesPerSecond = fs
             }
             
-            self.thread = Thread(block: {
-                self.timer?.add(to:RunLoop.current , forMode: .common)
-                self.runloop  = RunLoop.current
-                self.callback()
+            self.thread = Thread(block: { [weak self] in
+                self?.timer?.add(to:RunLoop.current , forMode: .common)
+                self?.runloop  = RunLoop.current
+                self?.callback()
                 pthread_mutex_unlock(lock)
                 RunLoop.current.run()
             })
@@ -415,5 +412,7 @@ public class FrameTicker{
             }
         }
     }
-    
+    func close(){
+        self.timer.invalidate()
+    }
 }

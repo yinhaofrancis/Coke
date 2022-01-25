@@ -96,27 +96,25 @@ public class CokeTextureRender {
         }
         renderPass.colorAttachments[0].clearColor = MTLClearColor(red: 1, green: 1, blue: 1, alpha: 1)
         renderPass.colorAttachments[0].storeAction = .store
-        renderPass.colorAttachments[0].loadAction = .load
+        renderPass.colorAttachments[0].loadAction = .clear
         renderPass.colorAttachments[0].texture = drawable.texture
-        
+        guard let indexb = self.indexVertice else { return  }
+        if self.pipelineState == nil{
+            self.pipelineState = try configuration.device.makeRenderPipelineState(descriptor: self.pipelineDescriptor)
+        }
         guard let encoder = buffer.makeRenderCommandEncoder(descriptor: renderPass) else { throw NSError(domain: "start encoder fail", code: 0, userInfo: nil)}
         if self.viewPort == nil{
             self.viewPort = MTLViewport(originX: 0, originY: 0, width: Double(self.screenSize.width), height: Double(self.screenSize.height)
                                   , znear: -1, zfar: 1)
         }
         encoder.setViewport(self.viewPort!)
-        if self.pipelineState == nil{
-            self.pipelineState = try configuration.device.makeRenderPipelineState(descriptor: self.pipelineDescriptor)
-        }
         guard let pipelinestate = self.pipelineState else { encoder.endEncoding();return}
         encoder.setRenderPipelineState(pipelinestate)
         encoder.setVertexBuffer(self.vertice, offset: 0, index: 0)
         encoder.setVertexBytes(&self.worldState, length: MemoryLayout.stride(ofValue: self.worldState), index: 1)
         encoder.setFragmentTexture(texture, index: 0)
         encoder.setFragmentSamplerState(self.samplerState, index: 0)
-        if let indexb = self.indexVertice{
-            encoder.drawIndexedPrimitives(type: .triangleStrip, indexCount: rectangleIndex.count, indexType: .uint32, indexBuffer: indexb, indexBufferOffset: 0)
-        }
+        encoder.drawIndexedPrimitives(type: .triangleStrip, indexCount: rectangleIndex.count, indexType: .uint32, indexBuffer: indexb, indexBufferOffset: 0)
         encoder.endEncoding()
         buffer.present(drawable)
     }
