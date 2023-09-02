@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VgT-9M-Pc5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VgT-9M-Pc5">
     <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -35,7 +35,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.098039215690000001" green="0.098039215690000001" blue="0.098039215690000001" alpha="1" colorSpace="calibratedRGB"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" searchBarStyle="minimal" placeholder="输入URL,多个URL用空格分开" showsCancelButton="YES" id="Qrg-Zb-lxb">
-                            <rect key="frame" x="0.0" y="0.0" width="428" height="51"/>
+                            <rect key="frame" x="0.0" y="0.0" width="428" height="56"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
                             <scopeButtonTitles>
@@ -48,10 +48,10 @@
                         </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="cell" textLabel="h0a-Ta-j8H" detailTextLabel="k54-RP-IXA" style="IBUITableViewCellStyleSubtitle" id="szl-pB-FqL">
-                                <rect key="frame" x="0.0" y="95.666666030883789" width="428" height="55.666667938232422"/>
+                                <rect key="frame" x="0.0" y="106" width="428" height="55.666667938232422"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="szl-pB-FqL" id="rXQ-hH-pOJ">
-                                    <rect key="frame" x="0.0" y="0.0" width="399.33333333333331" height="55.666667938232422"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="397.66666666666669" height="55.666667938232422"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="h0a-Ta-j8H">
@@ -88,7 +88,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="rnb-3J-qlq">
                             <connections>
-                                <segue destination="4my-is-ade" kind="show" id="yF6-4u-qx2"/>
+                                <segue destination="6JF-As-Pvu" kind="show" id="woZ-In-09B"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -96,6 +96,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d8B-w7-gOf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="110" y="-393"/>
+        </scene>
+        <!--Ppm View Controller-->
+        <scene sceneID="oUl-vi-X7D">
+            <objects>
+                <viewController id="6JF-As-Pvu" customClass="ppmViewController" customModule="CokeVideo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="SI0-fF-Upl"/>
+                        <viewControllerLayoutGuide type="bottom" id="T2u-ob-ZLj"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="p2f-zL-tyd">
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="GCI-M1-FmQ"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DyA-Fa-K1T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1166" y="-393"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="0Da-tg-TaB">
@@ -107,7 +126,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="690" id="Jhg-h4-im1" customClass="DetailCell" customModule="CokeVideo" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="44.666666030883789" width="428" height="690"/>
+                                <rect key="frame" x="0.0" y="50" width="428" height="690"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Jhg-h4-im1" id="jji-ng-ZuQ">
                                     <rect key="frame" x="0.0" y="0.0" width="428" height="690"/>
@@ -141,31 +160,12 @@
             </objects>
             <point key="canvasLocation" x="140.18691588785046" y="414.03887688984884"/>
         </scene>
-        <!--Photos View Controller-->
-        <scene sceneID="asf-s8-a1F">
-            <objects>
-                <viewController id="4my-is-ade" customClass="PhotosViewController" customModule="CokeVideo" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ech-dn-nUp"/>
-                        <viewControllerLayoutGuide type="bottom" id="Is0-53-crE"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="5fR-oI-kYJ">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="Ye3-LQ-iVp"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jhL-fM-aHB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="955" y="-394"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="mBe-Sp-fvQ">
             <objects>
                 <navigationController id="VgT-9M-Pc5" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="mhI-hO-kPq">
-                        <rect key="frame" x="0.0" y="44" width="428" height="44"/>
+                        <rect key="frame" x="0.0" y="47" width="428" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>

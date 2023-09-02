@@ -77,7 +77,9 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
 
             }
         }else{
-            let r = UInt64(dataRequest.requestedOffset)...UInt64(dataRequest.requestedLength + Int(dataRequest.requestedOffset) - 1)
+            let count:Int = (dataRequest.requestedLength > 1024 * 1024) ? 1024 * 1024  : dataRequest.requestedLength
+            
+            let r = UInt64(dataRequest.requestedOffset) ... UInt64(count + Int(dataRequest.requestedOffset) - 1)
             if self.downloader.storage.complete(range: r){
                 if let data = self.downloader.storage[r]{
                     dataRequest.respond(with: data)

@@ -209,3 +209,28 @@ class ViewController: UITableViewController,UISearchBarDelegate {
     }
 }
 
+
+class ppmViewController:UIViewController{
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+//        var px:[UInt32] = []
+//        for i in 0 ..< 25{
+//            for j in 0 ..< 25{
+//                for k in 0 ..< 25{
+//                    px.append(UInt32(i * 10))
+//                    px.append(UInt32(j * 10))
+//                    px.append(UInt32(k * 10))
+//                }
+//            }
+//        }
+//        let ppm = Ppm(type: .pixmap, width: 25, height: 25 * 25, pixels: px)
+//        if #available(macCatalyst 16.0, *) {
+//            let url = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: "m.ppm")
+//            ppm.write(url: url)
+//        } else {
+//            // Fallback on earlier versions
+//        }
+        
+    }
+}

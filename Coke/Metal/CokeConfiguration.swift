@@ -15,6 +15,7 @@ import CoreVideo
 public class CokeMetalConfiguration{
     public var device:MTLDevice
     public var queue:MTLCommandQueue
+    public var semphone = DispatchSemaphore(value: 2)
     public init() throws{
         let device:MTLDevice? = MTLCreateSystemDefaultDevice()
         guard let dev = device else { throw NSError(domain: "can't create metal context", code: 0, userInfo: nil) }
@@ -30,14 +31,21 @@ public class CokeMetalConfiguration{
     public var shaderLibrary:MTLLibrary!
     
     public func begin() throws ->MTLCommandBuffer {
+        
+        let a = self.semphone.wait(timeout: .now() + .milliseconds(100))
+        if a == .timedOut{
+            throw NSError(domain: "draw call waiting timeout", code: 1)
+        }
         guard let commandbuffer = self.queue.makeCommandBuffer() else { throw NSError(domain: " can't create command buffer", code: 0, userInfo: nil)}
         commandbuffer.enqueue()
         return commandbuffer
     }
     
     public func commit(buffer:MTLCommandBuffer) {
+        buffer .addCompletedHandler { _ in
+            self.semphone.signal()
+        }
         buffer.commit()
-        buffer.waitUntilCompleted()
     }
     public func function(name:String)->MTLFunction?{
         if let a = self.map[name]{
