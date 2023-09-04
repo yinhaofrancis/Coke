@@ -7,14 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A91BF42227046247002F5246 /* CokeTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91BF42127046247002F5246 /* CokeTask.swift */; };
 		A94CC67426B398ED00494732 /* CokeUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A94CC66D26B398ED00494732 /* CokeUI.framework */; };
 		A94CC67526B398ED00494732 /* CokeUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A94CC66D26B398ED00494732 /* CokeUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A9B1F52226B6380500E157A4 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B1F52126B6380500E157A4 /* DetailViewController.swift */; };
-		A9B1F52826B6CD2100E157A4 /* CokeAudioEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B1F52426B6CD2100E157A4 /* CokeAudioEncoder.swift */; };
-		A9B1F52926B6CD2100E157A4 /* CokeAudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B1F52526B6CD2100E157A4 /* CokeAudioRecorder.swift */; };
-		A9B1F52A26B6CD2100E157A4 /* CokeAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B1F52626B6CD2100E157A4 /* CokeAudioPlayer.swift */; };
-		A9B1F52B26B6CD2100E157A4 /* CokeAudioNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B1F52726B6CD2100E157A4 /* CokeAudioNode.swift */; };
 		A9D1C9B626B3086500F4421B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9B526B3086500F4421B /* AppDelegate.swift */; };
 		A9D1C9BA26B3086500F4421B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9B926B3086500F4421B /* ViewController.swift */; };
 		A9D1C9BD26B3086500F4421B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D1C9BB26B3086500F4421B /* Main.storyboard */; };
@@ -30,7 +25,6 @@
 		A9D1CA0726B3093800F4421B /* CokeVideo.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9E426B3093800F4421B /* CokeVideo.metal */; };
 		A9D1CA0826B3093800F4421B /* CokeVideoTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9E526B3093800F4421B /* CokeVideoTrack.swift */; };
 		A9D1CA0926B3093800F4421B /* CokeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9E626B3093800F4421B /* CokeView.swift */; };
-		A9D1CA0E26B3093800F4421B /* CokeVideoEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9EE26B3093800F4421B /* CokeVideoEncoder.swift */; };
 		A9D1CA0F26B3093800F4421B /* CokePlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9EF26B3093800F4421B /* CokePlayerViewController.swift */; };
 		A9D1CA1026B3093800F4421B /* CokeGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F026B3093800F4421B /* CokeGallery.swift */; };
 		A9D1CA1126B3093800F4421B /* CokeDiskStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F226B3093800F4421B /* CokeDiskStorage.swift */; };
@@ -42,11 +36,6 @@
 		A9D1CA1E26B30ADB00F4421B /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1CA1D26B30ADB00F4421B /* PhotosViewController.swift */; };
 		A9D1CA2026B30B6B00F4421B /* Launch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D1CA1F26B30B6B00F4421B /* Launch.storyboard */; };
 		A9D1CA2226B31DFE00F4421B /* CokeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1CA2126B31DFE00F4421B /* CokeConfig.swift */; };
-		A9E3D61E2AA2D05200BD5CF7 /* ppm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3D61D2AA2D05200BD5CF7 /* ppm.swift */; };
-		A9F8267C278D953E004BFDC7 /* CokeCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F8267B278D953E004BFDC7 /* CokeCamera.swift */; };
-		A9F8267E278E745D004BFDC7 /* CokeDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F8267D278E745D004BFDC7 /* CokeDecoder.swift */; };
-		A9F82680278E748F004BFDC7 /* CokeEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F8267F278E748F004BFDC7 /* CokeEncoder.swift */; };
-		A9F82682278E80A8004BFDC7 /* CameraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F82681278E80A8004BFDC7 /* CameraVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,14 +71,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A91BF42127046247002F5246 /* CokeTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeTask.swift; sourceTree = "<group>"; };
 		A94CC66D26B398ED00494732 /* CokeUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CokeUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A94CC67026B398ED00494732 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9B1F52126B6380500E157A4 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
-		A9B1F52426B6CD2100E157A4 /* CokeAudioEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeAudioEncoder.swift; sourceTree = "<group>"; };
-		A9B1F52526B6CD2100E157A4 /* CokeAudioRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeAudioRecorder.swift; sourceTree = "<group>"; };
-		A9B1F52626B6CD2100E157A4 /* CokeAudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeAudioPlayer.swift; sourceTree = "<group>"; };
-		A9B1F52726B6CD2100E157A4 /* CokeAudioNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeAudioNode.swift; sourceTree = "<group>"; };
 		A9D1C9B226B3086500F4421B /* CokeVideo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CokeVideo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9D1C9B526B3086500F4421B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A9D1C9B926B3086500F4421B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -107,7 +91,6 @@
 		A9D1C9E426B3093800F4421B /* CokeVideo.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = CokeVideo.metal; sourceTree = "<group>"; };
 		A9D1C9E526B3093800F4421B /* CokeVideoTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeVideoTrack.swift; sourceTree = "<group>"; };
 		A9D1C9E626B3093800F4421B /* CokeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeView.swift; sourceTree = "<group>"; };
-		A9D1C9EE26B3093800F4421B /* CokeVideoEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeVideoEncoder.swift; sourceTree = "<group>"; };
 		A9D1C9EF26B3093800F4421B /* CokePlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokePlayerViewController.swift; sourceTree = "<group>"; };
 		A9D1C9F026B3093800F4421B /* CokeGallery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeGallery.swift; sourceTree = "<group>"; };
 		A9D1C9F226B3093800F4421B /* CokeDiskStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeDiskStorage.swift; sourceTree = "<group>"; };
@@ -120,11 +103,6 @@
 		A9D1CA1F26B30B6B00F4421B /* Launch.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Launch.storyboard; sourceTree = "<group>"; };
 		A9D1CA2126B31DFE00F4421B /* CokeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeConfig.swift; sourceTree = "<group>"; };
 		A9E3D5EA2A9E236900BD5CF7 /* CokeVideo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CokeVideo.entitlements; sourceTree = "<group>"; };
-		A9E3D61D2AA2D05200BD5CF7 /* ppm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ppm.swift; sourceTree = "<group>"; };
-		A9F8267B278D953E004BFDC7 /* CokeCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeCamera.swift; sourceTree = "<group>"; };
-		A9F8267D278E745D004BFDC7 /* CokeDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeDecoder.swift; sourceTree = "<group>"; };
-		A9F8267F278E748F004BFDC7 /* CokeEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeEncoder.swift; sourceTree = "<group>"; };
-		A9F82681278E80A8004BFDC7 /* CameraVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,14 +132,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A91BF4202704622A002F5246 /* BackgroundTask */ = {
-			isa = PBXGroup;
-			children = (
-				A91BF42127046247002F5246 /* CokeTask.swift */,
-			);
-			path = BackgroundTask;
-			sourceTree = "<group>";
-		};
 		A94CC66E26B398ED00494732 /* CokeUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -170,17 +140,6 @@
 				A94CC67026B398ED00494732 /* Info.plist */,
 			);
 			path = CokeUI;
-			sourceTree = "<group>";
-		};
-		A9B1F52326B6CD2100E157A4 /* Audio */ = {
-			isa = PBXGroup;
-			children = (
-				A9B1F52426B6CD2100E157A4 /* CokeAudioEncoder.swift */,
-				A9B1F52526B6CD2100E157A4 /* CokeAudioRecorder.swift */,
-				A9B1F52626B6CD2100E157A4 /* CokeAudioPlayer.swift */,
-				A9B1F52726B6CD2100E157A4 /* CokeAudioNode.swift */,
-			);
-			path = Audio;
 			sourceTree = "<group>";
 		};
 		A9D1C9A926B3086500F4421B = {
@@ -215,7 +174,6 @@
 				A9D1C9BE26B3086600F4421B /* Assets.xcassets */,
 				A9D1CA1F26B30B6B00F4421B /* Launch.storyboard */,
 				A9D1C9C326B3086600F4421B /* Info.plist */,
-				A9F82681278E80A8004BFDC7 /* CameraVC.swift */,
 			);
 			path = CokeVideo;
 			sourceTree = "<group>";
@@ -223,12 +181,8 @@
 		A9D1C9CF26B308B100F4421B /* Coke */ = {
 			isa = PBXGroup;
 			children = (
-				A9E3D61C2AA2D03600BD5CF7 /* other */,
-				A91BF4202704622A002F5246 /* BackgroundTask */,
-				A9B1F52326B6CD2100E157A4 /* Audio */,
 				A9D1C9F126B3093800F4421B /* Coke */,
 				A9D1C9DB26B3093800F4421B /* Metal */,
-				A9D1C9ED26B3093800F4421B /* Video */,
 				A9D1C9D126B308B100F4421B /* Info.plist */,
 			);
 			path = Coke;
@@ -259,17 +213,6 @@
 			path = shader;
 			sourceTree = "<group>";
 		};
-		A9D1C9ED26B3093800F4421B /* Video */ = {
-			isa = PBXGroup;
-			children = (
-				A9F8267B278D953E004BFDC7 /* CokeCamera.swift */,
-				A9D1C9EE26B3093800F4421B /* CokeVideoEncoder.swift */,
-				A9F8267D278E745D004BFDC7 /* CokeDecoder.swift */,
-				A9F8267F278E748F004BFDC7 /* CokeEncoder.swift */,
-			);
-			path = Video;
-			sourceTree = "<group>";
-		};
 		A9D1C9F126B3093800F4421B /* Coke */ = {
 			isa = PBXGroup;
 			children = (
@@ -281,14 +224,6 @@
 				A9D1C9F726B3093800F4421B /* CokeCookie.swift */,
 			);
 			path = Coke;
-			sourceTree = "<group>";
-		};
-		A9E3D61C2AA2D03600BD5CF7 /* other */ = {
-			isa = PBXGroup;
-			children = (
-				A9E3D61D2AA2D05200BD5CF7 /* ppm.swift */,
-			);
-			path = other;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -448,7 +383,6 @@
 			files = (
 				A9D1CA1E26B30ADB00F4421B /* PhotosViewController.swift in Sources */,
 				A9D1C9BA26B3086500F4421B /* ViewController.swift in Sources */,
-				A9F82682278E80A8004BFDC7 /* CameraVC.swift in Sources */,
 				A9D1C9B626B3086500F4421B /* AppDelegate.swift in Sources */,
 				A9B1F52226B6380500E157A4 /* DetailViewController.swift in Sources */,
 			);
@@ -458,32 +392,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9F8267E278E745D004BFDC7 /* CokeDecoder.swift in Sources */,
 				A9D1CA1526B3093800F4421B /* CokeDownloader.swift in Sources */,
 				A9D1CA0726B3093800F4421B /* CokeVideo.metal in Sources */,
-				A9B1F52B26B6CD2100E157A4 /* CokeAudioNode.swift in Sources */,
-				A9D1CA0E26B3093800F4421B /* CokeVideoEncoder.swift in Sources */,
 				A9D1CA0926B3093800F4421B /* CokeView.swift in Sources */,
-				A9B1F52926B6CD2100E157A4 /* CokeAudioRecorder.swift in Sources */,
-				A91BF42227046247002F5246 /* CokeTask.swift in Sources */,
 				A9D1CA1226B3093800F4421B /* Coke.swift in Sources */,
 				A9D1CA1426B3093800F4421B /* CokeVideoLoader.swift in Sources */,
 				A9D1CA2226B31DFE00F4421B /* CokeConfig.swift in Sources */,
 				A9D1CA0F26B3093800F4421B /* CokePlayerViewController.swift in Sources */,
 				A9D1CA0326B3093800F4421B /* CokeDisplay.swift in Sources */,
-				A9E3D61E2AA2D05200BD5CF7 /* ppm.swift in Sources */,
 				A9D1CA1026B3093800F4421B /* CokeGallery.swift in Sources */,
 				A9D1CA1326B3093800F4421B /* CokeSecurity.swift in Sources */,
 				A9D1CA1126B3093800F4421B /* CokeDiskStorage.swift in Sources */,
 				A9D1CA1626B3093800F4421B /* CokeCookie.swift in Sources */,
 				A9D1CA0126B3093800F4421B /* CokeConfiguration.swift in Sources */,
 				A9D1CA0826B3093800F4421B /* CokeVideoTrack.swift in Sources */,
-				A9F82680278E748F004BFDC7 /* CokeEncoder.swift in Sources */,
 				A9D1CA0526B3093800F4421B /* CokeVideoPlayer.swift in Sources */,
 				A9D1CA0026B3093800F4421B /* CokeCompute.swift in Sources */,
-				A9B1F52826B6CD2100E157A4 /* CokeAudioEncoder.swift in Sources */,
-				A9F8267C278D953E004BFDC7 /* CokeCamera.swift in Sources */,
-				A9B1F52A26B6CD2100E157A4 /* CokeAudioPlayer.swift in Sources */,
 				A9D1CA0426B3093800F4421B /* CokeMetalFilter.swift in Sources */,
 				A9D1CA0226B3093800F4421B /* CokeTextureRender.swift in Sources */,
 			);
@@ -712,7 +636,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.CokeVideo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -739,7 +663,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.CokeVideo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
