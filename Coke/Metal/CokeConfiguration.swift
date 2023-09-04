@@ -15,13 +15,14 @@ import CoreVideo
 public class CokeMetalConfiguration{
     public var device:MTLDevice
     public var queue:MTLCommandQueue
-    public var semphone = DispatchSemaphore(value: 2)
-    public init() throws{
+    public var semphone:DispatchSemaphore
+    public init(drawCallsCount:Int = 1) throws{
         let device:MTLDevice? = MTLCreateSystemDefaultDevice()
         guard let dev = device else { throw NSError(domain: "can't create metal context", code: 0, userInfo: nil) }
         self.device = dev
         guard let queue = dev.makeCommandQueue(maxCommandBufferCount: 2) else { throw NSError(domain: "can't create metal command queue", code: 0, userInfo: nil)}
         self.queue = queue
+        self.semphone = DispatchSemaphore(value: drawCallsCount)
         try self.loadDefaultLibrary()
     }
     private func loadDefaultLibrary() throws{
