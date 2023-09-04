@@ -209,22 +209,30 @@ class CameraViewController:UIViewController{
         self.cokeView.videoLayer as! CokeVideoLayer
     }
     public var encode:CodeVideoEncode?
+    public var decode:CokeVideoDecode?
     public lazy var camera:CokeCapture = {
-        CokeCapture(preset: .hd4K3840x2160) {[weak self] sample in
+        CokeCapture{[weak self] sample in
             if self?.encode == nil{
                 
-                self?.encode = try? CodeVideoEncode(width: Int32(sample.width), height: Int32(sample.height))
+                self?.encode = try? CodeVideoEncode(width: Int32(sample.width / 2), height: Int32(sample.height / 2))
             }
             guard let buffer = VideoEncoderBuffer(sample: sample) else {
                 return
             }
-//            self?.encode?.encode(buffer: buffer, callback: { i, f, e, i in
-////                print(e as Any);
-//            })
-            guard let px = sample.imageBuffer else { return }
-            DispatchQueue.main.async {
-                self?.display.render(pixelBuffer: px, transform: CGAffineTransformMakeRotation(.pi))
-            }
+            self?.encode?.encode(buffer: buffer, callback: { i, f, e, index in
+                if self?.decode == nil {
+                    self?.decode = CokeVideoDecode(pixelFormat: kCVPixelFormatType_32BGRA, callback: { f, s in
+                        guard let px = s?.imageBuffer else { return }
+                        DispatchQueue.main.async {
+                            self?.display.render(pixelBuffer: px, transform: CGAffineTransformMakeRotation(.pi))
+                        }
+                    })
+                }
+                guard let e else {return}
+                self?.decode?.decode(sampleBuffer: e)
+            })
+            self?.encode?.complete()
+            
         }
     }()
     override func viewDidLoad() {

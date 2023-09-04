@@ -10,6 +10,7 @@
 		A94CC67426B398ED00494732 /* CokeUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A94CC66D26B398ED00494732 /* CokeUI.framework */; };
 		A94CC67526B398ED00494732 /* CokeUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A94CC66D26B398ED00494732 /* CokeUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A9B1F52226B6380500E157A4 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B1F52126B6380500E157A4 /* DetailViewController.swift */; };
+		A9C8D4E42AA6400200C23FC6 /* CodeVideoDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8D4E32AA6400200C23FC6 /* CodeVideoDecode.swift */; };
 		A9D1C9B626B3086500F4421B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9B526B3086500F4421B /* AppDelegate.swift */; };
 		A9D1C9BA26B3086500F4421B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9B926B3086500F4421B /* ViewController.swift */; };
 		A9D1C9BD26B3086500F4421B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D1C9BB26B3086500F4421B /* Main.storyboard */; };
@@ -77,6 +78,7 @@
 		A94CC66D26B398ED00494732 /* CokeUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CokeUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A94CC67026B398ED00494732 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9B1F52126B6380500E157A4 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		A9C8D4E32AA6400200C23FC6 /* CodeVideoDecode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeVideoDecode.swift; sourceTree = "<group>"; };
 		A9D1C9B226B3086500F4421B /* CokeVideo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CokeVideo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9D1C9B526B3086500F4421B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A9D1C9B926B3086500F4421B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 			isa = PBXGroup;
 			children = (
 				A9E3D62E2AA60D9C00BD5CF7 /* CodeVideoEncode.swift */,
+				A9C8D4E32AA6400200C23FC6 /* CodeVideoDecode.swift */,
 				A9E3D6302AA60FCB00BD5CF7 /* CodeVideoSample.swift */,
 			);
 			path = Video;
@@ -437,6 +440,7 @@
 				A9D1CA0426B3093800F4421B /* CokeMetalFilter.swift in Sources */,
 				A9E3D6342AA6127900BD5CF7 /* CokeCapture.swift in Sources */,
 				A9E3D62F2AA60D9C00BD5CF7 /* CodeVideoEncode.swift in Sources */,
+				A9C8D4E42AA6400200C23FC6 /* CodeVideoDecode.swift in Sources */,
 				A9D1CA0226B3093800F4421B /* CokeTextureRender.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
