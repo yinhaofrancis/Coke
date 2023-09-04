@@ -223,7 +223,7 @@ class CameraViewController:UIViewController{
 //            })
             guard let px = sample.imageBuffer else { return }
             DispatchQueue.main.async {
-                self?.display.render(pixelBuffer: px, transform: CGAffineTransformMakeRotation(.pi / 2))
+                self?.display.render(pixelBuffer: px, transform: CGAffineTransformMakeRotation(.pi))
             }
         }
     }()
