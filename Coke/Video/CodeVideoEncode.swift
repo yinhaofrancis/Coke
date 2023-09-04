@@ -62,34 +62,25 @@ public class CodeVideoEncode{
             throw NSError(domain: "create encoder fail \(ret)", code: Int(ret))
         }
     }
-    public var bframe:Bool{
-        get{
-            let b = kCFBooleanFalse!
-            
-            VTSessionCopyProperty(self, key: kVTCompressionPropertyKey_AllowFrameReordering, allocator: nil, valueOut: Unmanaged.passUnretained(b).toOpaque())
-            
-            return CFBooleanGetValue(b)
-        }
-        set{
-            VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_AllowFrameReordering, value: newValue ? kCFBooleanTrue : kCFBooleanFalse)
-        }
+    public func setBframe(bframe:Bool){
+        VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_AllowFrameReordering, value: bframe ? kCFBooleanTrue : kCFBooleanFalse)
     }
-    public var maxKeyFrameInterval:Int{
-        get{
-            var int32 = 0
-            let b = CFNumberCreate(kCFAllocatorDefault, .sInt32Type, &int32)
-            
-            VTSessionCopyProperty(self, key: kVTCompressionPropertyKey_MaxKeyFrameInterval, allocator: nil, valueOut: Unmanaged.passUnretained(b!).toOpaque())
-            
-            CFNumberGetValue(b, .sInt32Type, &int32)
-            return int32
-        }
-        set{
-            var int32 = 0
-            let b = CFNumberCreate(kCFAllocatorDefault, .sInt32Type, &int32)
-            VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_MaxKeyFrameInterval, value: b)
-        }
+    public func setMaxKeyFrameInterval(maxKeyFrameInterval:Int){
+        var int32 = maxKeyFrameInterval
+        let b = CFNumberCreate(kCFAllocatorDefault, .sInt32Type, &int32)
+        VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_MaxKeyFrameInterval, value: b)
     }
+    public func setAverageBitRate(averageBitRate:Int32){
+        var int32 = averageBitRate
+        let b = CFNumberCreate(kCFAllocatorDefault, .sInt32Type, &int32)
+        VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_AverageBitRate, value: b)
+    }
+    public func setFrameRate(frameRate:Int32){
+        var int32 = frameRate
+        let b = CFNumberCreate(kCFAllocatorDefault, .sInt32Type, &int32)
+        VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_ExpectedFrameRate, value: b)
+    }
+    
     public func encode(buffer:VideoEncoderBuffer,callback:@escaping ImageCallback){
         let currentBuffer = buffer
         let err = VTCompressionSessionEncodeFrame(self.session, imageBuffer: currentBuffer.imagebuffer, presentationTimeStamp: currentBuffer.presentationTimeStamp, duration: currentBuffer.duration, frameProperties: nil, infoFlagsOut: nil) { ret, flag, buffer in

@@ -211,11 +211,16 @@ class CameraViewController:UIViewController{
     public var encode:CodeVideoEncode?
     public var decode:CokeVideoDecode?
     public lazy var camera:CokeCapture = {
-        CokeCapture{[weak self] sample in
-            if self?.encode == nil{
-                
-                self?.encode = try? CodeVideoEncode(width: Int32(sample.width / 2), height: Int32(sample.height / 2))
-            }
+        if self.encode == nil{
+            
+            self.encode = try? CodeVideoEncode(width: 1280, height: 720)
+            self.encode?.setBframe(bframe: false)
+            self.encode?.setMaxKeyFrameInterval(maxKeyFrameInterval: 60)
+            self.encode?.setAverageBitRate(averageBitRate: 200000)
+            self.encode?.setFrameRate(frameRate: 24)
+        }
+        return CokeCapture{[weak self] sample in
+
             guard let buffer = VideoEncoderBuffer(sample: sample) else {
                 return
             }
@@ -231,8 +236,6 @@ class CameraViewController:UIViewController{
                 guard let e else {return}
                 self?.decode?.decode(sampleBuffer: e)
             })
-            self?.encode?.complete()
-            
         }
     }()
     override func viewDidLoad() {
