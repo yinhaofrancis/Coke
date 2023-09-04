@@ -190,12 +190,6 @@ class ViewController: UITableViewController,UISearchBarDelegate {
         }
     }
     
-    @IBAction func show(_ sender: Any) {
-        let vc:CokePlayerViewController = self.storyboard?.instantiateViewController(withIdentifier: "player") as! CokePlayerViewController
-        
-        self.show(vc, sender: nil)
-        imageShow(vc)
-    }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "detail"{
             let des:DetailViewController = segue.destination as! DetailViewController
@@ -206,27 +200,38 @@ class ViewController: UITableViewController,UISearchBarDelegate {
 }
 
 
-class ppmViewController:UIViewController{
+class CameraViewController:UIViewController{
     
+    public var cokeView:CokeView{
+        return self.view as! CokeView
+    }
+    public var display:CokeVideoLayer{
+        self.cokeView.videoLayer as! CokeVideoLayer
+    }
+    public var encode:CodeVideoEncode?
+    public lazy var camera:CokeCapture = {
+        CokeCapture(preset: .hd4K3840x2160) {[weak self] sample in
+            if self?.encode == nil{
+                
+                self?.encode = try? CodeVideoEncode(width: Int32(sample.width), height: Int32(sample.height))
+            }
+            guard let buffer = VideoEncoderBuffer(sample: sample) else {
+                return
+            }
+//            self?.encode?.encode(buffer: buffer, callback: { i, f, e, i in
+////                print(e as Any);
+//            })
+            guard let px = sample.imageBuffer else { return }
+            DispatchQueue.main.async {
+                self?.display.render(pixelBuffer: px, transform: CGAffineTransformMakeRotation(.pi / 2))
+            }
+        }
+    }()
     override func viewDidLoad() {
         super.viewDidLoad()
-//        var px:[UInt32] = []
-//        for i in 0 ..< 25{
-//            for j in 0 ..< 25{
-//                for k in 0 ..< 25{
-//                    px.append(UInt32(i * 10))
-//                    px.append(UInt32(j * 10))
-//                    px.append(UInt32(k * 10))
-//                }
-//            }
-//        }
-//        let ppm = Ppm(type: .pixmap, width: 25, height: 25 * 25, pixels: px)
-//        if #available(macCatalyst 16.0, *) {
-//            let url = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: "m.ppm")
-//            ppm.write(url: url)
-//        } else {
-//            // Fallback on earlier versions
-//        }
+        self.display.videoFilter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
         
+        self.camera.start()
     }
 }
+

@@ -65,9 +65,9 @@ public class CokeMetalConfiguration{
     
     private var textureCache:CVMetalTextureCache?
     
-    public func createTexture(img:CVPixelBuffer,usage:MTLTextureUsage = [.shaderRead,.shaderWrite])->MTLTexture?{
+    public func createTexture(img:CVPixelBuffer,pixelFormat:MTLPixelFormat? = nil,usage:MTLTextureUsage = [.shaderRead,.shaderWrite])->MTLTexture?{
         let d = MTLTextureDescriptor()
-        d.pixelFormat = CokeConfig.metalColorFormat
+        d.pixelFormat = pixelFormat ?? CokeConfig.metalColorFormat
         
         d.width = CVPixelBufferGetWidth(img)
         d.storageMode = .shared

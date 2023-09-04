@@ -143,7 +143,8 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         return self.cokePlayer?.copyPixelbuffer()
     }
     public func clean(){
-     
+        
+        
     }
     lazy private var videoTransformFilter:CokeMetalFilter = {
         return CokeTransformFilter(configuration: .defaultConfiguration)!
@@ -191,8 +192,8 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         }
         
     }
-    public func render(pixelBuffer:CVPixelBuffer,transform:CGAffineTransform){
-        guard let texture = self.render.configuration.createTexture(img: pixelBuffer) else { return }
+    public func render(pixelBuffer:CVPixelBuffer,format:MTLPixelFormat? = nil,transform:CGAffineTransform){
+        guard let texture = self.render.configuration.createTexture(img: pixelBuffer,pixelFormat: format) else { return }
         self.lastPixel = texture
         self.render(texture: texture, transform: transform)
     }

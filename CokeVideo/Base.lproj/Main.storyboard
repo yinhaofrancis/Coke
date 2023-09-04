@@ -8,19 +8,20 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Coke Player View Controller-->
+        <!--Camera View Controller-->
         <scene sceneID="dEM-L3-5Ca">
             <objects>
-                <viewController storyboardIdentifier="player" id="zIH-R9-HcI" customClass="CokePlayerViewController" customModule="Coke" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="player" id="zIH-R9-HcI" customClass="CameraViewController" customModule="CokeVideo" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="z1c-xO-w7L"/>
                         <viewControllerLayoutGuide type="bottom" id="Y9U-wN-Xez"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="AdW-Fl-dD8">
+                    <view key="view" contentMode="scaleToFill" id="AdW-Fl-dD8" customClass="CokeView" customModule="Coke">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="VTF-0Q-Nxz"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xa1-TC-rII" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -83,7 +84,7 @@
                     <navigationItem key="navigationItem" id="2Mm-Ub-LP8">
                         <barButtonItem key="leftBarButtonItem" title="Item" id="nlV-WP-gsD">
                             <connections>
-                                <action selector="show:" destination="kJj-Ga-zE5" id="KZO-MN-SWn"/>
+                                <segue destination="zIH-R9-HcI" kind="show" id="dOA-I6-fmx"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="rnb-3J-qlq">
