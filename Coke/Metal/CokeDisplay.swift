@@ -114,7 +114,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         autoreleasepool {
             if let pl = self.cokePlayer,let item = pl.currentItem{
                 if let pixelBuffer = self.getCurrentPixelBuffer() ,item.status == .readyToPlay{
-                    self.render(pixelBuffer: pixelBuffer,transform: self.cokePlayer?.currentPresentTransform ?? .identity)
+                    self.render(pixelBuffer: pixelBuffer)
                 }
             }
         }
@@ -123,17 +123,13 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         
         FrameTicker.shared.perform { [weak self] in
             guard let last = self?.lastPixel else { return }
-            self?.render(texture: last,transform: self?.cokePlayer?.currentPresentTransform ?? .identity)
+            self?.render(texture: last)
         }
         
     }
-    func transformTexture(texture:MTLTexture,transform:CGAffineTransform)->MTLTexture?{
+    func transformTexture(texture:MTLTexture)->MTLTexture?{
         var result:MTLTexture?
         result = texture
-        if transform != .identity{
-            guard let outTexture = self.videoTransformFilter.filterTexture(pixel: [texture], w: Float(texture.height), h: Float(texture.width)) else { return nil }
-            result = outTexture
-        }
         if let filter = self.videoFilter{
             result = filter.filterTexture(pixel: [result!], w: Float(self.showSize.width), h: Float(self.showSize.height))
         }
@@ -192,14 +188,14 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         }
         
     }
-    public func render(pixelBuffer:CVPixelBuffer,format:MTLPixelFormat? = nil,transform:CGAffineTransform){
+    public func render(pixelBuffer:CVPixelBuffer,format:MTLPixelFormat? = nil){
         guard let texture = self.render.configuration.createTexture(img: pixelBuffer,pixelFormat: format) else { return }
         self.lastPixel = texture
-        self.render(texture: texture, transform: transform)
+        self.render(texture: texture)
     }
-    public func render(texture:MTLTexture,transform:CGAffineTransform){
+    public func render(texture:MTLTexture){
         
-        guard let displayTexture = self.transformTexture(texture: texture,transform: transform) else { return }
+        guard let displayTexture = self.transformTexture(texture: texture) else { return }
         self.render.screenSize = self.showSize;
         guard let draw = self.nextDrawable() else { return  }
         do {
@@ -219,7 +215,7 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
             guard let ws = self else  { return }
             guard let text = try? MTKTextureLoader.init(device: ws.render.configuration.device).newTexture(cgImage: image, options: [.SRGB:false]) else { return }
             ws.lastPixel = text
-            ws.render(texture:text , transform: .identity)
+            ws.render(texture:text)
         }
     }
     public func render(data:Data){

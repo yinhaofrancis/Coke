@@ -112,7 +112,7 @@ open class CokeView:UIView{
             }
             return Int(v1) ?? 0 > 4
         }else{
-            return false
+            return true
         }
     }
     public required init?(coder: NSCoder) {

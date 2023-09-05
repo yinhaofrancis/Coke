@@ -16,7 +16,7 @@ public class CokeMetalConfiguration{
     public var device:MTLDevice
     public var queue:MTLCommandQueue
     public var semphone:DispatchSemaphore
-    public init(drawCallsCount:Int = 1) throws{
+    public init(drawCallsCount:Int = 3) throws{
         let device:MTLDevice? = MTLCreateSystemDefaultDevice()
         guard let dev = device else { throw NSError(domain: "can't create metal context", code: 0, userInfo: nil) }
         self.device = dev

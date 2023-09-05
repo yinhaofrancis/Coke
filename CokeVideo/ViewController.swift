@@ -201,39 +201,48 @@ class ViewController: UITableViewController,UISearchBarDelegate {
 
 
 class CameraViewController:UIViewController{
-    
+    @IBOutlet public var video:CokeSampleView!
     public var cokeView:CokeView{
         return self.view as! CokeView
     }
     public var display:CokeVideoLayer{
         self.cokeView.videoLayer as! CokeVideoLayer
     }
-    public var encode:CodeVideoEncode?
-    public var decode:CokeVideoDecode?
+    public var encode:CodeVideoEncoder?
+    public var decode:CokeVideoDecoder?
     public lazy var camera:CokeCapture = {
         if self.encode == nil{
             
-            self.encode = try? CodeVideoEncode(width: 1280, height: 720)
+            self.encode = try? CodeVideoEncoder(width: 720, height: 1280)
             self.encode?.setBframe(bframe: false)
-            self.encode?.setMaxKeyFrameInterval(maxKeyFrameInterval: 60)
-            self.encode?.setAverageBitRate(averageBitRate: 200000)
-            self.encode?.setFrameRate(frameRate: 24)
+            self.encode?.setMaxKeyFrameInterval(maxKeyFrameInterval: 1)
+            self.encode?.setAverageBitRate(averageBitRate: 64 * 1024 * 1024 * 8)
+//            self.encode?.setAverageBitRate(averageBitRate: 1)
+//            self.encode?.setFrameRate(frameRate: 1)
         }
         return CokeCapture{[weak self] sample in
 
             guard let buffer = VideoEncoderBuffer(sample: sample) else {
                 return
             }
+//            self?.display.render(pixelBuffer: px, transform: CGAffineTransform.identity)
             self?.encode?.encode(buffer: buffer, callback: { i, f, e, index in
+                guard let e else { return }
+//
                 if self?.decode == nil {
-                    self?.decode = CokeVideoDecode(pixelFormat: kCVPixelFormatType_32BGRA, callback: { f, s in
-                        guard let px = s?.imageBuffer else { return }
+                    
+                    self?.decode = CokeVideoDecoder(pixelFormat: kCVPixelFormatType_420YpCbCr8Planar, callback: { f, s in
+                        guard let s else { return }
                         DispatchQueue.main.async {
-                            self?.display.render(pixelBuffer: px, transform: CGAffineTransformMakeRotation(.pi))
+                            self?.video.sampleLayer.enqueue(s)
                         }
+                        
+//                        guard let px = s.imageBuffer else { return }
+//                        DispatchQueue.main.async {
+//                            self?.display.render(pixelBuffer: px, transform: CGAffineTransform.identity)
+//                        }
                     })
                 }
-                guard let e else {return}
                 self?.decode?.decode(sampleBuffer: e)
             })
         }
@@ -243,6 +252,12 @@ class CameraViewController:UIViewController{
         self.display.videoFilter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
         
         self.camera.start()
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let x = (self.view.window!.screen.bounds.width - 320) / 2
+        let y = (self.view.window!.screen.bounds.height  - 568) / 2
+        self.view.window?.frame = CGRect(x: x, y: y, width: 320, height: 568)
     }
 }
 

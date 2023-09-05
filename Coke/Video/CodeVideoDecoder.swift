@@ -31,7 +31,7 @@ public class VideoEncoderHandle{
     }
 }
 
-public class CokeVideoDecode{
+public class CokeVideoDecoder{
     
     public var session:VTDecompressionSession?
     public var callback:VTDecompressionOutputCallbackRecord?
@@ -96,7 +96,7 @@ public class CokeVideoDecode{
 }
 
 
-extension CokeVideoDecode{
+extension CokeVideoDecoder{
     public static func videoDescriptionFromH264(params:[Data]) -> CMVideoFormatDescription?{
         var result:CMVideoFormatDescription?
         let paramMPointer = params.map { $0.createUnsafeBuffer() }

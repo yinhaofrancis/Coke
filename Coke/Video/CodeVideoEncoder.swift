@@ -30,7 +30,7 @@ public struct VideoEncoderBuffer{
 
 public typealias ImageCallback = (OSStatus,VTEncodeInfoFlags,CMSampleBuffer?,Int)->Void
 
-public class CodeVideoEncode{
+public class CodeVideoEncoder{
     public var session:VTCompressionSession
     
     public init(width:Int32,

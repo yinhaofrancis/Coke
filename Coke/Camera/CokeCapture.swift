@@ -27,7 +27,7 @@ public class CokeCapture:NSObject,AVCaptureVideoDataOutputSampleBufferDelegate,A
     }()
     lazy var output: AVCaptureVideoDataOutput = {
         let out =  AVCaptureVideoDataOutput()
-        out.videoSettings = [kCVPixelBufferPixelFormatTypeKey as! String: kCVPixelFormatType_32BGRA]
+        out.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
         out.setSampleBufferDelegate(self, queue: .global())
         return out
     }()
@@ -61,6 +61,10 @@ public class CokeCapture:NSObject,AVCaptureVideoDataOutputSampleBufferDelegate,A
         self.session.addOutput(self.output)
         self.session.addOutput(self.audioOutput)
         self.session.sessionPreset = self.preset
+        guard let connect = self.output.connection(with: .video) else { return }
+        if connect.isVideoOrientationSupported{
+            connect.videoOrientation = .portrait
+        }
         
     }
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
