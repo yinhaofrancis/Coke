@@ -19,24 +19,9 @@
                     <view key="view" contentMode="scaleToFill" id="AdW-Fl-dD8" customClass="CokeView" customModule="Coke">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zo3-iQ-fga" customClass="CokeSampleView" customModule="Coke">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
-                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstAttribute="bottom" secondItem="zo3-iQ-fga" secondAttribute="bottom" id="ZCQ-It-NMO"/>
-                            <constraint firstItem="zo3-iQ-fga" firstAttribute="top" secondItem="AdW-Fl-dD8" secondAttribute="top" id="anO-KK-l28"/>
-                            <constraint firstItem="zo3-iQ-fga" firstAttribute="leading" secondItem="AdW-Fl-dD8" secondAttribute="leading" id="r43-9J-zy2"/>
-                            <constraint firstAttribute="trailing" secondItem="zo3-iQ-fga" secondAttribute="trailing" id="s8I-RT-PGR"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="VTF-0Q-Nxz"/>
-                    <connections>
-                        <outlet property="video" destination="zo3-iQ-fga" id="zeW-0x-3K1"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xa1-TC-rII" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -113,15 +98,15 @@
             </objects>
             <point key="canvasLocation" x="110" y="-393"/>
         </scene>
-        <!--Ppm View Controller-->
+        <!--Out View Controller-->
         <scene sceneID="oUl-vi-X7D">
             <objects>
-                <viewController id="6JF-As-Pvu" customClass="ppmViewController" customModule="CokeVideo" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="6JF-As-Pvu" customClass="outViewController" customModule="CokeVideo" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="SI0-fF-Upl"/>
                         <viewControllerLayoutGuide type="bottom" id="T2u-ob-ZLj"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="p2f-zL-tyd">
+                    <view key="view" contentMode="scaleToFill" id="p2f-zL-tyd" customClass="CokeSampleView" customModule="Coke">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>

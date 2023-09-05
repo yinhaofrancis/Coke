@@ -210,41 +210,44 @@ class CameraViewController:UIViewController{
     }
     public var encode:CodeVideoEncoder?
     public var decode:CokeVideoDecoder?
+    public var audioEncode:CokeAudioEncoder?
+    public var audio:AVSampleBufferAudioRenderer = AVSampleBufferAudioRenderer()
     public lazy var camera:CokeCapture = {
         if self.encode == nil{
             
             self.encode = try? CodeVideoEncoder(width: 720, height: 1280)
             self.encode?.setBframe(bframe: false)
-            self.encode?.setMaxKeyFrameInterval(maxKeyFrameInterval: 1)
+            self.encode?.setMaxKeyFrameInterval(maxKeyFrameInterval: 20)
             self.encode?.setAverageBitRate(averageBitRate: 64 * 1024 * 1024 * 8)
 //            self.encode?.setAverageBitRate(averageBitRate: 1)
 //            self.encode?.setFrameRate(frameRate: 1)
         }
         return CokeCapture{[weak self] sample in
 
-            guard let buffer = VideoEncoderBuffer(sample: sample) else {
-                return
-            }
-//            self?.display.render(pixelBuffer: px, transform: CGAffineTransform.identity)
-            self?.encode?.encode(buffer: buffer, callback: { i, f, e, index in
-                guard let e else { return }
-//
-                if self?.decode == nil {
-                    
-                    self?.decode = CokeVideoDecoder(pixelFormat: kCVPixelFormatType_420YpCbCr8Planar, callback: { f, s in
-                        guard let s else { return }
-                        DispatchQueue.main.async {
-                            self?.video.sampleLayer.enqueue(s)
-                        }
+            if let buffer = VideoEncoderBuffer(sample: sample)  {
+                self?.encode?.encode(buffer: buffer, callback: { i, f, e, index in
+                    guard let e else { return }
+                    AppDelegate.sample.append(e);
+                    if self?.decode == nil {
                         
-//                        guard let px = s.imageBuffer else { return }
-//                        DispatchQueue.main.async {
-//                            self?.display.render(pixelBuffer: px, transform: CGAffineTransform.identity)
-//                        }
-                    })
+                        self?.decode = CokeVideoDecoder(pixelFormat: kCVPixelFormatType_32BGRA, callback: { f, s in
+                            guard let s else { return }
+                            guard let px = s.imageBuffer else { return }
+                            DispatchQueue.main.async {
+                                self?.display.render(pixelBuffer: px)
+                            }
+                        })
+                    }
+                    self?.decode?.decode(sampleBuffer: e)
+                })
+            }else{
+                if self?.audioEncode == nil {
+                    self?.audioEncode = try! CokeAudioEncoder(source: sample.audioFormat!, destination: CokeAudioEncoder.aacAudioStreamBasicDescription(mFrameRate: sample.audioFormat!.mSampleRate))
                 }
-                self?.decode?.decode(sampleBuffer: e)
-            })
+                guard let samp = self?.audioEncode?.encode(sampleBuffer: sample) else { return }
+                AppDelegate.sample.append(samp);
+            }
+            
         }
     }()
     override func viewDidLoad() {
@@ -261,3 +264,19 @@ class CameraViewController:UIViewController{
     }
 }
 
+
+
+class outViewController:UIViewController{
+
+    public var render:CokeSampleView{
+        return self.view as! CokeSampleView
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        try! self.render.sync.setRate(1, time: AppDelegate.sample.first!.presentationTimeStamp)
+        AppDelegate.sample.forEach { c in
+            self.render.enqueue(sample: c)
+            
+        }
+    }
+}

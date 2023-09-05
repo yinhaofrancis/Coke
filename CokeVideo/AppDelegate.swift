@@ -7,6 +7,7 @@
 
 import UIKit
 import Coke
+import CoreMedia
 let id = "com.coke.look"
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,6 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         return true
     }
+    
+    public static var sample:[CMSampleBuffer] = []
 }
 
 
