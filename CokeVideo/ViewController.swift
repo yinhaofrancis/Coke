@@ -211,12 +211,13 @@ class CameraViewController:UIViewController{
     public var encode:CodeVideoEncoder?
     public var decode:CokeVideoDecoder?
     public var audioEncode:CokeAudioEncoder?
-    public var audio:AVSampleBufferAudioRenderer = AVSampleBufferAudioRenderer()
+    public var audio:[CMSampleBuffer] = []
+
     public lazy var camera:CokeCapture = {
         if self.encode == nil{
             
             self.encode = try? CodeVideoEncoder(width: 720, height: 1280)
-            self.encode?.setBframe(bframe: false)
+            self.encode?.setBframe(bframe: true)
             self.encode?.setMaxKeyFrameInterval(maxKeyFrameInterval: 20)
             self.encode?.setAverageBitRate(averageBitRate: 64 * 1024 * 1024 * 8)
 //            self.encode?.setAverageBitRate(averageBitRate: 1)
@@ -242,7 +243,7 @@ class CameraViewController:UIViewController{
                 })
             }else{
                 if self?.audioEncode == nil {
-                    self?.audioEncode = try! CokeAudioEncoder(source: sample.audioFormat!, destination: CokeAudioEncoder.aacAudioStreamBasicDescription(mFrameRate: sample.audioFormat!.mSampleRate))
+                    self?.audioEncode = try! CokeAudioEncoder(source: sample.audioFormat!, destination: CokeAudioEncoder.aacAudioStreamBasicDescription(mFrameRate: sample.audioFormat!.mSampleRate / 2))
                 }
                 guard let samp = self?.audioEncode?.encode(sampleBuffer: sample) else { return }
                 AppDelegate.sample.append(samp);
@@ -258,9 +259,7 @@ class CameraViewController:UIViewController{
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let x = (self.view.window!.screen.bounds.width - 320) / 2
-        let y = (self.view.window!.screen.bounds.height  - 568) / 2
-        self.view.window?.frame = CGRect(x: x, y: y, width: 320, height: 568)
+      
     }
 }
 
@@ -276,7 +275,7 @@ class outViewController:UIViewController{
         try! self.render.sync.setRate(1, time: AppDelegate.sample.first!.presentationTimeStamp)
         AppDelegate.sample.forEach { c in
             self.render.enqueue(sample: c)
-            
         }
+        AppDelegate.sample.removeAll()
     }
 }

@@ -52,13 +52,14 @@ public class CokeAudioEncoder {
     
     public var quality:Quality {
         get{
-            return getProperty(value: Quality(rawValue: 0) ?? .Medium) { ioPropertyDataSize, outPropertyData in
-                AudioConverterGetProperty(self.converter, kAudioConverterEncodeAdjustableSampleRate, ioPropertyDataSize, outPropertyData)
+            let value = getProperty(value: UInt32(0)) { ioPropertyDataSize, outPropertyData in
+                AudioConverterGetProperty(self.converter, kAudioConverterSampleRateConverterQuality, ioPropertyDataSize, outPropertyData)
             }
+            return Quality(rawValue: value) ?? .Medium
         }
         set{
-            setProperty(value: newValue) { inPropertyDataSize, inPropertyData in
-                AudioConverterSetProperty(self.converter, kAudioConverterEncodeAdjustableSampleRate, inPropertyDataSize,inPropertyData)
+            setProperty(value: newValue.rawValue) { inPropertyDataSize, inPropertyData in
+                AudioConverterSetProperty(self.converter, kAudioConverterSampleRateConverterQuality, inPropertyDataSize,inPropertyData)
             }
         }
     }
@@ -122,8 +123,8 @@ extension CokeAudioEncoder{
         
         var pack:AudioStreamPacketDescription = .init(mStartOffset: 0, mVariableFramesInPacket: 0, mDataByteSize: 0)
         var size:UInt32 = 1
-        let inbuffer = AudioEncodeBuffer(data: pcm, channel: self.source.mChannelsPerFrame, mBytesPerPacket: self.source.mBytesPerPacket)
-        let destSize:UInt32 = self.maximumOutputPacketSize
+        let inbuffer = AudioEncodeBuffer(data: pcm, channel: self.source.mChannelsPerFrame, mBytesPerframe: self.source.mBytesPerFrame)
+        let destSize:UInt32 = UInt32(pcm.count)
         var buffer = AudioEncodeBuffer.createNewAudioBuffer(channel: self.destination.mChannelsPerFrame, count: destSize)
         
         AudioConverterFillComplexBuffer(self.converter, { c, numberOfFrame, buffer, pack, io in
@@ -131,7 +132,9 @@ extension CokeAudioEncoder{
             buffer.pointee.mNumberBuffers = 1;
             buffer.pointee.mBuffers = a.buffer.mBuffers
             buffer.pointee.mBuffers.mNumberChannels = 1
-            numberOfFrame.pointee = a.noUsedPack;
+            buffer.pointee.mBuffers.mDataByteSize = a.buffer.mBuffers.mDataByteSize
+            numberOfFrame.pointee = a.numberOfFrame
+//            pack?.pointee = a.packetDescription
             return noErr
         }, Unmanaged.passUnretained(inbuffer).toOpaque(), &size, &buffer, &pack)
         
@@ -152,7 +155,7 @@ extension CokeAudioEncoder{
     
     private func encodePackets(pcmBuffer:Data)->[AudioOutBufferPacket]{
         var cur:Int = 0
-        let size = self.source.mBytesPerFrame * 1024
+        let size = pcmBuffer.count
         var result:[AudioOutBufferPacket] = []
         while(cur < pcmBuffer.count){
             let current = (cur + Int(size) < pcmBuffer.count) ? pcmBuffer[cur ..< cur + Int(size)] : pcmBuffer[cur ..<  pcmBuffer.count]
@@ -168,19 +171,21 @@ extension CokeAudioEncoder{
 public class AudioEncodeBuffer{
     var buffer:AudioBufferList
     var index:UnsafeMutableRawPointer?
-    var noUsedPack:UInt32
-    var mBytesPerPacket:UInt32
-    init(buffer: AudioBufferList,mBytesPerPacket:UInt32) {
+    var numberOfFrame:UInt32
+    var mBytesPerframe:UInt32
+    var packetDescription:UnsafeMutablePointer<AudioStreamPacketDescription> = UnsafeMutablePointer.allocate(capacity: 1)
+    init(buffer: AudioBufferList,mBytesPerframe:UInt32) {
         self.buffer = buffer
-        self.mBytesPerPacket = mBytesPerPacket
+        self.mBytesPerframe = mBytesPerframe
         self.index = buffer.mBuffers.mData
-        self.noUsedPack = buffer.mBuffers.mDataByteSize / mBytesPerPacket
+        self.numberOfFrame = buffer.mBuffers.mDataByteSize / mBytesPerframe
+        self.packetDescription.pointee = AudioStreamPacketDescription(mStartOffset: 0, mVariableFramesInPacket: 0, mDataByteSize: mBytesPerframe)
     }
-    convenience init(data:Data,channel:UInt32,mBytesPerPacket:UInt32){
+    convenience init(data:Data,channel:UInt32,mBytesPerframe:UInt32){
         let pointer = UnsafeMutableRawPointer.allocate(byteCount: data.count, alignment: 8)
         data.copyBytes(to: pointer.assumingMemoryBound(to: UInt8.self), count: data.count)
         let buffer = AudioBufferList(mNumberBuffers: 1, mBuffers: AudioBuffer(mNumberChannels: channel, mDataByteSize: UInt32(data.count), mData: pointer))
-        self.init(buffer: buffer,mBytesPerPacket: mBytesPerPacket)
+        self.init(buffer: buffer,mBytesPerframe: mBytesPerframe)
     }
     static func createNewAudioBuffer(channel:UInt32,count:UInt32)->AudioBufferList{
         let pointer = UnsafeMutableRawPointer.allocate(byteCount: Int(count), alignment: 8)
@@ -188,6 +193,7 @@ public class AudioEncodeBuffer{
     }
     deinit{
         self.buffer.mBuffers.mData?.deallocate()
+        self.packetDescription.deallocate()
     }
 }
 
