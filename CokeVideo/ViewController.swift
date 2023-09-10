@@ -214,7 +214,7 @@ class CameraViewController:UIViewController{
     public lazy var camera:CokeCapture = {
         if self.encode == nil{
             
-            self.encode = try? CodeVideoEncoder(width: 720, height: 1280)
+            self.encode = try? CodeVideoEncoder(width: 720, height: 1280,codec: kCMVideoCodecType_HEVC)
             self.encode?.setBframe(bframe: false)
             self.encode?.setMaxKeyFrameInterval(maxKeyFrameInterval: 20)
             self.encode?.setAverageBitRate(averageBitRate: 64 * 1024 * 1024 * 8)
@@ -229,18 +229,11 @@ class CameraViewController:UIViewController{
                 self?.encode?.encode(buffer: buffer, callback: { i, f, e, index in
                     guard let e else { return }
                     AppDelegate.sample.append(e);
-                    if self?.decode == nil {
-                        
-                        self?.decode = CokeVideoDecoder(pixelFormat: kCVPixelFormatType_32BGRA, callback: { f, s in
-                            guard let s else { return }
-                            guard let px = s.imageBuffer else { return }
-                            DispatchQueue.main.async {
-                                self?.display.render(pixelBuffer: px)
-                            }
-                        })
-                    }
-                    self?.decode?.decode(sampleBuffer: e)
                 })
+                guard let px = sample.imageBuffer else { return }
+                DispatchQueue.main.async {
+                    self?.display.render(pixelBuffer: px)
+                }
             }else{
                 
                 AppDelegate.sample.append(sample);
@@ -271,7 +264,6 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
         
         guard let out2 = self.decoder?.decode(buffer: out) else { return }
         self.buffer.append(out2)
-        print(out.time.seconds)
         
     }
     
@@ -290,7 +282,7 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.recoder = try! CokeAudioRecorder()
-        
+        try? AVAudioSession.sharedInstance().setCategory(.playback)
         self.recoder?.output = self
         self.encoder = CokeAudioConverterAAC(encode: self.recoder!.audioStreamBasicDescription)
         self.encoder?.bitRate = 96000

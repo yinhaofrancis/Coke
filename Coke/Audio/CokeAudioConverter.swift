@@ -24,7 +24,8 @@ public class CokeAudioConverterAAC{
         var dest = CokeAudioConfig.shared.aacAudioStreamBasicDescription
         self.destination = dest
         let desc = CokeAudioConverterAAC.converterClassMaker(format: [
-            kAudioFormatMPEG4AAC
+            kAudioFormatMPEG4AAC,
+            kAudioFormatFLAC
         ], converterType: kAudioEncoderComponentType)
         var conv:AudioConverterRef?
         AudioConverterNewSpecific(&sour, &dest, UInt32(desc.count), desc, &conv)
@@ -53,7 +54,8 @@ public class CokeAudioConverterAAC{
         self.destination = dest
         
         let desc = CokeAudioConverterAAC.converterClassMaker(format: [
-            kAudioFormatMPEG4AAC
+            kAudioFormatMPEG4AAC,
+            kAudioFormatFLAC
         ], converterType: kAudioDecoderComponentType)
         var conv:AudioConverterRef?
         AudioConverterNewSpecific(&sour, &dest, UInt32(desc.count), desc, &conv)

@@ -230,11 +230,11 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         if self.showCover {
             guard let asset = self.cokePlayer?.currentItem?.asset else { return }
             guard let t = self.cokePlayer?.currentItem?.currentTime() else { return }
-//            AVAssetImageGenerator.init(asset: asset).generateCGImagesAsynchronously(forTimes: [NSValue(time: t)]) { _, img, _, _, _ in
-//
-//                guard let image = img else { return }
-//                try? self.render(image: image)
-//            }
+            AVAssetImageGenerator.init(asset: asset).generateCGImagesAsynchronously(forTimes: [NSValue(time: t)]) { _, img, _, _, _ in
+
+                guard let image = img else { return }
+                try? self.render(image: image)
+            }
         }
     }
 
@@ -245,8 +245,6 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
     }
     deinit {
         self.stopNotificationScreen()
-        FrameTicker.shared.close()
-        FrameTicker.shared = FrameTicker()
     }
 }
 extension CGImageSource{
@@ -411,5 +409,6 @@ public class FrameTicker{
     }
     func close(){
         self.timer.invalidate()
+        self.thread.cancel()
     }
 }

@@ -85,6 +85,7 @@ public class CokeCapture:NSObject,
     
     public func start(){
         DispatchQueue.global().async {
+            try! AVAudioSession.sharedInstance().setCategory(.record)
             self.session.startRunning()
             self.aacEncode?.reset()
             self.record.start()
