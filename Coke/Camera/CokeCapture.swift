@@ -52,6 +52,7 @@ public class CokeCapture:NSObject,AVCaptureVideoDataOutputSampleBufferDelegate,A
                 self.loadConfig()
             }
         }
+    
     }
     public var quickDisplay:Bool = false;
     public func loadConfig(){

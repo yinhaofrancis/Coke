@@ -55,12 +55,127 @@ public func setProperty<T>(value:T,callback:(_ inPropertyDataSize: UInt32, _ inP
 
 
 extension CMSampleBuffer {
-    var pcm:Data?{
-
+    public var pcm:Data?{
+        guard let buffer = self.audioBufferList else { return nil }
+        guard let pointer = buffer.mBuffers.mData else { return nil }
+        return Data(bytes: pointer, count: Int(buffer.mBuffers.mDataByteSize))
+    }
+    public var audioBufferList:AudioBufferList?{
+        return self.audioBlockBuffer?.1
+    }
+    public var audioBlockBuffer:(CMBlockBuffer,AudioBufferList)?{
         guard self.mediaType == kCMMediaType_Audio else {
             return nil
         }
-        return try? self.dataBuffer?.dataBytes()
+        var audioBufferList = AudioBufferList()
+        var blockBuffer: CMBlockBuffer?
+        CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(
+            self,
+            bufferListSizeNeededOut: nil,
+            bufferListOut: &audioBufferList,
+            bufferListSize: MemoryLayout.stride(ofValue: audioBufferList),
+            blockBufferAllocator: nil,
+            blockBufferMemoryAllocator: nil,
+            flags: kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment,
+            blockBufferOut: &blockBuffer)
+        guard let blockBuffer else { return nil }
+        return (blockBuffer,audioBufferList)
+        
+    }
+    public var packetDescription:[AudioStreamPacketDescription]{
+        let pointer:UnsafeMutablePointer<UnsafePointer<AudioStreamPacketDescription>?> = .allocate(capacity: 1)
+        defer{
+            pointer.deallocate()
+        }
+        var count:Int = 0
+        CMSampleBufferGetAudioStreamPacketDescriptionsPtr(self, packetDescriptionsPointerOut: pointer, sizeOut: &count)
+        if(count == 0){
+            return []
+        }else{
+            return (0 ..< count).map { i in
+                pointer.pointee!.advanced(by: i).pointee
+            }
+        }
     }
 }
 
+public struct CokeAudioOutputBuffer{
+    public var time:AudioTimeStamp
+    public var data:Data
+    public var numberOfChannel:UInt32
+    public var packetDescriptions:[AudioStreamPacketDescription]?
+
+    public func createSampleBuffer(destination:AudioStreamBasicDescription,
+                                   presentationTimeStamp:CMTime)->CMSampleBuffer?{
+        do{
+            let format = try CMAudioFormatDescription(audioStreamBasicDescription: destination)
+            var result:CMSampleBuffer?
+            CMAudioSampleBufferCreateWithPacketDescriptions(allocator: nil, dataBuffer: self.data.audioBlockBuffer, dataReady: true, makeDataReadyCallback: nil, refcon: nil, formatDescription: format, sampleCount: self.packetDescriptions?.count ?? 0, presentationTimeStamp: presentationTimeStamp, packetDescriptions: self.packetDescriptions ?? [], sampleBufferOut: &result)
+            return result
+        }catch{
+            return nil
+        }
+    }
+}
+public class CokeAudioInputBuffer{
+    public var buffer:AudioBufferList
+    public var numberOfChannel:UInt32
+    public var numberOfPacket:UInt32
+    public var source:AudioStreamBasicDescription
+    public var packetDescriptions:UnsafeMutablePointer<AudioStreamPacketDescription>?
+    
+    public init(buffer: AudioBufferList,
+         numberOfChannel: UInt32,
+         source: AudioStreamBasicDescription, packetDescriptions: [AudioStreamPacketDescription] = []) {
+        self.buffer = buffer
+        self.numberOfChannel = numberOfChannel
+        self.numberOfPacket = UInt32(packetDescriptions.count)
+        self.source = source
+        if packetDescriptions.count > 0{
+            self.packetDescriptions = UnsafeMutablePointer<AudioStreamPacketDescription>.allocate(capacity: packetDescriptions.count)
+            (0 ..< packetDescriptions.count).forEach { i in
+                self.packetDescriptions?[i] = packetDescriptions[i]
+            }
+        }
+    }
+    deinit {
+        self.packetDescriptions?.deallocate()
+    }
+}
+
+public struct CokeAudioConfig{
+    public let mSampleRate:Float64
+    public let mBitsPerChannel:UInt32
+    public let mChannelsPerFrame:UInt32
+    public let mFramesPerPacket:UInt32
+    public static let shared = CokeAudioConfig(
+        mSampleRate: 48000,
+        mBitsPerChannel: 16,
+        mChannelsPerFrame: 2,
+        mFramesPerPacket: 1
+    )
+    
+    public var pcmAudioStreamBasicDescription:AudioStreamBasicDescription{
+        self.pcmAudioStreamBasicDescription(mFrameRate: self.mSampleRate)
+    }
+    
+    public func pcmAudioStreamBasicDescription(mFrameRate:Float64)-> AudioStreamBasicDescription{
+        let mSampleRate:Float64 = mFrameRate
+        let mBitsPerChannel:UInt32 = self.mBitsPerChannel
+        let mChannelsPerFrame:UInt32 = self.mChannelsPerFrame
+        let mFramesPerPacket:UInt32 = self.mFramesPerPacket
+        return AudioStreamBasicDescription(
+            mSampleRate: mSampleRate,
+            mFormatID: kAudioFormatLinearPCM,
+            mFormatFlags: kAudioFormatFlagIsSignedInteger,
+            mBytesPerPacket: mChannelsPerFrame * mBitsPerChannel / 8 * mFramesPerPacket,
+            mFramesPerPacket: mFramesPerPacket,
+            mBytesPerFrame: mChannelsPerFrame * mBitsPerChannel / 8,
+            mChannelsPerFrame: mChannelsPerFrame,
+            mBitsPerChannel: mBitsPerChannel, mReserved: 0)
+    }
+    
+    public var aacAudioStreamBasicDescription:AudioStreamBasicDescription{
+        return AudioStreamBasicDescription(mSampleRate: self.mSampleRate, mFormatID: kAudioFormatMPEG4AAC, mFormatFlags: 0, mBytesPerPacket: 0, mFramesPerPacket: 1024, mBytesPerFrame: 0, mChannelsPerFrame: self.mChannelsPerFrame, mBitsPerChannel: 0, mReserved: 0)
+    }
+}

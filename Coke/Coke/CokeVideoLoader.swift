@@ -15,7 +15,7 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
     public init(url:URL) throws {
         self.downloader = try CokeSessionDownloader(url: url)
         super.init()
-        self.image(se: 3,6,9) { _ in }
+        self.image(se: 0) { _ in }
     }
     public var asset:AVAsset?{
         var c = URLComponents(string: self.downloader.url.absoluteString)
@@ -25,14 +25,14 @@ public class CokeVideoLoader:NSObject,AVAssetResourceLoaderDelegate{
         a.resourceLoader.setDelegate(self, queue: DispatchQueue(label: "CokeVideoLoader"))
         return a
     }
-    public func image(se:TimeInterval...,callback:@escaping (CGImage?)->Void){
+    public func image(se:TimeInterval,callback:@escaping (CGImage?)->Void){
         guard let ass = self.asset else {
             DispatchQueue.main.async {
                 callback(nil)
             }
             return
         }
-        let times = se.map({NSValue(time: CMTime(seconds: $0, preferredTimescale: .max))})
+        let times = [se].map({NSValue(time: CMTime(seconds: $0, preferredTimescale: .max))})
         AVAssetImageGenerator(asset: ass).generateCGImagesAsynchronously(forTimes: times) { (t, i, tt, re, e) in
             DispatchQueue.main.async {
                 callback(i)

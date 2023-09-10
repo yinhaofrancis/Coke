@@ -7,13 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A923536F2AAD6ECD00FFF763 /* CokeAudioConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A923536E2AAD6ECD00FFF763 /* CokeAudioConverter.swift */; };
 		A94CC67426B398ED00494732 /* CokeUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A94CC66D26B398ED00494732 /* CokeUI.framework */; };
 		A94CC67526B398ED00494732 /* CokeUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A94CC66D26B398ED00494732 /* CokeUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A9B1F52226B6380500E157A4 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B1F52126B6380500E157A4 /* DetailViewController.swift */; };
 		A9C8D4E42AA6400200C23FC6 /* CodeVideoDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8D4E32AA6400200C23FC6 /* CodeVideoDecoder.swift */; };
 		A9C8D4E62AA75F0900C23FC6 /* CodeSampleDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8D4E52AA75F0900C23FC6 /* CodeSampleDisplay.swift */; };
-		A9C8D4E92AA78BFE00C23FC6 /* CokeAudioEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8D4E82AA78BFE00C23FC6 /* CokeAudioEncoder.swift */; };
 		A9C8D4EB2AA78DDF00C23FC6 /* CokeAudioBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8D4EA2AA78DDF00C23FC6 /* CokeAudioBuffer.swift */; };
+		A9C8D50D2AACA64F00C23FC6 /* CokeAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8D50C2AACA64F00C23FC6 /* CokeAudioPlayer.swift */; };
 		A9D1C9B626B3086500F4421B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9B526B3086500F4421B /* AppDelegate.swift */; };
 		A9D1C9BA26B3086500F4421B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9B926B3086500F4421B /* ViewController.swift */; };
 		A9D1C9BD26B3086500F4421B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D1C9BB26B3086500F4421B /* Main.storyboard */; };
@@ -77,13 +78,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A923536E2AAD6ECD00FFF763 /* CokeAudioConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeAudioConverter.swift; sourceTree = "<group>"; };
 		A94CC66D26B398ED00494732 /* CokeUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CokeUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A94CC67026B398ED00494732 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9B1F52126B6380500E157A4 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		A9C8D4E32AA6400200C23FC6 /* CodeVideoDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeVideoDecoder.swift; sourceTree = "<group>"; };
 		A9C8D4E52AA75F0900C23FC6 /* CodeSampleDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeSampleDisplay.swift; sourceTree = "<group>"; };
-		A9C8D4E82AA78BFE00C23FC6 /* CokeAudioEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeAudioEncoder.swift; sourceTree = "<group>"; };
 		A9C8D4EA2AA78DDF00C23FC6 /* CokeAudioBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeAudioBuffer.swift; sourceTree = "<group>"; };
+		A9C8D50C2AACA64F00C23FC6 /* CokeAudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeAudioPlayer.swift; sourceTree = "<group>"; };
 		A9D1C9B226B3086500F4421B /* CokeVideo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CokeVideo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9D1C9B526B3086500F4421B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A9D1C9B926B3086500F4421B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -157,8 +159,9 @@
 		A9C8D4E72AA78BDF00C23FC6 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
-				A9C8D4E82AA78BFE00C23FC6 /* CokeAudioEncoder.swift */,
 				A9C8D4EA2AA78DDF00C23FC6 /* CokeAudioBuffer.swift */,
+				A9C8D50C2AACA64F00C23FC6 /* CokeAudioPlayer.swift */,
+				A923536E2AAD6ECD00FFF763 /* CokeAudioConverter.swift */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
@@ -361,6 +364,7 @@
 					};
 					A9D1C9CD26B308B100F4421B = {
 						CreatedOnToolsVersion = 12.5.1;
+						LastSwiftMigration = 1420;
 					};
 				};
 			};
@@ -446,17 +450,18 @@
 				A9D1CA1026B3093800F4421B /* CokeGallery.swift in Sources */,
 				A9D1CA1326B3093800F4421B /* CokeSecurity.swift in Sources */,
 				A9D1CA1126B3093800F4421B /* CokeDiskStorage.swift in Sources */,
+				A923536F2AAD6ECD00FFF763 /* CokeAudioConverter.swift in Sources */,
 				A9E3D6312AA60FCB00BD5CF7 /* CodeVideoSample.swift in Sources */,
 				A9D1CA0126B3093800F4421B /* CokeConfiguration.swift in Sources */,
 				A9D1CA0826B3093800F4421B /* CokeVideoTrack.swift in Sources */,
 				A9D1CA0526B3093800F4421B /* CokeVideoPlayer.swift in Sources */,
-				A9C8D4E92AA78BFE00C23FC6 /* CokeAudioEncoder.swift in Sources */,
 				A9D1CA0026B3093800F4421B /* CokeCompute.swift in Sources */,
 				A9D1CA0426B3093800F4421B /* CokeMetalFilter.swift in Sources */,
 				A9E3D6342AA6127900BD5CF7 /* CokeCapture.swift in Sources */,
 				A9E3D62F2AA60D9C00BD5CF7 /* CodeVideoEncoder.swift in Sources */,
 				A9C8D4E42AA6400200C23FC6 /* CodeVideoDecoder.swift in Sources */,
 				A9C8D4EB2AA78DDF00C23FC6 /* CokeAudioBuffer.swift in Sources */,
+				A9C8D50D2AACA64F00C23FC6 /* CokeAudioPlayer.swift in Sources */,
 				A9D1CA0226B3093800F4421B /* CokeTextureRender.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -722,6 +727,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -741,6 +747,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.Coke;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -752,6 +759,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;

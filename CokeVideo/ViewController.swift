@@ -210,14 +210,15 @@ class CameraViewController:UIViewController{
     }
     public var encode:CodeVideoEncoder?
     public var decode:CokeVideoDecoder?
-    public var audioEncode:CokeAudioEncoder?
+//    public var audioEncode:CokeAudioConverterAAC?
+    
     public var audio:[CMSampleBuffer] = []
 
     public lazy var camera:CokeCapture = {
         if self.encode == nil{
             
             self.encode = try? CodeVideoEncoder(width: 720, height: 1280)
-            self.encode?.setBframe(bframe: true)
+            self.encode?.setBframe(bframe: false)
             self.encode?.setMaxKeyFrameInterval(maxKeyFrameInterval: 20)
             self.encode?.setAverageBitRate(averageBitRate: 64 * 1024 * 1024 * 8)
 //            self.encode?.setAverageBitRate(averageBitRate: 1)
@@ -242,17 +243,21 @@ class CameraViewController:UIViewController{
                     self?.decode?.decode(sampleBuffer: e)
                 })
             }else{
-                if self?.audioEncode == nil {
-                    self?.audioEncode = try! CokeAudioEncoder(source: sample.audioFormat!, destination: CokeAudioEncoder.aacAudioStreamBasicDescription(mFrameRate: sample.audioFormat!.mSampleRate / 2))
-                }
-                guard let samp = self?.audioEncode?.encode(sampleBuffer: sample) else { return }
-                AppDelegate.sample.append(samp);
+//                if self?.audioEncode == nil {
+//                    AppDelegate.desc = sample.audioFormat!
+//                    self?.audioEncode = CokeAudioConverterAAC(source: sample.audioFormat!, destination: CokeAudioConfig.shared.aacAudioStreamBasicDescription)
+////                    self?.audioEncode?.bitRate = 192000;
+//                }
+//                guard let samp = self?.audioEncode?.encode(sample: sample) else { return }
+//                AppDelegate.sample.append(samp);
+                
             }
             
         }
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
+        AppDelegate.sample.removeAll()
         self.display.videoFilter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
         
         self.camera.start()
@@ -265,17 +270,60 @@ class CameraViewController:UIViewController{
 
 
 
-class outViewController:UIViewController{
+class outViewController:UIViewController,CokeAudioRecoderOutput{
+    
+    func handle(recorder: Coke.CokeAudioRecorder, output: Coke.CokeAudioOutputBuffer) {
+        guard let out = encoder?.encode(buffer: output) else { return }
+        
+        guard let out2 = self.decoder?.decode(buffer: out) else { return }
+        print(out2)
+        self.buffer.append(out2)
+    }
+    
 
     public var render:CokeSampleView{
         return self.view as! CokeSampleView
     }
+    
+    let b = UIButton(type: .close)
+
+    public var buffer:[CokeAudioOutputBuffer] = []
+    public var player:CokeAudioPlayer?
+    public var recoder:CokeAudioRecorder?
+    public var encoder:CokeAudioConverterAAC?
+    public var decoder:CokeAudioConverterAAC?
     override func viewDidLoad() {
         super.viewDidLoad()
-        try! self.render.sync.setRate(1, time: AppDelegate.sample.first!.presentationTimeStamp)
-        AppDelegate.sample.forEach { c in
-            self.render.enqueue(sample: c)
+        self.recoder = try! CokeAudioRecorder()
+        
+        self.recoder?.output = self
+        self.encoder = CokeAudioConverterAAC(encode: self.recoder!.audioStreamBasicDescription)
+        self.decoder = CokeAudioConverterAAC(decode: self.encoder!.destination)
+        self.player = try! CokeAudioPlayer(audioDiscription: self.decoder!.destination)
+        b.frame = CGRect(x: 0, y: 200, width: 88, height: 88)
+        self.view .addSubview(b)
+        b .addTarget(self, action: #selector(down), for: .touchDown)
+        b .addTarget(self, action: #selector(up), for: .touchUpInside)
+        
+        if(AppDelegate.sample.count > 0){
+            self.render.sync.setRate(1, time: AppDelegate.sample.first!.presentationTimeStamp)
+            AppDelegate.sample.forEach { buf in
+                self.render.enqueue(sample: buf)
+            }
         }
-        AppDelegate.sample.removeAll()
+    }
+    @objc func down(){
+        self.buffer.removeAll()
+        try? AVAudioSession.sharedInstance().setCategory(.record)
+        self.recoder?.start()
+    }
+    @objc func up(){
+        self.recoder?.stop(complete: {
+            try? AVAudioSession.sharedInstance().setCategory(.playback)
+            let data = self.buffer.reduce(into: Data(), { partialResult, b in
+                partialResult += b.data
+            })
+            self.player?.play(data: data)
+        })
     }
 }
