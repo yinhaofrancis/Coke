@@ -202,7 +202,7 @@ public class CokeAudioRecorder{
         AudioQueueNewInputWithDispatchQueue(&self.audioQueue, &self.audioStreamBasicDescription, 0, CokeAudioRecorder.queue) {[weak self] queue, buffer, time, numOfPack, packs in
             guard let self else { return }
             if(packs == nil){
-                let buffer = CokeAudioOutputBuffer(time: time.pointee, data: Data(bytes: buffer.pointee.mAudioData, count: Int(buffer.pointee.mAudioDataByteSize)), numberOfChannel: self.audioStreamBasicDescription.mChannelsPerFrame, packetDescriptions: [])
+                let buffer = CokeAudioOutputBuffer(time: time.pointee, data: Data(bytes: buffer.pointee.mAudioData, count: Int(buffer.pointee.mAudioDataBytesCapacity)), numberOfChannel: self.audioStreamBasicDescription.mChannelsPerFrame, packetDescriptions: [])
                 if buffer.time.mHostTime > 0{
                     self.output?.handle(recorder: self, output: buffer)
                 }else{
@@ -210,7 +210,7 @@ public class CokeAudioRecorder{
                     self.endCallBack = nil
                 }
             }else{
-                let buffer = CokeAudioOutputBuffer(time: time.pointee, data: Data(bytes: buffer.pointee.mAudioData, count: Int(buffer.pointee.mAudioDataByteSize)), numberOfChannel: self.audioStreamBasicDescription.mChannelsPerFrame, packetDescriptions: (0 ..< numOfPack).map { i in
+                let buffer = CokeAudioOutputBuffer(time: time.pointee, data: Data(bytes: buffer.pointee.mAudioData, count: Int(buffer.pointee.mAudioDataBytesCapacity)), numberOfChannel: self.audioStreamBasicDescription.mChannelsPerFrame, packetDescriptions: (0 ..< numOfPack).map { i in
                     packs![Int(i)]
                 })
                 if buffer.time.mHostTime > 0{

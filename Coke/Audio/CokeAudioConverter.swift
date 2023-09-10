@@ -61,6 +61,13 @@ public class CokeAudioConverterAAC{
         }
         self.converter = conv!
     }
+    
+    public func encode(sample:CMSampleBuffer)->CMSampleBuffer?{
+        guard let pcm = sample.pcm else { return nil }
+        let source = CokeAudioOutputBuffer(time: .init(), data: pcm, numberOfChannel: 1)
+        guard let destination = self.encode(buffer: source) else { return nil }
+        return destination.createSampleBuffer(destination: self.destination, presentationTimeStamp: sample.presentationTimeStamp)
+    }
     public func encode(buffer: CokeAudioOutputBuffer)->CokeAudioOutputBuffer?{
         
         var inputPacketNum:UInt32 = 1
@@ -101,6 +108,7 @@ public class CokeAudioConverterAAC{
             }
             return noErr
         }, Unmanaged<CokeAudioInputBuffer>.passUnretained(inb).toOpaque(), &inputPacketNum, &outbuff, packets)
+        print(inputPacketNum)
         return CokeAudioOutputBuffer(time: buffer.time, data: Data(bytes: outpointer, count: Int(outbuff.mBuffers.mDataByteSize)), numberOfChannel: self.destination.mChannelsPerFrame,packetDescriptions: [packets.pointee])
     }
     
@@ -137,7 +145,10 @@ public class CokeAudioConverterAAC{
             packetDesc?.pointee = inbuff.packetDescriptions
             return noErr
         }, Unmanaged<CokeAudioInputBuffer>.passUnretained(inb).toOpaque(), &inputPacketNum, &outbuff, packets)
+        print(inputPacketNum)
         return CokeAudioOutputBuffer(time: buffer.time, data: Data(bytes: outpointer, count: Int(outbuff.mBuffers.mDataByteSize)), numberOfChannel: self.destination.mChannelsPerFrame,packetDescriptions: [packets.pointee])
     }
-    
+    public func reset(){
+        AudioConverterReset(self.converter)
+    }
 }

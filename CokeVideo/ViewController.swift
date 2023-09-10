@@ -210,7 +210,7 @@ class CameraViewController:UIViewController{
     }
     public var encode:CodeVideoEncoder?
     public var decode:CokeVideoDecoder?
-//    public var audioEncode:CokeAudioConverterAAC?
+    public var audioEncode:CokeAudioConverterAAC?
     
     public var audio:[CMSampleBuffer] = []
 
@@ -243,13 +243,12 @@ class CameraViewController:UIViewController{
                     self?.decode?.decode(sampleBuffer: e)
                 })
             }else{
-//                if self?.audioEncode == nil {
-//                    AppDelegate.desc = sample.audioFormat!
-//                    self?.audioEncode = CokeAudioConverterAAC(source: sample.audioFormat!, destination: CokeAudioConfig.shared.aacAudioStreamBasicDescription)
-////                    self?.audioEncode?.bitRate = 192000;
-//                }
-//                guard let samp = self?.audioEncode?.encode(sample: sample) else { return }
-//                AppDelegate.sample.append(samp);
+                if self?.audioEncode == nil {
+                    self?.audioEncode = CokeAudioConverterAAC(encode: sample.audioFormat!)
+//                    self?.audioEncode?.bitRate = 192000;
+                }
+                guard let samp = self?.audioEncode?.encode(sample: sample) else { return }
+                AppDelegate.sample.append(samp);
                 
             }
             
@@ -276,8 +275,8 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
         guard let out = encoder?.encode(buffer: output) else { return }
         
         guard let out2 = self.decoder?.decode(buffer: out) else { return }
-        print(out2)
         self.buffer.append(out2)
+        print("|",output.data.count)
     }
     
 
@@ -314,6 +313,10 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
     }
     @objc func down(){
         self.buffer.removeAll()
+        self.encoder?.reset()
+        self.decoder?.reset()
+        self.player?.stop()
+    
         try? AVAudioSession.sharedInstance().setCategory(.record)
         self.recoder?.start()
     }
