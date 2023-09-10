@@ -1,5 +1,6 @@
 import Foundation
 import AudioToolbox
+import CoreMedia
 
 public class CokeAudioPlayer {
     
@@ -100,6 +101,11 @@ public class CokeAudioPlayer {
     public func pause(){
         AudioQueuePause(self.queue!)
     }
+    
+    public func reset(){
+        AudioQueueReset(self.queue!)
+    }
+    
     private func loadAudioBuffer(_ buffer: AudioQueueBufferRef,_ data:Data) {
         guard let queue = self.queue else { return }
         buffer.pointee.mAudioDataByteSize = UInt32(data.count)
@@ -186,11 +192,14 @@ public class CokeAudioRecorder{
     private var buffers:[AudioQueueBufferRef] = []
     
     public let bufferCount = 20
+    
+    public let sampleNum:UInt32 = 1024
+    
     public var endCallBack:(()->Void)?
     
     public var bufferSize:UInt32 {
         
-        self.audioStreamBasicDescription.mBytesPerPacket * 1024
+        self.audioStreamBasicDescription.mBytesPerPacket * sampleNum
     };
     public var isRuning:UInt32{
         return getProperty(value: UInt32(0)) { ioPropertyDataSize, outPropertyData in
@@ -202,18 +211,18 @@ public class CokeAudioRecorder{
         AudioQueueNewInputWithDispatchQueue(&self.audioQueue, &self.audioStreamBasicDescription, 0, CokeAudioRecorder.queue) {[weak self] queue, buffer, time, numOfPack, packs in
             guard let self else { return }
             if(packs == nil){
-                let buffer = CokeAudioOutputBuffer(time: time.pointee, data: Data(bytes: buffer.pointee.mAudioData, count: Int(buffer.pointee.mAudioDataBytesCapacity)), numberOfChannel: self.audioStreamBasicDescription.mChannelsPerFrame, packetDescriptions: [])
-                if buffer.time.mHostTime > 0{
+                let buffer = CokeAudioOutputBuffer(time: CMClockMakeHostTimeFromSystemUnits(time.pointee.mHostTime), data: Data(bytes: buffer.pointee.mAudioData, count: Int(buffer.pointee.mAudioDataBytesCapacity)), numberOfChannel: self.audioStreamBasicDescription.mChannelsPerFrame,  packetDescriptions: [], description: self.audioStreamBasicDescription)
+                if time.pointee.mHostTime > 0{
                     self.output?.handle(recorder: self, output: buffer)
                 }else{
                     self.endCallBack?()
                     self.endCallBack = nil
                 }
             }else{
-                let buffer = CokeAudioOutputBuffer(time: time.pointee, data: Data(bytes: buffer.pointee.mAudioData, count: Int(buffer.pointee.mAudioDataBytesCapacity)), numberOfChannel: self.audioStreamBasicDescription.mChannelsPerFrame, packetDescriptions: (0 ..< numOfPack).map { i in
+                let buffer = CokeAudioOutputBuffer(time: CMClockMakeHostTimeFromSystemUnits(time.pointee.mHostTime), data: Data(bytes: buffer.pointee.mAudioData, count: Int(buffer.pointee.mAudioDataBytesCapacity)), numberOfChannel: self.audioStreamBasicDescription.mChannelsPerFrame , packetDescriptions: (0 ..< numOfPack).map { i in
                     packs![Int(i)]
-                })
-                if buffer.time.mHostTime > 0{
+                }, description: self.audioStreamBasicDescription)
+                if time.pointee.mHostTime > 0{
                     self.output?.handle(recorder: self, output: buffer)
                 }else{
                     self.endCallBack?()
@@ -246,11 +255,13 @@ public class CokeAudioRecorder{
             AudioQueueStop(self.audioQueue!,inImmediate)
         }
     }
-//    public func close(inImmediate:Bool = false){
-//        AudioQueueDispose(self.audioQueue!, inImmediate)
-//    }
+
     public func pause(){
+        
         AudioQueuePause(self.audioQueue!)
+    }
+    public func reset(){
+        AudioQueueReset(self.audioQueue!)
     }
     deinit{
         guard let aq = self.audioQueue else { return }

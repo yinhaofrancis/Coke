@@ -366,7 +366,7 @@ extension Data{
                                                        flags: .zero,
                                                        blockBufferOut: &blockBuffer)
         guard error == kCMBlockBufferNoErr else {
-            print("fail to create block buffer")
+            print("fail to create block buffer \(error)")
             return nil
         }
         return blockBuffer
@@ -385,7 +385,7 @@ extension Data{
                                                        flags: .zero,
                                                        blockBufferOut: &blockBuffer)
         guard error == kCMBlockBufferNoErr else {
-            print("fail to create block buffer")
+            print("fail to create block buffer \(error)")
             return nil
         }
         return blockBuffer

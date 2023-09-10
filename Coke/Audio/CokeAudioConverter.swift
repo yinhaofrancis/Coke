@@ -13,6 +13,7 @@ import AVFoundation
 public class CokeAudioConverterAAC{
     
     public let source:AudioStreamBasicDescription
+    
     public let destination:AudioStreamBasicDescription
     
     public let converter:AudioConverterRef
@@ -62,12 +63,6 @@ public class CokeAudioConverterAAC{
         self.converter = conv!
     }
     
-    public func encode(sample:CMSampleBuffer)->CMSampleBuffer?{
-        guard let pcm = sample.pcm else { return nil }
-        let source = CokeAudioOutputBuffer(time: .init(), data: pcm, numberOfChannel: 1)
-        guard let destination = self.encode(buffer: source) else { return nil }
-        return destination.createSampleBuffer(destination: self.destination, presentationTimeStamp: sample.presentationTimeStamp)
-    }
     public func encode(buffer: CokeAudioOutputBuffer)->CokeAudioOutputBuffer?{
         
         var inputPacketNum:UInt32 = 1
@@ -108,8 +103,7 @@ public class CokeAudioConverterAAC{
             }
             return noErr
         }, Unmanaged<CokeAudioInputBuffer>.passUnretained(inb).toOpaque(), &inputPacketNum, &outbuff, packets)
-        print(inputPacketNum)
-        return CokeAudioOutputBuffer(time: buffer.time, data: Data(bytes: outpointer, count: Int(outbuff.mBuffers.mDataByteSize)), numberOfChannel: self.destination.mChannelsPerFrame,packetDescriptions: [packets.pointee])
+        return CokeAudioOutputBuffer(time: buffer.time, data: Data(bytes: outpointer, count: Int(outbuff.mBuffers.mDataByteSize)), numberOfChannel: self.destination.mChannelsPerFrame, packetDescriptions: [packets.pointee], description: self.destination)
     }
     
     public func decode(buffer: CokeAudioOutputBuffer)->CokeAudioOutputBuffer?{
@@ -145,10 +139,74 @@ public class CokeAudioConverterAAC{
             packetDesc?.pointee = inbuff.packetDescriptions
             return noErr
         }, Unmanaged<CokeAudioInputBuffer>.passUnretained(inb).toOpaque(), &inputPacketNum, &outbuff, packets)
-        print(inputPacketNum)
-        return CokeAudioOutputBuffer(time: buffer.time, data: Data(bytes: outpointer, count: Int(outbuff.mBuffers.mDataByteSize)), numberOfChannel: self.destination.mChannelsPerFrame,packetDescriptions: [packets.pointee])
+        return CokeAudioOutputBuffer(time: buffer.time, data: Data(bytes: outpointer, count: Int(outbuff.mBuffers.mDataByteSize)), numberOfChannel: self.destination.mChannelsPerFrame, packetDescriptions: [packets.pointee], description: self.destination)
     }
     public func reset(){
         AudioConverterReset(self.converter)
     }
+    deinit{
+        AudioConverterDispose(self.converter)
+    }
+    public var bitRate:UInt32{
+        set{
+            var value:UInt32 = newValue
+            AudioConverterSetProperty(self.converter, kAudioConverterEncodeBitRate, UInt32(MemoryLayout<UInt32>.size), &value)
+        }
+        get{
+            var value:UInt32 = 0
+            var count:UInt32 = 0
+            AudioConverterGetProperty(self.converter, kAudioConverterEncodeBitRate, &count, &value)
+            return value
+        }
+    }
 }
+
+
+
+
+public class CokeFilmAudioEncodeAAC {
+
+    public let source:AVAudioFormat
+    
+    public let destination:AVAudioFormat
+    
+    public let convert : AVAudioConverter
+    
+    public init?(source:AVAudioFormat,destination:AVAudioFormat){
+        self.source = source
+        self.destination = destination
+        guard let cv = AVAudioConverter(from: source, to: destination) else { return nil }
+        self.convert = cv
+
+    }
+    
+    public func encode(pcm:AVAudioPCMBuffer)->AVAudioCompressedBuffer{
+        let outBuffer = AVAudioCompressedBuffer(format: destination,
+                                                    packetCapacity: 8,
+                                                maximumPacketSize: self.convert.maximumOutputPacketSize)
+        var e:NSError?
+        self.convert.convert(to: outBuffer, error: &e) { c, s in
+            s.pointee = AVAudioConverterInputStatus.haveData
+            return pcm
+        }
+        return outBuffer
+    }
+    public func encode(sample:CMSampleBuffer)->CMSampleBuffer?{
+        guard let sampleAf = sample.formatDescription else { return nil }
+        guard let list = sample.audioBufferList else { return nil  }
+        var mlist = list
+        if #available(iOS 15.0, *) {
+            guard let pcm = AVAudioPCMBuffer(pcmFormat: AVAudioFormat(cmAudioFormatDescription: sampleAf), bufferListNoCopy: &mlist) else { return nil }
+            let compress = self.encode(pcm: pcm)
+            let alist = compress.audioBufferList
+            guard let data = Data(bytes: alist.pointee.mBuffers.mData!, count: Int(alist.pointee.mBuffers.mDataByteSize)).blockBuffer else { return nil }
+            var buffer:CMSampleBuffer?
+            CMAudioSampleBufferCreateReadyWithPacketDescriptions(allocator: nil, dataBuffer: data, formatDescription: self.destination.formatDescription, sampleCount: CMItemCount(compress.packetCount), presentationTimeStamp: sample.presentationTimeStamp, packetDescriptions: compress.packetDescriptions, sampleBufferOut: &buffer)
+            return buffer
+        }
+        return nil
+    }
+    
+}
+
+

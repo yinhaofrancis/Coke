@@ -100,17 +100,27 @@ extension CMSampleBuffer {
 }
 
 public struct CokeAudioOutputBuffer{
-    public var time:AudioTimeStamp
+    public var time:CMTime
     public var data:Data
     public var numberOfChannel:UInt32
     public var packetDescriptions:[AudioStreamPacketDescription]?
-
-    public func createSampleBuffer(destination:AudioStreamBasicDescription,
-                                   presentationTimeStamp:CMTime)->CMSampleBuffer?{
+    public var description:AudioStreamBasicDescription
+    public func createSampleBuffer()->CMSampleBuffer?{
+        do{
+            let format = try CMAudioFormatDescription(audioStreamBasicDescription: self.description)
+            var result:CMSampleBuffer?
+            CMAudioSampleBufferCreateWithPacketDescriptions(allocator: nil, dataBuffer: self.data.audioBlockBuffer, dataReady: true, makeDataReadyCallback: nil, refcon: nil, formatDescription: format, sampleCount: self.packetDescriptions?.count ?? 1, presentationTimeStamp: self.time, packetDescriptions: self.packetDescriptions ?? [], sampleBufferOut: &result)
+            return result
+        }catch{
+            return nil
+        }
+    }
+    public func createPCMSampleBuffer(destination:AudioStreamBasicDescription)->CMSampleBuffer?{
         do{
             let format = try CMAudioFormatDescription(audioStreamBasicDescription: destination)
             var result:CMSampleBuffer?
-            CMAudioSampleBufferCreateWithPacketDescriptions(allocator: nil, dataBuffer: self.data.audioBlockBuffer, dataReady: true, makeDataReadyCallback: nil, refcon: nil, formatDescription: format, sampleCount: self.packetDescriptions?.count ?? 0, presentationTimeStamp: presentationTimeStamp, packetDescriptions: self.packetDescriptions ?? [], sampleBufferOut: &result)
+            let a = self.data.audioBlockBuffer
+            CMAudioSampleBufferCreateWithPacketDescriptions(allocator: nil, dataBuffer: a, dataReady: true, makeDataReadyCallback: nil, refcon: nil, formatDescription: format, sampleCount: 1, presentationTimeStamp: self.time, packetDescriptions: nil, sampleBufferOut: &result)
             return result
         }catch{
             return nil
@@ -151,7 +161,7 @@ public struct CokeAudioConfig{
     public static let shared = CokeAudioConfig(
         mSampleRate: 48000,
         mBitsPerChannel: 16,
-        mChannelsPerFrame: 2,
+        mChannelsPerFrame: 1,
         mFramesPerPacket: 1
     )
     
