@@ -36,7 +36,7 @@ public class CodeVideoEncoder{
     public init(width:Int32,
                 height:Int32,
                 pixelFormat:OSType = kCVPixelFormatType_420YpCbCr8Planar,
-                codec:CMVideoCodecType = kCMVideoCodecType_H264,
+                codec:CMVideoCodecType = kCMVideoCodecType_HEVC,
                 propertys:CFDictionary? = nil) throws{
         let dic:CFDictionary = [kCVPixelBufferPixelFormatTypeKey:pixelFormat as CFNumber] as CFDictionary
         var ses:VTCompressionSession?

@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 import Coke
 import AVKit
+import VideoToolbox
 import Accelerate
 
 class Model:Codable{
@@ -214,20 +215,22 @@ class CameraViewController:UIViewController{
     public lazy var camera:CokeCapture = {
         if self.encode == nil{
             
-            self.encode = try? CodeVideoEncoder(width: 360, height: 640)
+            self.encode = try? CodeVideoEncoder(width: 720, height: 1280)
+
+            self.encode?.setProfileLevel(value: kVTProfileLevel_H264_Baseline_1_3)
             self.encode?.setBframe(bframe: true)
             self.encode?.setMaxKeyFrameInterval(maxKeyFrameInterval: 60)
 //            self.encode?.setAverageBitRate(averageBitRate: 1024 * 1024 * 8)
-            if #available(iOS 15.0, *) {
-                self.encode?.setMaxAllowQP(qp: 0.6)
-            } else {
-                // Fallback on earlier versions
-            }
-            if #available(iOS 16.0, *) {
-                self.encode?.setMinAllowQP(qp: 0.1)
-            } else {
-                // Fallback on earlier versions
-            }
+//            if #available(iOS 15.0, *) {
+//                self.encode?.setMaxAllowQP(qp: 0.6)
+//            } else {
+//                // Fallback on earlier versions
+//            }
+//            if #available(iOS 16.0, *) {
+//                self.encode?.setMinAllowQP(qp: 0.1)
+//            } else {
+//                // Fallback on earlier versions
+//            }
 //            self.encode?.setAverageBitRate(averageBitRate: 1)
 //            self.encode?.setFrameRate(frameRate: 1)
         }

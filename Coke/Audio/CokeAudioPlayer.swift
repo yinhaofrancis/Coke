@@ -182,7 +182,7 @@ public class CokeAudioRecorder{
     
     public weak var output:CokeAudioRecoderOutput?
     
-    public static let queue:DispatchQueue = DispatchQueue(label: "AudioPlayer")
+    public static let queue:DispatchQueue = DispatchQueue(label: "AudioPlayer",attributes: .concurrent)
     
     
     public private(set) var audioStreamBasicDescription:AudioStreamBasicDescription
@@ -196,6 +196,8 @@ public class CokeAudioRecorder{
     public let sampleNum:UInt32 = 1024
     
     public var endCallBack:(()->Void)?
+    
+    private var isDestroyed:Bool = false
     
     public var bufferSize:UInt32 {
         
@@ -265,6 +267,8 @@ public class CokeAudioRecorder{
     }
     deinit{
         guard let aq = self.audioQueue else { return }
+        self.stop(inImmediate: false)
+        AudioQueueFlush(aq)
         AudioQueueDispose(aq, false)
     }
 }
