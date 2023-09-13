@@ -75,10 +75,39 @@ public class CodeVideoEncoder{
         let b = CFNumberCreate(kCFAllocatorDefault, .sInt32Type, &int32)
         VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_AverageBitRate, value: b)
     }
+    @available(iOS 16.0, *)
+    public func setConstantBitRate(cbr:Int32){
+        var int32 = cbr
+        let b = CFNumberCreate(kCFAllocatorDefault, .sInt32Type, &int32)
+        VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_ConstantBitRate, value: b)
+    }
+    @available(iOS 15.0, *)
+    public func setMaxAllowQP(qp:Float){
+        var qp = qp
+        let b = CFNumberCreate(kCFAllocatorDefault, .floatType, &qp)
+        VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_MaxAllowedFrameQP, value: b)
+    }
+    @available(iOS 16.0, *)
+    public func setMinAllowQP(qp:Float){
+        var qp = qp
+        let b = CFNumberCreate(kCFAllocatorDefault, .floatType, &qp)
+        VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_MinAllowedFrameQP, value: b)
+    }
+    
+    public func setQuality(quality:Float){
+        var float = quality
+        let b = CFNumberCreate(kCFAllocatorDefault, .floatType, &float)
+        VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_Quality, value: b)
+    }
+    
     public func setFrameRate(frameRate:Int32){
         var int32 = frameRate
         let b = CFNumberCreate(kCFAllocatorDefault, .sInt32Type, &int32)
         VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_ExpectedFrameRate, value: b)
+    }
+    
+    public func setProfileLevel(value:CFString){
+        VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_ProfileLevel, value: value)
     }
     
     public func encode(buffer:VideoEncoderBuffer,callback:@escaping ImageCallback){

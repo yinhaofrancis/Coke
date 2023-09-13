@@ -217,7 +217,17 @@ class CameraViewController:UIViewController{
             self.encode = try? CodeVideoEncoder(width: 720, height: 1280,codec: kCMVideoCodecType_HEVC)
             self.encode?.setBframe(bframe: true)
             self.encode?.setMaxKeyFrameInterval(maxKeyFrameInterval: 60)
-            self.encode?.setAverageBitRate(averageBitRate: 1024 * 1024 * 8)
+//            self.encode?.setAverageBitRate(averageBitRate: 1024 * 1024 * 8)
+            if #available(iOS 15.0, *) {
+                self.encode?.setMaxAllowQP(qp: 0.6)
+            } else {
+                // Fallback on earlier versions
+            }
+            if #available(iOS 16.0, *) {
+                self.encode?.setMinAllowQP(qp: 0.1)
+            } else {
+                // Fallback on earlier versions
+            }
 //            self.encode?.setAverageBitRate(averageBitRate: 1)
 //            self.encode?.setFrameRate(frameRate: 1)
         }
