@@ -13,11 +13,12 @@ public class CokeCapture:NSObject,
                          AVCaptureVideoDataOutputSampleBufferDelegate,
                          CokeAudioRecoderOutput{
     public func handle(recorder: CokeAudioRecorder, output: CokeAudioOutputBuffer) {
-        guard let accbudder =  self.aacEncode?.encode(buffer: output)?.createSampleBuffer() else { return }
+        guard let accbudder =  self.aacEncode.encode(buffer: output)?.createSampleBuffer() else { return }
         self.callback(accbudder)
         
     }
     
+    static let queue:DispatchQueue = DispatchQueue(label: "CokeCapture")
 
     lazy var device:AVCaptureDevice = {
         AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera
@@ -39,21 +40,20 @@ public class CokeCapture:NSObject,
         return AVCaptureSession()
     }()
 
-    lazy var record:CokeAudioRecorder = {
-        let c = try!CokeAudioRecorder()
-        c.output = self
-        return c
-    }()
-    lazy var aacEncode:CokeAudioConverterAAC? = {
-        CokeAudioConverterAAC(encode: record.audioStreamBasicDescription)
-    }()
+    private (set) var record:CokeAudioRecorder
+    
+    private(set) var aacEncode:CokeAudioConverter
     
     var callback:(CMSampleBuffer)->Void
     public var preset:AVCaptureSession.Preset
-    public init(preset:AVCaptureSession.Preset = .iFrame1280x720,callback:@escaping (CMSampleBuffer)->Void){
+    public init(preset:AVCaptureSession.Preset = .iFrame1280x720,callback:@escaping (CMSampleBuffer)->Void) throws{
         self.callback = callback
         self.preset = preset
+        let record = try CokeAudioRecorder()
+        self.aacEncode = try CokeAudioConverter(encode: record.audioStreamBasicDescription)
+        self.record = record
         super.init()
+        self.record.output = self
         if AVCaptureDevice.authorizationStatus(for: .video) == .authorized{
             self.loadConfig()
         }else{
@@ -61,7 +61,6 @@ public class CokeCapture:NSObject,
                 self.loadConfig()
             }
         }
-    
     }
     public var quickDisplay:Bool = false;
     public func loadConfig(){
@@ -84,15 +83,15 @@ public class CokeCapture:NSObject,
 
     
     public func start(){
-        DispatchQueue.global().async {
+        CokeCapture.queue.async {
             try! AVAudioSession.sharedInstance().setCategory(.record)
             self.session.startRunning()
-            self.aacEncode?.reset()
+            self.aacEncode.reset()
             self.record.start()
         }
     }
     public func stop(){
-        DispatchQueue.global().async {
+        CokeCapture.queue.async {
             self.session.stopRunning()
             self.record.stop()
         }

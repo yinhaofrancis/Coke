@@ -234,7 +234,7 @@ class CameraViewController:UIViewController{
 //            self.encode?.setAverageBitRate(averageBitRate: 1)
 //            self.encode?.setFrameRate(frameRate: 1)
         }
-        return CokeCapture{[weak self] sample in
+        return try! CokeCapture{[weak self] sample in
 
             
             if let buffer = VideoEncoderBuffer(sample: sample)  {
@@ -274,8 +274,8 @@ class CameraViewController:UIViewController{
 class outViewController:UIViewController,CokeAudioRecoderOutput{
     
     func handle(recorder: Coke.CokeAudioRecorder, output: Coke.CokeAudioOutputBuffer) {
+
         guard let out = encoder?.encode(buffer: output) else { return }
-        
         guard let out2 = self.decoder?.decode(buffer: out) else { return }
         self.buffer.append(out2)
         print(out.data.count,out2.data.count)
@@ -291,16 +291,16 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
     public var buffer:[CokeAudioOutputBuffer] = []
     public var player:CokeAudioPlayer?
     public var recoder:CokeAudioRecorder?
-    public var encoder:CokeAudioConverterAAC?
-    public var decoder:CokeAudioConverterAAC?
+    public var encoder:CokeAudioConverter?
+    public var decoder:CokeAudioConverter?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.recoder = try! CokeAudioRecorder()
         try? AVAudioSession.sharedInstance().setCategory(.playback)
         self.recoder?.output = self
-        self.encoder = CokeAudioConverterAAC(encode: self.recoder!.audioStreamBasicDescription)
+        self.encoder = try? CokeAudioConverter(encode: self.recoder!.audioStreamBasicDescription)
         self.encoder?.bitRate = 96000
-        self.decoder = CokeAudioConverterAAC(decode: self.encoder!.destination)
+        self.decoder = try? CokeAudioConverter(decode: self.encoder!.destination)
         self.player = try! CokeAudioPlayer(audioDiscription: self.decoder!.destination)
         b.frame = CGRect(x: 0, y: 200, width: 88, height: 88)
         

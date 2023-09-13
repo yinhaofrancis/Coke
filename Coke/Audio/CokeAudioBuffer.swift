@@ -165,11 +165,14 @@ public struct CokeAudioConfig{
         mFramesPerPacket: 1
     )
     
-    public var pcmAudioStreamBasicDescription:AudioStreamBasicDescription{
+    public var pcmIntegerAudioStreamBasicDescription:AudioStreamBasicDescription{
         self.pcmAudioStreamBasicDescription(mFrameRate: self.mSampleRate)
     }
+    public var pcmAudioStreamBasicDescription:AudioStreamBasicDescription{
+        self.pcmAudioStreamBasicDescription(mFrameRate: self.mSampleRate,flag: kAudioFormatFlagIsFloat)
+    }
     
-    public func pcmAudioStreamBasicDescription(mFrameRate:Float64)-> AudioStreamBasicDescription{
+    public func pcmAudioStreamBasicDescription(mFrameRate:Float64,flag:AudioFormatFlags = kAudioFormatFlagIsSignedInteger)-> AudioStreamBasicDescription{
         let mSampleRate:Float64 = mFrameRate
         let mBitsPerChannel:UInt32 = self.mBitsPerChannel
         let mChannelsPerFrame:UInt32 = self.mChannelsPerFrame
@@ -177,7 +180,7 @@ public struct CokeAudioConfig{
         return AudioStreamBasicDescription(
             mSampleRate: mSampleRate,
             mFormatID: kAudioFormatLinearPCM,
-            mFormatFlags: kAudioFormatFlagIsSignedInteger,
+            mFormatFlags: flag,
             mBytesPerPacket: mChannelsPerFrame * mBitsPerChannel / 8 * mFramesPerPacket,
             mFramesPerPacket: mFramesPerPacket,
             mBytesPerFrame: mChannelsPerFrame * mBitsPerChannel / 8,
@@ -187,5 +190,9 @@ public struct CokeAudioConfig{
     
     public var aacAudioStreamBasicDescription:AudioStreamBasicDescription{
         return AudioStreamBasicDescription(mSampleRate: self.mSampleRate, mFormatID: kAudioFormatMPEG4AAC, mFormatFlags: 0, mBytesPerPacket: 0, mFramesPerPacket: 1024, mBytesPerFrame: 0, mChannelsPerFrame: self.mChannelsPerFrame, mBitsPerChannel: 0, mReserved: 0)
+    }
+    
+    public var flacAudioStreamBasicDescription:AudioStreamBasicDescription{
+        return AudioStreamBasicDescription(mSampleRate: self.mSampleRate, mFormatID: kAudioFormatFLAC, mFormatFlags: 0, mBytesPerPacket: 0, mFramesPerPacket: 1024, mBytesPerFrame: 0, mChannelsPerFrame: self.mChannelsPerFrame, mBitsPerChannel: 0, mReserved: 0)
     }
 }

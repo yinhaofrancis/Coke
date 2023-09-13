@@ -10,7 +10,7 @@ import AVFoundation
 
 
 
-public class CokeAudioConverterAAC{
+public class CokeAudioConverter{
     
     public let source:AudioStreamBasicDescription
     
@@ -18,53 +18,40 @@ public class CokeAudioConverterAAC{
     
     public let converter:AudioConverterRef
     
-    public init?(encode:AudioStreamBasicDescription){
-        var sour = encode
-        self.source = sour
-        var dest = CokeAudioConfig.shared.aacAudioStreamBasicDescription
-        self.destination = dest
-        let desc = CokeAudioConverterAAC.converterClassMaker(format: [
+    public convenience init(encode:AudioStreamBasicDescription,
+                            to:AudioStreamBasicDescription = CokeAudioConfig.shared.aacAudioStreamBasicDescription) throws{
+        try self.init(source: encode, destination: to)
+    }
+    
+    public convenience init (decode:AudioStreamBasicDescription,toSampleRate:Float64? = nil) throws{
+        let dest = CokeAudioConfig.shared.pcmAudioStreamBasicDescription(mFrameRate: toSampleRate ?? decode.mSampleRate)
+        try self.init(source: decode, destination: dest)
+    }
+    
+    public convenience init (resample:AudioStreamBasicDescription,sampleRate:Float64) throws{
+        var dest = resample
+        dest.mSampleRate = sampleRate
+        try self.init(source: resample, destination: dest)
+    }
+
+    public init(source:AudioStreamBasicDescription,destination:AudioStreamBasicDescription) throws{
+        self.source = source
+        var sour = source
+        self.destination = destination
+        var dest = destination
+        let desc = CokeAudioConverter.converterClassMaker(format: [
             kAudioFormatMPEG4AAC,
             kAudioFormatFLAC
         ], converterType: kAudioEncoderComponentType)
         var conv:AudioConverterRef?
-        AudioConverterNewSpecific(&sour, &dest, UInt32(desc.count), desc, &conv)
+        let e = AudioConverterNewSpecific(&sour, &dest, UInt32(desc.count), desc, &conv)
         if conv == nil {
-            return nil
+            throw NSError(domain: "create converter fail(\(e)", code: Int(e))
         }
         self.converter = conv!
     }
     
-    static func converterClassMaker(format:[AudioFormatID],converterType:UInt32)->[AudioClassDescription] {
-        format.map { i in
-            [AudioClassDescription(
-            mType: converterType,
-            mSubType: i,
-            mManufacturer: kAppleSoftwareAudioCodecManufacturer),
-            AudioClassDescription(
-            mType: converterType,
-            mSubType: i,
-            mManufacturer: kAppleHardwareAudioCodecManufacturer)]
-        }.flatMap{$0}
-    }
-    public init?(decode:AudioStreamBasicDescription){
-        var sour = decode
-        self.source = sour
-        var dest = CokeAudioConfig.shared.pcmAudioStreamBasicDescription(mFrameRate: decode.mSampleRate)
-        self.destination = dest
-        
-        let desc = CokeAudioConverterAAC.converterClassMaker(format: [
-            kAudioFormatMPEG4AAC,
-            kAudioFormatFLAC
-        ], converterType: kAudioDecoderComponentType)
-        var conv:AudioConverterRef?
-        AudioConverterNewSpecific(&sour, &dest, UInt32(desc.count), desc, &conv)
-        if conv == nil {
-            return nil
-        }
-        self.converter = conv!
-    }
-    
+
     public func encode(buffer: CokeAudioOutputBuffer)->CokeAudioOutputBuffer?{
         
         var inputPacketNum:UInt32 = 1
@@ -120,13 +107,13 @@ public class CokeAudioConverterAAC{
         let inbuffer = AudioBufferList(mNumberBuffers: 1, mBuffers: AudioBuffer(mNumberChannels: buffer.numberOfChannel, mDataByteSize: UInt32(buffer.data.count), mData: inpoint))
         
         let inb = CokeAudioInputBuffer(buffer: inbuffer, numberOfChannel: buffer.numberOfChannel, source: self.source,packetDescriptions: buffer.packetDescriptions ?? [])
-        
-        let outpointer = UnsafeMutablePointer<UInt8>.allocate(capacity: 1024 * 1024)
+        let max = 1024 * 1024
+        let outpointer = UnsafeMutablePointer<UInt8>.allocate(capacity: max)
         defer{
             outpointer.deallocate()
         }
 
-        var outbuff = AudioBufferList(mNumberBuffers: 1, mBuffers: AudioBuffer(mNumberChannels: buffer.numberOfChannel, mDataByteSize: UInt32( 1024 * 1024), mData: outpointer))
+        var outbuff = AudioBufferList(mNumberBuffers: 1, mBuffers: AudioBuffer(mNumberChannels: buffer.numberOfChannel, mDataByteSize:UInt32(max) , mData: outpointer))
         
         let packets:UnsafeMutablePointer<AudioStreamPacketDescription> = .allocate(capacity: 64)
         defer {
@@ -143,6 +130,7 @@ public class CokeAudioConverterAAC{
         }, Unmanaged<CokeAudioInputBuffer>.passUnretained(inb).toOpaque(), &inputPacketNum, &outbuff, packets)
         return CokeAudioOutputBuffer(time: buffer.time, data: Data(bytes: outpointer, count: Int(outbuff.mBuffers.mDataByteSize)), numberOfChannel: self.destination.mChannelsPerFrame, packetDescriptions: [packets.pointee], description: self.destination)
     }
+    
     public func reset(){
         AudioConverterReset(self.converter)
     }
@@ -160,6 +148,18 @@ public class CokeAudioConverterAAC{
             AudioConverterGetProperty(self.converter, kAudioConverterEncodeBitRate, &count, &value)
             return value
         }
+    }
+    static func converterClassMaker(format:[AudioFormatID],converterType:UInt32)->[AudioClassDescription] {
+        format.map { i in
+            [AudioClassDescription(
+            mType: converterType,
+            mSubType: i,
+            mManufacturer: kAppleSoftwareAudioCodecManufacturer),
+            AudioClassDescription(
+            mType: converterType,
+            mSubType: i,
+            mManufacturer: kAppleHardwareAudioCodecManufacturer)]
+        }.flatMap{$0}
     }
 }
 
