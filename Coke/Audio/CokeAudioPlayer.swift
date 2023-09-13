@@ -163,7 +163,7 @@ public class CokeAudioPlayer {
         AudioQueueDispose(queue, false)
     }
     
-    public static let queue:DispatchQueue = DispatchQueue(label: "AudioPlayer")
+    public static let queue:DispatchQueue = DispatchQueue(label: "AudioPlayer",attributes: .concurrent)
 }
 
 
@@ -269,6 +269,9 @@ public class CokeAudioRecorder{
         guard let aq = self.audioQueue else { return }
         self.stop(inImmediate: false)
         AudioQueueFlush(aq)
+        self.buffers.forEach { i in
+            AudioQueueFreeBuffer(aq, i)
+        }
         AudioQueueDispose(aq, false)
     }
 }
