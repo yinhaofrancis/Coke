@@ -265,14 +265,11 @@ public class CokeAudioRecorder{
     }
     deinit{
         guard let aq = self.audioQueue else { return }
-        
+        AudioQueueFlush(aq)
         if (self.isRuning != 0){
-            self.stop()
+            self.stop(inImmediate: false)
         }
-        self.buffers.forEach { b in
-            AudioQueueFreeBuffer(aq, b)
-        }
-        AudioQueueDispose(aq, false)
         
+        AudioQueueDispose(aq, false)
     }
 }

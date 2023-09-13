@@ -215,9 +215,9 @@ class CameraViewController:UIViewController{
         if self.encode == nil{
             
             self.encode = try? CodeVideoEncoder(width: 720, height: 1280,codec: kCMVideoCodecType_HEVC)
-            self.encode?.setBframe(bframe: false)
-            self.encode?.setMaxKeyFrameInterval(maxKeyFrameInterval: 20)
-            self.encode?.setAverageBitRate(averageBitRate: 64 * 1024 * 1024 * 8)
+            self.encode?.setBframe(bframe: true)
+            self.encode?.setMaxKeyFrameInterval(maxKeyFrameInterval: 60)
+            self.encode?.setAverageBitRate(averageBitRate: 1024 * 1024 * 8)
 //            self.encode?.setAverageBitRate(averageBitRate: 1)
 //            self.encode?.setFrameRate(frameRate: 1)
         }
@@ -225,10 +225,11 @@ class CameraViewController:UIViewController{
 
             
             if let buffer = VideoEncoderBuffer(sample: sample)  {
-                print(sample.presentationTimeStamp.seconds,"v")
+                
                 self?.encode?.encode(buffer: buffer, callback: { i, f, e, index in
                     guard let e else { return }
                     AppDelegate.sample.append(e);
+                    print(sample.presentationTimeStamp.seconds,"v \(e.isIFrame) \(e.dataBuffer?.dataLength)")
                 })
                 guard let px = sample.imageBuffer else { return }
                 DispatchQueue.main.async {
@@ -237,7 +238,7 @@ class CameraViewController:UIViewController{
             }else{
                 
                 AppDelegate.sample.append(sample);
-                print(sample.presentationTimeStamp.seconds,"a")
+                print(sample.presentationTimeStamp.seconds,"a \(sample.dataBuffer?.dataLength)")
             }
             
         }
@@ -264,7 +265,7 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
         
         guard let out2 = self.decoder?.decode(buffer: out) else { return }
         self.buffer.append(out2)
-        
+        print(out.data.count,out2.data.count)
     }
     
 
