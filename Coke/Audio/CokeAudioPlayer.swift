@@ -163,7 +163,7 @@ public class CokeAudioPlayer {
         AudioQueueDispose(queue, false)
     }
     
-    public static let queue:DispatchQueue = DispatchQueue(label: "AudioPlayer",attributes: .concurrent)
+    public static let queue:DispatchQueue = DispatchQueue(label: "AudioPlayer")
 }
 
 
