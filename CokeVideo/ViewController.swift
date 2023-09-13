@@ -214,7 +214,7 @@ class CameraViewController:UIViewController{
     public lazy var camera:CokeCapture = {
         if self.encode == nil{
             
-            self.encode = try? CodeVideoEncoder(width: 720, height: 1280,codec: kCMVideoCodecType_HEVC)
+            self.encode = try? CodeVideoEncoder(width: 360, height: 640)
             self.encode?.setBframe(bframe: true)
             self.encode?.setMaxKeyFrameInterval(maxKeyFrameInterval: 60)
 //            self.encode?.setAverageBitRate(averageBitRate: 1024 * 1024 * 8)

@@ -265,11 +265,6 @@ public class CokeAudioRecorder{
     }
     deinit{
         guard let aq = self.audioQueue else { return }
-        AudioQueueFlush(aq)
-        if (self.isRuning != 0){
-            self.stop(inImmediate: false)
-        }
-        
         AudioQueueDispose(aq, false)
     }
 }
