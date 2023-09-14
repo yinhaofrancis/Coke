@@ -12,6 +12,7 @@ import Coke
 import AVKit
 import VideoToolbox
 import Accelerate
+import os
 
 class Model:Codable{
     var name:String
@@ -342,5 +343,13 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
             })
             self.player?.play(data: data)
         })
+    }
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        super.motionEnded(motion, with: event)
+        let fft = vDSP.FFT(log2n: 11, radix: .radix2, ofType: DSPSplitComplex.self)!
+        let f = self.buffer.map { i in
+            i.data.fft_foward(fft: fft)
+        }
+        print(f)
     }
 }
