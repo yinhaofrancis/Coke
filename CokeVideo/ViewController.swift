@@ -279,7 +279,6 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
         guard let out = encoder?.encode(buffer: output) else { return }
         guard let out2 = self.decoder?.decode(buffer: out) else { return }
         self.buffer.append(out2)
-        print(out.data.count,out2.data.count)
     }
     
 
@@ -343,13 +342,5 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
             })
             self.player?.play(data: data)
         })
-    }
-    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        super.motionEnded(motion, with: event)
-        let fft = vDSP.FFT(log2n: 11, radix: .radix2, ofType: DSPSplitComplex.self)!
-        let f = self.buffer.map { i in
-            i.data.fft_foward(fft: fft)
-        }
-        print(f)
     }
 }

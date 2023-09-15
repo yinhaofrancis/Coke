@@ -197,38 +197,3 @@ public struct CokeAudioConfig{
         return AudioStreamBasicDescription(mSampleRate: self.mSampleRate, mFormatID: kAudioFormatFLAC, mFormatFlags: 0, mBytesPerPacket: 0, mFramesPerPacket: 1024, mBytesPerFrame: 0, mChannelsPerFrame: self.mChannelsPerFrame, mBitsPerChannel: 0, mReserved: 0)
     }
 }
-
-public class FFTComplex{
-    public private(set) var data:DSPSplitComplex
-    public init(data: DSPSplitComplex) {
-        self.data = data
-    }
-    deinit{
-        data.imagp.deallocate()
-        data.realp.deallocate()
-    }
-}
-
-extension Data{
-    public func fft_foward(fft:vDSP.FFT<DSPSplitComplex>)->FFTComplex{
-        let c = self.count / MemoryLayout<Float>.size
-        var a = self
-        let i = a.withUnsafeMutableBytes { b in
-            b.baseAddress!.assumingMemoryBound(to: Float.self)
-        }
-        let p = UnsafeMutablePointer<Float>.allocate(capacity: c)
-        (0 ..< c).forEach{ i in
-           p[i] = Float(i) / 100
-        }
-        defer{
-            p.deallocate()
-        }
-        let input = DSPSplitComplex(realp: p, imagp: i)
-        
-        let outR = UnsafeMutablePointer<Float>.allocate(capacity: c)
-        let outi = UnsafeMutablePointer<Float>.allocate(capacity: c)
-        var output = DSPSplitComplex(realp: outR, imagp: outi)
-        fft.forward(input: input, output: &output)
-        return FFTComplex(data: output)
-    }
-}
