@@ -52,8 +52,8 @@ open class CokeView:UIView{
 
     public static func systemCheck<T,W>(model1:Int32,model2:Int32,type:T.Type,map:((UnsafeMutablePointer<T>)->W))->W?{
         let model = UnsafeMutablePointer<Int32>.allocate(capacity: 2)
-        model.assign(repeating: model1, count: 1)
-        model.advanced(by: 1).assign(repeating: model2, count: 1)
+        model.update(repeating: model1, count: 1)
+        model.advanced(by: 1).update(repeating: model2, count: 1)
         var count:Int = 1024
         let b = UnsafeMutableRawPointer.allocate(byteCount: 1024, alignment: 1)
         let rs = sysctl(model, 2, b, &count, nil, 0)
