@@ -33,8 +33,6 @@
 		A9D1CA0726B3093800F4421B /* CokeVideo.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9E426B3093800F4421B /* CokeVideo.metal */; };
 		A9D1CA0826B3093800F4421B /* CokeVideoTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9E526B3093800F4421B /* CokeVideoTrack.swift */; };
 		A9D1CA0926B3093800F4421B /* CokeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9E626B3093800F4421B /* CokeView.swift */; };
-		A9D1CA0F26B3093800F4421B /* CokePlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9EF26B3093800F4421B /* CokePlayerViewController.swift */; };
-		A9D1CA1026B3093800F4421B /* CokeGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F026B3093800F4421B /* CokeGallery.swift */; };
 		A9D1CA1126B3093800F4421B /* CokeDiskStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F226B3093800F4421B /* CokeDiskStorage.swift */; };
 		A9D1CA1226B3093800F4421B /* Coke.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F326B3093800F4421B /* Coke.swift */; };
 		A9D1CA1326B3093800F4421B /* CokeSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F426B3093800F4421B /* CokeSecurity.swift */; };
@@ -49,13 +47,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		A94CC67226B398ED00494732 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A9D1C9AA26B3086500F4421B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A94CC66C26B398ED00494732;
-			remoteInfo = CokeUI;
-		};
 		A9D1C9D326B308B100F4421B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A9D1C9AA26B3086500F4421B /* Project object */;
@@ -72,7 +63,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A94CC67526B398ED00494732 /* CokeUI.framework in Embed Frameworks */,
 				A9D1C9D626B308B100F4421B /* Coke.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -110,8 +100,6 @@
 		A9D1C9E426B3093800F4421B /* CokeVideo.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = CokeVideo.metal; sourceTree = "<group>"; };
 		A9D1C9E526B3093800F4421B /* CokeVideoTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeVideoTrack.swift; sourceTree = "<group>"; };
 		A9D1C9E626B3093800F4421B /* CokeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeView.swift; sourceTree = "<group>"; };
-		A9D1C9EF26B3093800F4421B /* CokePlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokePlayerViewController.swift; sourceTree = "<group>"; };
-		A9D1C9F026B3093800F4421B /* CokeGallery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeGallery.swift; sourceTree = "<group>"; };
 		A9D1C9F226B3093800F4421B /* CokeDiskStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeDiskStorage.swift; sourceTree = "<group>"; };
 		A9D1C9F326B3093800F4421B /* Coke.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coke.swift; sourceTree = "<group>"; };
 		A9D1C9F426B3093800F4421B /* CokeSecurity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeSecurity.swift; sourceTree = "<group>"; };
@@ -127,18 +115,10 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		A94CC66A26B398ED00494732 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A9D1C9AF26B3086500F4421B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A94CC67426B398ED00494732 /* CokeUI.framework in Frameworks */,
 				A9D1C9D526B308B100F4421B /* Coke.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -153,16 +133,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A94CC66E26B398ED00494732 /* CokeUI */ = {
-			isa = PBXGroup;
-			children = (
-				A9D1C9EF26B3093800F4421B /* CokePlayerViewController.swift */,
-				A9D1C9F026B3093800F4421B /* CokeGallery.swift */,
-				A94CC67026B398ED00494732 /* Info.plist */,
-			);
-			path = CokeUI;
-			sourceTree = "<group>";
-		};
 		A9C8D4E72AA78BDF00C23FC6 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
@@ -178,7 +148,6 @@
 			children = (
 				A9D1C9B426B3086500F4421B /* CokeVideo */,
 				A9D1C9CF26B308B100F4421B /* Coke */,
-				A94CC66E26B398ED00494732 /* CokeUI */,
 				A9D1C9B326B3086500F4421B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -188,7 +157,6 @@
 			children = (
 				A9D1C9B226B3086500F4421B /* CokeVideo.app */,
 				A9D1C9CE26B308B100F4421B /* Coke.framework */,
-				A94CC66D26B398ED00494732 /* CokeUI.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -285,13 +253,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		A94CC66826B398ED00494732 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A9D1C9C926B308B100F4421B /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -302,24 +263,6 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		A94CC66C26B398ED00494732 /* CokeUI */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A94CC67626B398ED00494732 /* Build configuration list for PBXNativeTarget "CokeUI" */;
-			buildPhases = (
-				A94CC66826B398ED00494732 /* Headers */,
-				A94CC66926B398ED00494732 /* Sources */,
-				A94CC66A26B398ED00494732 /* Frameworks */,
-				A94CC66B26B398ED00494732 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = CokeUI;
-			productName = CokeUI;
-			productReference = A94CC66D26B398ED00494732 /* CokeUI.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 		A9D1C9B126B3086500F4421B /* CokeVideo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A9D1C9C626B3086600F4421B /* Build configuration list for PBXNativeTarget "CokeVideo" */;
@@ -333,7 +276,6 @@
 			);
 			dependencies = (
 				A9D1C9D426B308B100F4421B /* PBXTargetDependency */,
-				A94CC67326B398ED00494732 /* PBXTargetDependency */,
 			);
 			name = CokeVideo;
 			productName = CokeVideo;
@@ -368,9 +310,6 @@
 				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
-					A94CC66C26B398ED00494732 = {
-						CreatedOnToolsVersion = 12.5.1;
-					};
 					A9D1C9B126B3086500F4421B = {
 						CreatedOnToolsVersion = 12.5.1;
 					};
@@ -395,19 +334,11 @@
 			targets = (
 				A9D1C9B126B3086500F4421B /* CokeVideo */,
 				A9D1C9CD26B308B100F4421B /* Coke */,
-				A94CC66C26B398ED00494732 /* CokeUI */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		A94CC66B26B398ED00494732 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A9D1C9B026B3086500F4421B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -428,13 +359,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		A94CC66926B398ED00494732 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A9D1C9AE26B3086500F4421B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -458,9 +382,7 @@
 				A9D1CA1226B3093800F4421B /* Coke.swift in Sources */,
 				A9D1CA1426B3093800F4421B /* CokeVideoLoader.swift in Sources */,
 				A9D1CA2226B31DFE00F4421B /* CokeConfig.swift in Sources */,
-				A9D1CA0F26B3093800F4421B /* CokePlayerViewController.swift in Sources */,
 				A9D1CA0326B3093800F4421B /* CokeDisplay.swift in Sources */,
-				A9D1CA1026B3093800F4421B /* CokeGallery.swift in Sources */,
 				A9D1CA1326B3093800F4421B /* CokeSecurity.swift in Sources */,
 				A9D1CA1126B3093800F4421B /* CokeDiskStorage.swift in Sources */,
 				A923536F2AAD6ECD00FFF763 /* CokeAudioConverter.swift in Sources */,
@@ -484,11 +406,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		A94CC67326B398ED00494732 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A94CC66C26B398ED00494732 /* CokeUI */;
-			targetProxy = A94CC67226B398ED00494732 /* PBXContainerItemProxy */;
-		};
 		A9D1C9D426B308B100F4421B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A9D1C9CD26B308B100F4421B /* Coke */;
@@ -820,15 +737,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A94CC67626B398ED00494732 /* Build configuration list for PBXNativeTarget "CokeUI" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A94CC67726B398ED00494732 /* Debug */,
-				A94CC67826B398ED00494732 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		A9D1C9AD26B3086500F4421B /* Build configuration list for PBXProject "CokeVideo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
