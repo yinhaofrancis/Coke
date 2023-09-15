@@ -97,6 +97,16 @@ public class CokeMetalConfiguration{
         d.height = height
         return self.device.makeTexture(descriptor: d)
     }
+    public func createDepthTexture(width:Int,height:Int)->MTLTexture?{
+        let d = MTLTextureDescriptor()
+        d.pixelFormat = CokeConfig.metalDepthFormat
+        d.width = width
+        d.storageMode = .private
+        d.usage = .renderTarget
+        d.height = height
+        return self.device.makeTexture(descriptor: d)
+    }
+    
     
     public func createCVPixelBuffer(img:CGImage)->CVPixelBuffer?{
         let option = [

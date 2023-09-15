@@ -11,5 +11,6 @@ import CoreVideo
 import MetalKit
 public struct CokeConfig{
     public static let metalColorFormat:MTLPixelFormat = .bgra8Unorm
+    public static let metalDepthFormat:MTLPixelFormat = .depth32Float_stencil8
     public static let videoColorFormat:UInt32 = kCVPixelFormatType_32BGRA
 }
