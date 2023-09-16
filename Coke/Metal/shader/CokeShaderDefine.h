@@ -35,7 +35,9 @@ struct RenderFragmentUniform{
 
 #define ShaderFragmentLightingIndex 3
 
-#define ShaderFragmentTextureIndex 0
+#define ShaderFragmentDiffuseTextureIndex 0
+
+#define ShaderFragmentSpecularTextureIndex 1
 
 #define ShaderFragmentSamplerIndex 0
 
@@ -57,7 +59,9 @@ struct TransformUniform{
     float4x4 invert;
 };
 struct LightingUniform{
-    float ambient;
+    float3 ambient;
+    float3 diffuse;
+    float3 specular;
     float3 lightPos;
     float specularStrength;
     float3 viewPos;

@@ -18,7 +18,9 @@ public let ShaderVertexCameraMatrixIndex = 2
 
 public let ShaderFragmentLightingIndex = 3
 
-public let ShaderFragmentTextureIndex = 0
+public let ShaderFragmentDiffuseTextureIndex = 0
+
+public let ShaderFragmentSpecularTextureIndex = 1
 
 public let ShaderFragmentSamplerIndex = 0
 
@@ -104,7 +106,9 @@ public struct WorldTransformUniform{
 };
 
 public struct LightingUniform{
-    var ambient:Float
+    var ambient:simd_float3
+    var diffuse:simd_float3
+    var specular:simd_float3
     var lightPos:simd_float3
     var specularStrength:Float
     var viewPos:simd_float3
@@ -234,11 +238,22 @@ public class CokeModelRenderDisplay:CokeRenderDisplay{
     }
     private var _renderPassDescription:MTLRenderPassDescriptor = MTLRenderPassDescriptor()
 
+    private var renderDepthTarget:MTLTexture?
+    
     public var currentRenderPassDescription:MTLRenderPassDescriptor{
         let renderPassDescription = self._renderPassDescription
         self.currentDrawable = self.layer.nextDrawable()
         let colorTexture = self.currentDrawable?.texture
-        let depthStenci = self.render.createDepthTexture(width: colorTexture!.width, height: colorTexture!.height)
+        if renderDepthTarget == nil{
+            let depthStenci = self.render.createDepthTexture(width: colorTexture!.width, height: colorTexture!.height)
+            self.renderDepthTarget = depthStenci
+        }else{
+            if(renderDepthTarget!.width != colorTexture!.width || renderDepthTarget!.height != colorTexture!.height){
+                let depthStenci = self.render.createDepthTexture(width: colorTexture!.width, height: colorTexture!.height)
+                self.renderDepthTarget = depthStenci
+            }
+        }
+       
         renderPassDescription.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1)
         renderPassDescription.colorAttachments[0].loadAction = .clear
         renderPassDescription.colorAttachments[0].storeAction = .store
@@ -246,11 +261,13 @@ public class CokeModelRenderDisplay:CokeRenderDisplay{
         
         
         renderPassDescription.depthAttachment.clearDepth = 1;
-        renderPassDescription.depthAttachment.texture = depthStenci
-
+        renderPassDescription.depthAttachment.texture = self.renderDepthTarget
+        renderPassDescription.depthAttachment.loadAction = .clear
+        renderPassDescription.depthAttachment.storeAction = .store
         renderPassDescription.stencilAttachment.clearStencil = 1
-        renderPassDescription.stencilAttachment.texture = depthStenci
-
+        renderPassDescription.stencilAttachment.texture = self.renderDepthTarget
+        renderPassDescription.stencilAttachment.loadAction = .clear
+        renderPassDescription.stencilAttachment.storeAction = .store
         return renderPassDescription
     }
     
@@ -297,25 +314,28 @@ public class CokeBoxModel:CokeModel{
     private var value:Float = 0
     
     public var lighting:LightingUniform = LightingUniform(
-        ambient: 0.2,
+        ambient: [0.2,0.2,0.2],
+        diffuse: [0.5,0.5,0.5],
+        specular: [1,1,1],
         lightPos: [5,5,-2],
         specularStrength: 0.5,
-        viewPos: [0,20,-30], shininess: 32)
+        viewPos: [0,20,-30], shininess: 16)
     
     public var renderPipline:MTLRenderPipelineState
     var world:TransformUniform {
         let v = TransformUniform(
-            mat: simd_float4x4.translate(x: 0, y: 0, z: 0) *
-            simd_float4x4.scale(x: 3, y: 3, z: 3) *
-            simd_float4x4.rotate(x: 0, y: value, z: 0))
-        value += 0.05
+            mat: simd_float4x4.translate(x: cos(value * 1.2) * 4, y: sin(value * 1.2) * 4, z: sin(value) * 4) *
+            simd_float4x4.scale(x: 4, y: 4, z: 4) *
+            simd_float4x4.rotate(x: value, y: value, z: value))
+        value += 0.02
         return v
     }
     var camera:TransformUniform {
         TransformUniform(
             mat:simd_float4x4.perspective(fov: .pi / 4, aspect: Float(x), near: 0.1, far: 10000) * simd_float4x4.camera(positionX: self.lighting.viewPos.x, positionY: self.lighting.viewPos.y, positionZ: self.lighting.viewPos.z, rotateX: -0.5, rotateY: 0, rotateZ: 0))
     }
-    private var texture:MTLTexture
+    private var diff:MTLTexture
+    private var specular:MTLTexture
     public var sampleState:MTLSamplerState?
     public var mtkMesh:MTKMesh?
     public required init(render: CokeModelRender) throws {
@@ -340,7 +360,8 @@ public class CokeBoxModel:CokeModel{
         vd.layouts[0].stepFunction = .perVertex
         desc.vertexDescriptor = vd
         self.renderPipline = try render.device.makeRenderPipelineState(descriptor: desc)
-        self.texture = try MTKTextureLoader(device: render.device).newTexture(cgImage: UIImage(named: "a")!.cgImage!)
+        self.diff = try MTKTextureLoader(device: render.device).newTexture(cgImage: UIImage(named: "diff")!.cgImage!)
+        self.specular = try MTKTextureLoader(device: render.device).newTexture(data: UIImage(named: "specular")!.jpegData(compressionQuality: 1)!)
         let sample = MTLSamplerDescriptor()
         sample.mipFilter = .linear
         sample.magFilter = .linear
@@ -351,8 +372,8 @@ public class CokeBoxModel:CokeModel{
     
 
     func genetate(device:MTLDevice){
-//        let md = MDLMesh(boxWithExtent: [1,1,1], segments: [1,1,1], inwardNormals: false, geometryType: .triangles, allocator: MTKMeshBufferAllocator(device: device))
-        let md = MDLMesh(sphereWithExtent: [1,1,1], segments: [20,20], inwardNormals: false, geometryType: .triangles, allocator: MTKMeshBufferAllocator(device: device))
+        let md = MDLMesh(boxWithExtent: [1,1,1], segments: [1,1,1], inwardNormals: false, geometryType: .triangles, allocator: MTKMeshBufferAllocator(device: device))
+//        let md = MDLMesh(sphereWithExtent: [1,1,1], segments: [20,20], inwardNormals: false, geometryType: .triangles, allocator: MTKMeshBufferAllocator(device: device))
         let mk = try! MTKMesh(mesh: md, device: device)
         self.mtkMesh = mk
     }
@@ -371,7 +392,8 @@ public class CokeBoxModel:CokeModel{
         encoder.setVertexBytes(&w, length: MemoryLayout<TransformUniform>.size, index: ShaderVertexWorldMatrixIndex)
         encoder.setVertexBytes(&c, length: MemoryLayout<TransformUniform>.size, index: ShaderVertexCameraMatrixIndex)
         encoder.setFragmentBytes(&self.lighting, length: MemoryLayout<LightingUniform>.stride, index: ShaderFragmentLightingIndex)
-        encoder.setFragmentTexture(self.texture, index: ShaderFragmentTextureIndex)
+        encoder.setFragmentTexture(self.diff, index: ShaderFragmentDiffuseTextureIndex)
+        encoder.setFragmentTexture(self.specular, index: ShaderFragmentSpecularTextureIndex)
         encoder.setFragmentSamplerState(self.sampleState,index: ShaderFragmentSamplerIndex)
         for i in mesh.submeshes{
             encoder.drawIndexedPrimitives(type: i.primitiveType, indexCount: i.indexCount, indexType: i.indexType, indexBuffer: i.indexBuffer.buffer, indexBufferOffset: i.indexBuffer.offset)
