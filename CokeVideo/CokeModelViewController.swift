@@ -16,7 +16,7 @@ public class CokeModelViewController:UIViewController {
     var display:CokeRenderDisplay?
     let render = try! CokeModelRender()
     let ticker = FrameTicker.shared
-    lazy var content = { try! CokeTriangleModel(render: self.render) }()
+    lazy var content = { try! CokeBoxModel(render: self.render) }()
     public override func viewDidLoad() {
         super.viewDidLoad()
         self.modelView.render = render

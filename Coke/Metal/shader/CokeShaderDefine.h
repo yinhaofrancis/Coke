@@ -27,6 +27,18 @@ struct RenderFragmentUniform{
 };
 
 
+#define ShaderVertexBufferIndex 0
+
+#define ShaderVertexWorldMatrixIndex 1
+
+#define ShaderVertexCameraMatrixIndex 2
+
+#define ShaderFragmentLightingIndex 3
+
+#define ShaderFragmentTextureIndex 0
+
+#define ShaderFragmentSamplerIndex 0
+
 
 struct CokeModelIn{
     float3 location [[attribute(0)]];
@@ -35,12 +47,22 @@ struct CokeModelIn{
 };
 struct CokeModel{
     float4 location [[position]];
+    float3 fragLocation;
     float3 normal;
     float2 textureVX;
 };
 
 struct TransformUniform{
     float4x4 mat;
+    float4x4 invert;
+};
+struct LightingUniform{
+    float ambient;
+    float3 lightPos;
+    float specularStrength;
+    float3 viewPos;
+    float shininess;
+    
 };
 
 #endif /* CokeShaderDefine_h */

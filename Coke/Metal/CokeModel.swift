@@ -10,6 +10,18 @@ import MetalKit
 import MetalFX
 import simd
 
+public let ShaderVertexBufferIndex = 0
+
+public let ShaderVertexWorldMatrixIndex = 1
+
+public let ShaderVertexCameraMatrixIndex = 2
+
+public let ShaderFragmentLightingIndex = 3
+
+public let ShaderFragmentTextureIndex = 0
+
+public let ShaderFragmentSamplerIndex = 0
+
 extension simd_float4x4 {
     public static func perspective(fov:Float,aspect:Float,near:Float,far:Float) -> simd_float4x4{
         let range = near - far
@@ -79,8 +91,43 @@ extension simd_float4x4 {
 }
 public struct TransformUniform{
     var mat:simd_float4x4
+    var inverse:simd_float4x4
+    public init(mat: simd_float4x4) {
+        self.mat = mat
+        self.inverse = mat.inverse
+    }
 };
 
+public struct WorldTransformUniform{
+    var world:simd_float4x4
+    var camera:simd_float4x4
+};
+
+public struct LightingUniform{
+    var ambient:Float
+    var lightPos:simd_float3
+    var specularStrength:Float
+    var viewPos:simd_float3
+    var shininess:Float
+
+}
+public struct Vertex:ExpressibleByArrayLiteral{
+    public init(arrayLiteral elements: Float...) {
+        var b:[Float] = [0,0,0,0,0,0,0,0]
+        for i in 0 ..< elements.count{
+            b[i] = elements[i]
+        }
+        vertics = simd_float3(b[0 ..< 3]);
+        normal = simd_float3(b[3 ..< 6])
+        texture = simd_float2(b[6 ..< 8])
+    }
+    
+    public typealias ArrayLiteralElement = Float
+    
+    var vertics:simd_float3
+    var normal:simd_float3
+    var texture:simd_float2
+}
 
 public class CokeModelRender{
     public let device:MTLDevice
@@ -244,35 +291,29 @@ public protocol CokeModel{
     func render(encoder:MTLRenderCommandEncoder)
 }
 
-public struct Vertex:ExpressibleByArrayLiteral{
-    public init(arrayLiteral elements: Float...) {
-        var b:[Float] = [0,0,0,0,0,0,0,0]
-        for i in 0 ..< elements.count{
-            b[i] = elements[i]
-        }
-        vertics = simd_float3(b[0 ..< 3]);
-        normal = simd_float3(b[3 ..< 6])
-        texture = simd_float2(b[6 ..< 8])
-    }
-    
-    public typealias ArrayLiteralElement = Float
-    
-    var vertics:simd_float3
-    var normal:simd_float3
-    var texture:simd_float2
-}
 
-public class CokeTriangleModel:CokeModel{
+public class CokeBoxModel:CokeModel{
     
     private var value:Float = 0
+    
+    public var lighting:LightingUniform = LightingUniform(
+        ambient: 0.2,
+        lightPos: [5,5,-2],
+        specularStrength: 0.5,
+        viewPos: [0,20,-30], shininess: 32)
+    
     public var renderPipline:MTLRenderPipelineState
     var world:TransformUniform {
-        let v = TransformUniform(mat: simd_float4x4.translate(x: 0, y: 0, z: 0) *  simd_float4x4.scale(x: 2, y: 2, z: 2) * simd_float4x4.rotate(x: 0, y: value, z: 0))
+        let v = TransformUniform(
+            mat: simd_float4x4.translate(x: 0, y: 0, z: 0) *
+            simd_float4x4.scale(x: 3, y: 3, z: 3) *
+            simd_float4x4.rotate(x: 0, y: value, z: 0))
         value += 0.05
         return v
     }
     var camera:TransformUniform {
-        TransformUniform(mat:simd_float4x4.perspective(fov: .pi / 4, aspect: Float(x), near: 0.1, far: 10000) * simd_float4x4.camera(positionX: 0, positionY: 20, positionZ: -30, rotateX: -0.5, rotateY: 0, rotateZ: 0))
+        TransformUniform(
+            mat:simd_float4x4.perspective(fov: .pi / 4, aspect: Float(x), near: 0.1, far: 10000) * simd_float4x4.camera(positionX: self.lighting.viewPos.x, positionY: self.lighting.viewPos.y, positionZ: self.lighting.viewPos.z, rotateX: -0.5, rotateY: 0, rotateZ: 0))
     }
     private var texture:MTLTexture
     public var sampleState:MTLSamplerState?
@@ -308,10 +349,10 @@ public class CokeTriangleModel:CokeModel{
         self.genetate(device: render.device)
     }
     
-    
-    
+
     func genetate(device:MTLDevice){
-        let md = MDLMesh(sphereWithExtent: [1,1,1], segments: [69,69], inwardNormals: false, geometryType: .triangles, allocator: MTKMeshBufferAllocator(device: device))
+//        let md = MDLMesh(boxWithExtent: [1,1,1], segments: [1,1,1], inwardNormals: false, geometryType: .triangles, allocator: MTKMeshBufferAllocator(device: device))
+        let md = MDLMesh(sphereWithExtent: [1,1,1], segments: [20,20], inwardNormals: false, geometryType: .triangles, allocator: MTKMeshBufferAllocator(device: device))
         let mk = try! MTKMesh(mesh: md, device: device)
         self.mtkMesh = mk
     }
@@ -326,11 +367,12 @@ public class CokeTriangleModel:CokeModel{
             return
         }
         
-        encoder.setVertexBuffer(mesh.vertexBuffers[0].buffer, offset: 0, index: 0)
-        encoder.setVertexBytes(&w, length: MemoryLayout<TransformUniform>.size, index: 1)
-        encoder.setVertexBytes(&c, length: MemoryLayout<TransformUniform>.size, index: 2)
-        encoder.setFragmentTexture(self.texture, index: 0)
-        encoder.setFragmentSamplerState(self.sampleState,index: 0)
+        encoder.setVertexBuffer(mesh.vertexBuffers[0].buffer, offset: 0, index: ShaderVertexBufferIndex)
+        encoder.setVertexBytes(&w, length: MemoryLayout<TransformUniform>.size, index: ShaderVertexWorldMatrixIndex)
+        encoder.setVertexBytes(&c, length: MemoryLayout<TransformUniform>.size, index: ShaderVertexCameraMatrixIndex)
+        encoder.setFragmentBytes(&self.lighting, length: MemoryLayout<LightingUniform>.stride, index: ShaderFragmentLightingIndex)
+        encoder.setFragmentTexture(self.texture, index: ShaderFragmentTextureIndex)
+        encoder.setFragmentSamplerState(self.sampleState,index: ShaderFragmentSamplerIndex)
         for i in mesh.submeshes{
             encoder.drawIndexedPrimitives(type: i.primitiveType, indexCount: i.indexCount, indexType: i.indexType, indexBuffer: i.indexBuffer.buffer, indexBufferOffset: i.indexBuffer.offset)
         }
