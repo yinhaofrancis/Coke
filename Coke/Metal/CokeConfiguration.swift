@@ -26,8 +26,7 @@ public class CokeMetalConfiguration{
         try self.loadDefaultLibrary()
     }
     private func loadDefaultLibrary() throws{
-        guard let url =  Bundle(for: CokeComputer.self).url(forResource: "default", withExtension: "metallib")?.path else { throw NSError(domain: "can't load default metal lib", code: 0, userInfo: nil) }
-        self.shaderLibrary = try self.device.makeLibrary(filepath:url)
+        self.shaderLibrary = try self.device.makeDefaultLibrary(bundle: Bundle(for: CokeComputer.self))
     }
     public var shaderLibrary:MTLLibrary!
     

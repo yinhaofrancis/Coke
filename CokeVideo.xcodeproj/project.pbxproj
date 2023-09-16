@@ -3,13 +3,16 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A9226E242AB5399E003A1B62 /* CokeModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9226E232AB5399E003A1B62 /* CokeModelViewController.swift */; };
+		A9226E262AB5598D003A1B62 /* CokeModel.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9226E252AB5598D003A1B62 /* CokeModel.metal */; };
 		A923536F2AAD6ECD00FFF763 /* CokeAudioConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A923536E2AAD6ECD00FFF763 /* CokeAudioConverter.swift */; };
 		A94CC67426B398ED00494732 /* CokeUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A94CC66D26B398ED00494732 /* CokeUI.framework */; };
 		A94CC67526B398ED00494732 /* CokeUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A94CC66D26B398ED00494732 /* CokeUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A9A40D192AB4C162000DB84A /* CokeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A40D182AB4C162000DB84A /* CokeModel.swift */; };
 		A9B1F52226B6380500E157A4 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B1F52126B6380500E157A4 /* DetailViewController.swift */; };
 		A9C8D4E42AA6400200C23FC6 /* CodeVideoDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8D4E32AA6400200C23FC6 /* CodeVideoDecoder.swift */; };
 		A9C8D4E62AA75F0900C23FC6 /* CodeSampleDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8D4E52AA75F0900C23FC6 /* CodeSampleDisplay.swift */; };
@@ -78,9 +81,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A9226E232AB5399E003A1B62 /* CokeModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeModelViewController.swift; sourceTree = "<group>"; };
+		A9226E252AB5598D003A1B62 /* CokeModel.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CokeModel.metal; sourceTree = "<group>"; };
+		A9226E272AB55A8D003A1B62 /* CokeShaderDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CokeShaderDefine.h; sourceTree = "<group>"; };
 		A923536E2AAD6ECD00FFF763 /* CokeAudioConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeAudioConverter.swift; sourceTree = "<group>"; };
 		A94CC66D26B398ED00494732 /* CokeUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CokeUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A94CC67026B398ED00494732 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A9A40D182AB4C162000DB84A /* CokeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeModel.swift; sourceTree = "<group>"; };
 		A9B1F52126B6380500E157A4 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		A9C8D4E32AA6400200C23FC6 /* CodeVideoDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeVideoDecoder.swift; sourceTree = "<group>"; };
 		A9C8D4E52AA75F0900C23FC6 /* CodeSampleDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeSampleDisplay.swift; sourceTree = "<group>"; };
@@ -195,6 +202,7 @@
 				A9D1C9B926B3086500F4421B /* ViewController.swift */,
 				A9D1C9BB26B3086500F4421B /* Main.storyboard */,
 				A9B1F52126B6380500E157A4 /* DetailViewController.swift */,
+				A9226E232AB5399E003A1B62 /* CokeModelViewController.swift */,
 				A9D1C9BE26B3086600F4421B /* Assets.xcassets */,
 				A9D1CA1F26B30B6B00F4421B /* Launch.storyboard */,
 				A9D1C9C326B3086600F4421B /* Info.plist */,
@@ -227,6 +235,7 @@
 				A9D1C9E026B3093800F4421B /* CokeMetalFilter.swift */,
 				A9D1C9E126B3093800F4421B /* CokeVideoPlayer.swift */,
 				A9D1C9E526B3093800F4421B /* CokeVideoTrack.swift */,
+				A9A40D182AB4C162000DB84A /* CokeModel.swift */,
 				A9D1C9E226B3093800F4421B /* shader */,
 			);
 			path = Metal;
@@ -236,6 +245,8 @@
 			isa = PBXGroup;
 			children = (
 				A9D1C9E426B3093800F4421B /* CokeVideo.metal */,
+				A9226E252AB5598D003A1B62 /* CokeModel.metal */,
+				A9226E272AB55A8D003A1B62 /* CokeShaderDefine.h */,
 			);
 			path = shader;
 			sourceTree = "<group>";
@@ -353,8 +364,9 @@
 		A9D1C9AA26B3086500F4421B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1250;
-				LastUpgradeCheck = 1300;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					A94CC66C26B398ED00494732 = {
 						CreatedOnToolsVersion = 12.5.1;
@@ -430,6 +442,7 @@
 				A9D1CA1E26B30ADB00F4421B /* PhotosViewController.swift in Sources */,
 				A9D1C9BA26B3086500F4421B /* ViewController.swift in Sources */,
 				A9D1C9B626B3086500F4421B /* AppDelegate.swift in Sources */,
+				A9226E242AB5399E003A1B62 /* CokeModelViewController.swift in Sources */,
 				A9B1F52226B6380500E157A4 /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -453,9 +466,11 @@
 				A923536F2AAD6ECD00FFF763 /* CokeAudioConverter.swift in Sources */,
 				A9E3D6312AA60FCB00BD5CF7 /* CodeVideoSample.swift in Sources */,
 				A9D1CA0126B3093800F4421B /* CokeConfiguration.swift in Sources */,
+				A9A40D192AB4C162000DB84A /* CokeModel.swift in Sources */,
 				A9D1CA0826B3093800F4421B /* CokeVideoTrack.swift in Sources */,
 				A9D1CA0526B3093800F4421B /* CokeVideoPlayer.swift in Sources */,
 				A9D1CA0026B3093800F4421B /* CokeCompute.swift in Sources */,
+				A9226E262AB5598D003A1B62 /* CokeModel.metal in Sources */,
 				A9D1CA0426B3093800F4421B /* CokeMetalFilter.swift in Sources */,
 				A9E3D6342AA6127900BD5CF7 /* CokeCapture.swift in Sources */,
 				A9E3D62F2AA60D9C00BD5CF7 /* CodeVideoEncoder.swift in Sources */,
@@ -497,6 +512,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -504,6 +520,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = CokeUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -512,6 +529,8 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				PRODUCT_BUNDLE_IDENTIFIER = com.francis.CokeUI;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -526,6 +545,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -533,6 +553,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = CokeUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -541,6 +562,8 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				PRODUCT_BUNDLE_IDENTIFIER = com.francis.CokeUI;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -728,6 +751,7 @@
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -735,6 +759,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = Coke/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -744,6 +769,8 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.Coke;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -760,6 +787,7 @@
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -767,6 +795,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = Coke/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -776,6 +805,8 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.Coke;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;

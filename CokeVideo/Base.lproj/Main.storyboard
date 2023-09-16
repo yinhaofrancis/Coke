@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VgT-9M-Pc5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VgT-9M-Pc5">
     <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Coke Model View Controller-->
+        <scene sceneID="GDb-nx-CaB">
+            <objects>
+                <viewController id="fP7-jy-9uu" customClass="CokeModelViewController" customModule="CokeVideo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="7LU-ZE-g6e"/>
+                        <viewControllerLayoutGuide type="bottom" id="3Sr-1r-Q3i"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="c1q-IG-liA" customClass="CokeModelView" customModule="Coke">
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="aQJ-ML-jzn"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SNt-75-PyI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-289" y="-1118"/>
+        </scene>
         <!--Camera View Controller-->
         <scene sceneID="dEM-L3-5Ca">
             <objects>
@@ -82,11 +101,21 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="2Mm-Ub-LP8">
+                        <nil key="title"/>
                         <barButtonItem key="leftBarButtonItem" title="Item" id="nlV-WP-gsD">
                             <connections>
                                 <segue destination="zIH-R9-HcI" kind="show" id="dOA-I6-fmx"/>
                             </connections>
                         </barButtonItem>
+                        <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="O6S-cP-FRc">
+                            <rect key="frame" x="176.66666666666666" y="5" width="75" height="34.333333333333336"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                            <connections>
+                                <segue destination="fP7-jy-9uu" kind="show" id="b8m-bd-MaU"/>
+                            </connections>
+                        </button>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="rnb-3J-qlq">
                             <connections>
                                 <segue destination="6JF-As-Pvu" kind="show" id="woZ-In-09B"/>

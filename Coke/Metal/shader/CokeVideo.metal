@@ -1,23 +1,6 @@
-#include <metal_stdlib>
 
-using namespace metal;
+#include "CokeShaderDefine.h"
 
-
-struct CokeVertex{
-    float4 location [[position]];
-    float2 textureVX;
-};
-struct CokeVertexIn{
-    float4 location [[attribute(0)]];
-    float2 textureVX [[attribute(1)]];
-};
-struct renderUniform{
-    float4x4 camera;
-    float4x4 world;
-};
-struct RenderFragmentUniform{
-    float bias;
-};
 
 vertex CokeVertex vertexShader(
                                CokeVertexIn vertices [[stage_in]],
