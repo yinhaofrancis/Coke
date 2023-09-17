@@ -23,6 +23,12 @@ public class CokeModelViewController:UIViewController {
         try! CokeBoxModel(render: self.render,diff: "diff",specular: "specular"),
         try! CokeBoxModel(render: self.render,diff: "diff",specular: "specular"),
         try! CokeBoxModel(render: self.render,diff: "diff",specular: "specular"),
+        try! CokeBoxModel(render: self.render,diff: "diff",specular: "specular"),
+        try! CokeBoxModel(render: self.render,diff: "diff",specular: "specular"),
+        try! CokeBoxModel(render: self.render,diff: "diff",specular: "specular"),
+        try! CokeBoxModel(render: self.render,diff: "diff",specular: "specular"),
+        try! CokeBoxModel(render: self.render,diff: "diff",specular: "specular"),
+        try! CokeBoxModel(render: self.render,diff: "diff",specular: "specular"),
     ]  }()
     
     var v:Float = 0
@@ -34,18 +40,18 @@ public class CokeModelViewController:UIViewController {
     }
     @objc public func run(){
         guard let display = self.display else { return }
-        let c = CokeScene(position: [0,40,-60], cameraRotate: [-0.5,0,0], lightPos: [5,5,-2], aspect: self.ratio)
-        v += 0.0
+        let c = CokeScene(position: [0,10,-15], cameraRotate: [-0.3,0,0], lightPos: [0,0,0],lightDir: [-1,-1,1], aspect: self.ratio)
+        v += 0.03
         self.render.render(display: display) { encoder in
             c.encoder(encoder: encoder)
             var offset:Float = 0
             var h:Float = 0
             for i in content{
                 offset += 0.3
-                h += 2
-                i.scale = [3,3,3]
+                h += 1
+                i.scale = [1,1,1]
                 i.translate = [h * cos(v * (offset)),h,h * sin(v * (offset))]
-                i.rotate = [4 * sin(v * h / 10),4 * cos(v * h / 10),4 * sin(v * h / 10)]
+                i.rotate = [4 * sin(v * h / 50),4 * cos(v * h / 50),4 * sin(v * h / 50)]
                 i.render(encoder: encoder)
             }
             

@@ -106,13 +106,19 @@ public struct WorldTransformUniform{
 };
 
 public struct LightingUniform{
+    var type:Int
     var ambient:simd_float3
     var diffuse:simd_float3
     var specular:simd_float3
     var lightPos:simd_float3
+    var lightDir:simd_float3
     var specularStrength:Float
     var viewPos:simd_float3
     var shininess:Float
+    var constantValue:Float
+    var linear:Float
+    var quadratic:Float
+    var cutOff:Float
 
 }
 public struct Vertex:ExpressibleByArrayLiteral{
@@ -230,7 +236,7 @@ public protocol CokeRenderDisplay{
 }
 
 public class CokeModelRenderDisplay:CokeRenderDisplay{
-    
+        
     public let render:CokeModelRender
     
     public let layer:CAMetalLayer
@@ -246,10 +252,16 @@ public class CokeModelRenderDisplay:CokeRenderDisplay{
 
     private var renderDepthTarget:MTLTexture?
     
+    private var colorTexture:MTLTexture?
+    
     public var currentRenderPassDescription:MTLRenderPassDescriptor{
+ 
         let renderPassDescription = self._renderPassDescription
         self.currentDrawable = self.layer.nextDrawable()
-        let colorTexture = self.currentDrawable?.texture
+        if(colorTexture == nil){
+            self.colorTexture = self.currentDrawable?.texture
+        }
+        let colorTexture = self.colorTexture
         if renderDepthTarget == nil{
             let depthStenci = self.render.createDepthTexture(width: colorTexture!.width, height: colorTexture!.height)
             self.renderDepthTarget = depthStenci
@@ -375,6 +387,7 @@ public class CokeBoxModel:CokeModel{
 
     func genetate(device:MTLDevice){
         let md = MDLMesh(boxWithExtent: [1,1,1], segments: [1,1,1], inwardNormals: false, geometryType: .triangles, allocator: MTKMeshBufferAllocator(device: device))
+//        let md = MDLMesh(sphereWithExtent: [1,1,1], segments: [20,20], inwardNormals: false, geometryType: .triangles, allocator: MTKMeshBufferAllocator(device: device))
 
         let mk = try! MTKMesh(mesh: md, device: device)
         self.mtkMesh = mk
@@ -413,24 +426,40 @@ public struct CokeCamera{
     }
 }
 
+public enum LightType:Int{
+    case directlight = 0
+    case spotlight = 1
+}
 
 public struct CokeLighting {
     public var ambient:simd_float3
     public var diffuse:simd_float3
     public var specular:simd_float3
     public var lightPos:simd_float3
+    public var lightDir:simd_float3
     public var specularStrength:Float
     public var viewPos:simd_float3
     public var shininess:Float
+    public var type:LightType
+    public var constantValue:Float
+    public var linear: Float
+    public var quadratic: Float
+    public var cutOff:Float
     public var LightingUniform:LightingUniform{
         return Coke.LightingUniform(
+            type: type.rawValue,
             ambient: self.ambient,
             diffuse: self.diffuse,
             specular: self.specular,
-            lightPos: self.lightPos,
+            lightPos: self.lightPos, lightDir: lightDir,
             specularStrength: self.specularStrength,
             viewPos: self.viewPos,
-            shininess: self.shininess)
+            shininess: self.shininess,
+            constantValue: constantValue,
+            linear: linear,
+            quadratic: quadratic,
+            cutOff: 12.5
+        )
     }
 }
 
@@ -443,22 +472,31 @@ public struct CokeScene{
     
     public var lighting:LightingUniform{
         LightingUniform(
-            ambient: [0.2,0.2,0.2],
-            diffuse: [0.7,0.7,0.7],
+            type: 0,
+            ambient: [0.3,0.3,0.3],
+            diffuse: [0.8,0.8,0.8],
             specular: [1,1,1],
             lightPos: lightPos,
-            specularStrength: 0.5,
-            viewPos: self.cameraPos, shininess: 16)
+            lightDir: self.lightDir,
+            specularStrength: 0.8,
+            viewPos: self.cameraPos,
+            shininess: 8,
+            constantValue: 1,
+            linear: 0.09,
+            quadratic: 0.032,
+            cutOff: 12.5)
     }
     public var cameraPos:simd_float3
     public var cameraRotate:simd_float3
     public var aspect:Float
     public var lightPos:simd_float3
+    public var lightDir:simd_float3
     public weak var render:CokeModelRender?
     
-    public init(position:simd_float3,cameraRotate:simd_float3,lightPos:simd_float3,aspect:Float) {
+    public init(position:simd_float3,cameraRotate:simd_float3,lightPos:simd_float3,lightDir:simd_float3 = [0,0,0],aspect:Float) {
         self.cameraPos = position
         self.aspect = aspect
+        self.lightDir = lightDir
         self.cameraRotate = cameraRotate
         self.lightPos = lightPos
     }

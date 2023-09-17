@@ -42,6 +42,12 @@ struct RenderFragmentUniform{
 #define ShaderFragmentSamplerIndex 0
 
 
+enum LightType:int {
+    directlight = 0,
+    spotlight = 1,
+};
+
+
 struct CokeModelIn{
     float3 location [[attribute(0)]];
     float3 normal [[attribute(1)]];
@@ -59,13 +65,19 @@ struct TransformUniform{
     float4x4 invert;
 };
 struct LightingUniform{
+    LightType lightType;
     float3 ambient;
     float3 diffuse;
     float3 specular;
     float3 lightPos;
+    float3 lightDir;
     float specularStrength;
     float3 viewPos;
+    float cutOff;
     float shininess;
+    float constantValue;
+    float linear;
+    float quadratic;
     
 };
 
