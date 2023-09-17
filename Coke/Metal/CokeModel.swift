@@ -212,6 +212,12 @@ public class CokeModelRender{
         return desc
     }
     
+    public func makeTextureFrom(cgimage:CGImage) ->MTLTexture?{
+        try? MTKTextureLoader(device: self.device).newTexture(cgImage: cgimage)
+    }
+    public func makeTextureFrom(data:Data)->MTLTexture?{
+        try? MTKTextureLoader(device: self.device).newTexture(data: data)
+    }
     
     public typealias RenderCallBack = (MTLRenderCommandEncoder)->Void
     
@@ -304,41 +310,37 @@ public class CokeModelView:UIView{
 
 
 public protocol CokeModel{
-    init(render:CokeModelRender) throws
     func render(encoder:MTLRenderCommandEncoder)
 }
 
 
 public class CokeBoxModel:CokeModel{
     
-    private var value:Float = 0
+    public var translate:simd_float3 = [0,0,0]
     
-    public var lighting:LightingUniform = LightingUniform(
-        ambient: [0.2,0.2,0.2],
-        diffuse: [0.5,0.5,0.5],
-        specular: [1,1,1],
-        lightPos: [5,5,-2],
-        specularStrength: 0.5,
-        viewPos: [0,20,-30], shininess: 16)
+    public var scale:simd_float3 = [1,1,1]
     
-    public var renderPipline:MTLRenderPipelineState
-    var world:TransformUniform {
+    public var rotate:simd_float3 = [0,0,0]
+    
+    public var mtkMesh:MTKMesh?
+    
+    private var diff:MTLTexture
+    
+    private var specular:MTLTexture
+    
+    private var sampleState:MTLSamplerState?
+    
+    private var renderPipline:MTLRenderPipelineState
+    
+    private var world:TransformUniform {
         let v = TransformUniform(
-            mat: simd_float4x4.translate(x: cos(value * 1.2) * 4, y: sin(value * 1.2) * 4, z: sin(value) * 4) *
-            simd_float4x4.scale(x: 4, y: 4, z: 4) *
-            simd_float4x4.rotate(x: value, y: value, z: value))
-        value += 0.02
+            mat: simd_float4x4.translate(x: self.translate.x, y: self.translate.y, z: self.translate.z) *
+            simd_float4x4.scale(x: self.scale.x, y: self.scale.y, z: self.scale.z) *
+            simd_float4x4.rotate(x: self.rotate.x, y: self.rotate.y, z: self.rotate.z))
         return v
     }
-    var camera:TransformUniform {
-        TransformUniform(
-            mat:simd_float4x4.perspective(fov: .pi / 4, aspect: Float(x), near: 0.1, far: 10000) * simd_float4x4.camera(positionX: self.lighting.viewPos.x, positionY: self.lighting.viewPos.y, positionZ: self.lighting.viewPos.z, rotateX: -0.5, rotateY: 0, rotateZ: 0))
-    }
-    private var diff:MTLTexture
-    private var specular:MTLTexture
-    public var sampleState:MTLSamplerState?
-    public var mtkMesh:MTKMesh?
-    public required init(render: CokeModelRender) throws {
+    
+    public init(render: CokeModelRender,diff:String,specular:String) throws {
         let ct = render.library.makeFunction(name: "cokeTriagle")
         let fg = render.library.makeFunction(name: "cokeTriagleFragment")
         let desc = render.newRenderPipelineDesciptor()
@@ -360,8 +362,8 @@ public class CokeBoxModel:CokeModel{
         vd.layouts[0].stepFunction = .perVertex
         desc.vertexDescriptor = vd
         self.renderPipline = try render.device.makeRenderPipelineState(descriptor: desc)
-        self.diff = try MTKTextureLoader(device: render.device).newTexture(cgImage: UIImage(named: "diff")!.cgImage!)
-        self.specular = try MTKTextureLoader(device: render.device).newTexture(data: UIImage(named: "specular")!.jpegData(compressionQuality: 1)!)
+        self.diff = render.makeTextureFrom(data: UIImage(named: diff)!.pngData()!)!
+        self.specular = render.makeTextureFrom(data: UIImage(named: specular)!.pngData()!)!
         let sample = MTLSamplerDescriptor()
         sample.mipFilter = .linear
         sample.magFilter = .linear
@@ -373,7 +375,7 @@ public class CokeBoxModel:CokeModel{
 
     func genetate(device:MTLDevice){
         let md = MDLMesh(boxWithExtent: [1,1,1], segments: [1,1,1], inwardNormals: false, geometryType: .triangles, allocator: MTKMeshBufferAllocator(device: device))
-//        let md = MDLMesh(sphereWithExtent: [1,1,1], segments: [20,20], inwardNormals: false, geometryType: .triangles, allocator: MTKMeshBufferAllocator(device: device))
+
         let mk = try! MTKMesh(mesh: md, device: device)
         self.mtkMesh = mk
     }
@@ -383,15 +385,11 @@ public class CokeBoxModel:CokeModel{
         encoder.setRenderPipelineState(self.renderPipline)
         encoder.setCullMode(.none)
         var w = world
-        var c = camera
         guard let mesh = self.mtkMesh else {
             return
         }
-        
         encoder.setVertexBuffer(mesh.vertexBuffers[0].buffer, offset: 0, index: ShaderVertexBufferIndex)
         encoder.setVertexBytes(&w, length: MemoryLayout<TransformUniform>.size, index: ShaderVertexWorldMatrixIndex)
-        encoder.setVertexBytes(&c, length: MemoryLayout<TransformUniform>.size, index: ShaderVertexCameraMatrixIndex)
-        encoder.setFragmentBytes(&self.lighting, length: MemoryLayout<LightingUniform>.stride, index: ShaderFragmentLightingIndex)
         encoder.setFragmentTexture(self.diff, index: ShaderFragmentDiffuseTextureIndex)
         encoder.setFragmentTexture(self.specular, index: ShaderFragmentSpecularTextureIndex)
         encoder.setFragmentSamplerState(self.sampleState,index: ShaderFragmentSamplerIndex)
@@ -402,4 +400,72 @@ public class CokeBoxModel:CokeModel{
     }
 }
 
-let x = UIScreen.main.bounds.width / UIScreen.main.bounds.height
+public struct CokeCamera{
+    public var camera:simd_float4x4
+    public var perspective:simd_float4x4
+    public init(camera:simd_float4x4,perspective:simd_float4x4) {
+        self.camera = camera
+        self.perspective = perspective
+    }
+    public var matrix:TransformUniform {
+        TransformUniform(
+            mat:perspective * camera)
+    }
+}
+
+
+public struct CokeLighting {
+    public var ambient:simd_float3
+    public var diffuse:simd_float3
+    public var specular:simd_float3
+    public var lightPos:simd_float3
+    public var specularStrength:Float
+    public var viewPos:simd_float3
+    public var shininess:Float
+    public var LightingUniform:LightingUniform{
+        return Coke.LightingUniform(
+            ambient: self.ambient,
+            diffuse: self.diffuse,
+            specular: self.specular,
+            lightPos: self.lightPos,
+            specularStrength: self.specularStrength,
+            viewPos: self.viewPos,
+            shininess: self.shininess)
+    }
+}
+
+public struct CokeScene{
+    
+    public var camera:TransformUniform{
+        TransformUniform(
+            mat:simd_float4x4.perspective(fov: .pi / 4, aspect: self.aspect, near: 0.1, far: 10000) * simd_float4x4.camera(positionX: self.cameraPos.x, positionY: self.cameraPos.y, positionZ: self.cameraPos.z, rotateX: self.cameraRotate.x, rotateY: self.cameraRotate.y, rotateZ: self.cameraRotate.z))
+    }
+    
+    public var lighting:LightingUniform{
+        LightingUniform(
+            ambient: [0.2,0.2,0.2],
+            diffuse: [0.7,0.7,0.7],
+            specular: [1,1,1],
+            lightPos: lightPos,
+            specularStrength: 0.5,
+            viewPos: self.cameraPos, shininess: 16)
+    }
+    public var cameraPos:simd_float3
+    public var cameraRotate:simd_float3
+    public var aspect:Float
+    public var lightPos:simd_float3
+    public weak var render:CokeModelRender?
+    
+    public init(position:simd_float3,cameraRotate:simd_float3,lightPos:simd_float3,aspect:Float) {
+        self.cameraPos = position
+        self.aspect = aspect
+        self.cameraRotate = cameraRotate
+        self.lightPos = lightPos
+    }
+    public func encoder(encoder:MTLRenderCommandEncoder){
+        var c = self.camera
+        encoder.setVertexBytes(&c, length: MemoryLayout<TransformUniform>.stride, index: ShaderVertexCameraMatrixIndex)
+        var l = self.lighting
+        encoder.setFragmentBytes(&l, length: MemoryLayout<LightingUniform>.stride, index: ShaderFragmentLightingIndex)
+    }
+}

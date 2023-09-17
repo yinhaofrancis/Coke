@@ -16,7 +16,16 @@ public class CokeModelViewController:UIViewController {
     var display:CokeRenderDisplay?
     let render = try! CokeModelRender()
     let ticker = FrameTicker.shared
-    lazy var content = { try! CokeBoxModel(render: self.render) }()
+    lazy var content:[CokeBoxModel] = {[
+        try! CokeBoxModel(render: self.render,diff: "diff",specular: "specular"),
+        try! CokeBoxModel(render: self.render,diff: "diff",specular: "specular"),
+        try! CokeBoxModel(render: self.render,diff: "diff",specular: "specular"),
+        try! CokeBoxModel(render: self.render,diff: "diff",specular: "specular"),
+        try! CokeBoxModel(render: self.render,diff: "diff",specular: "specular"),
+        try! CokeBoxModel(render: self.render,diff: "diff",specular: "specular"),
+    ]  }()
+    
+    var v:Float = 0
     public override func viewDidLoad() {
         super.viewDidLoad()
         self.modelView.render = render
@@ -25,8 +34,33 @@ public class CokeModelViewController:UIViewController {
     }
     @objc public func run(){
         guard let display = self.display else { return }
+        let c = CokeScene(position: [0,40,-60], cameraRotate: [-0.5,0,0], lightPos: [5,5,-2], aspect: self.ratio)
+        v += 0.0
         self.render.render(display: display) { encoder in
-            content.render(encoder: encoder)
+            c.encoder(encoder: encoder)
+            var offset:Float = 0
+            var h:Float = 0
+            for i in content{
+                offset += 0.3
+                h += 2
+                i.scale = [3,3,3]
+                i.translate = [h * cos(v * (offset)),h,h * sin(v * (offset))]
+                i.rotate = [4 * sin(v * h / 10),4 * cos(v * h / 10),4 * sin(v * h / 10)]
+                i.render(encoder: encoder)
+            }
+            
         }
+    }
+    public var ratio:Float{
+        if Thread.isMainThread{
+            return Float(self.view.frame.width / self.view.frame.height)
+        }else{
+            var v:Float = 1;
+            DispatchQueue.main.sync {
+                v = Float(self.view.frame.width / self.view.frame.height)
+            }
+            return v
+        }
+        
     }
 }
