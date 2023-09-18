@@ -48,5 +48,5 @@ fragment half4 cokeTriagleFragment(CokeModel in [[stage_in]],
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), lu->shininess) * lu->specularStrength * attenuation; //反射
     half3 specularColor = half3(lu->specular) * spec * half3(specular.sample(textureSampler, in.textureVX).x);
     
-    return half4(diffColor + ambientColor + specularColor,1);
+    return half4(diffColor + ambientColor + specularColor,0.5);
 }

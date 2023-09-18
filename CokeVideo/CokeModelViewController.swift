@@ -34,21 +34,26 @@ public class CokeModelViewController:UIViewController {
     var v:Float = 0
     public override func viewDidLoad() {
         super.viewDidLoad()
+        UIApplication.shared.isIdleTimerDisabled = true;
         self.modelView.render = render
         self.display = self.modelView.display
         self.ticker.addCallback(sender: self, sel: #selector(run))
     }
+    deinit{
+        UIApplication.shared.isIdleTimerDisabled = false;
+    }
     @objc public func run(){
+       
         guard let display = self.display else { return }
         let c = CokeScene(position: [0,10,-15], cameraRotate: [-0.3,0,0], lightPos: [0,0,0],lightDir: [-1,-1,1], aspect: self.ratio)
-        v += 0.03
+        v += 0.003
         self.render.render(display: display) { encoder in
             c.encoder(encoder: encoder)
             var offset:Float = 0
             var h:Float = 0
             for i in content{
                 offset += 0.3
-                h += 1
+                h += 1 
                 i.scale = [1,1,1]
                 i.translate = [h * cos(v * (offset)),h,h * sin(v * (offset))]
                 i.rotate = [4 * sin(v * h / 50),4 * cos(v * h / 50),4 * sin(v * h / 50)]

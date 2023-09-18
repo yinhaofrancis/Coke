@@ -24,6 +24,8 @@ public let ShaderFragmentSpecularTextureIndex = 1
 
 public let ShaderFragmentSamplerIndex = 0
 
+public let AntialiasingSampleCount = 1
+
 extension simd_float4x4 {
     public static func perspective(fov:Float,aspect:Float,near:Float,far:Float) -> simd_float4x4{
         let range = near - far
@@ -146,6 +148,13 @@ public class CokeModelRender{
         let d = MTLDepthStencilDescriptor()
         d.depthCompareFunction = .lessEqual
         d.isDepthWriteEnabled = true
+//        d.frontFaceStencil = MTLStencilDescriptor()
+//        d.frontFaceStencil.stencilCompareFunction = .equal
+//        d.frontFaceStencil.depthFailureOperation = .keep
+//        d.frontFaceStencil.stencilFailureOperation = .keep
+//        d.frontFaceStencil.depthStencilPassOperation = .replace
+//        d.frontFaceStencil.readMask = 5
+//        d.frontFaceStencil.writeMask = 0xff
         return d
     }()
     public var depthStencilState:MTLDepthStencilState?
@@ -167,10 +176,13 @@ public class CokeModelRender{
     public func createTexture(
         width:Int,
         height:Int,
+        sampleCount:Int = AntialiasingSampleCount,
         pixelformat:MTLPixelFormat = .bgra8Unorm,
         usage:MTLTextureUsage =  [.shaderRead,.shaderWrite],
         store:MTLStorageMode = .shared)->MTLTexture?{
         let d = MTLTextureDescriptor()
+        d.textureType = sampleCount > 1 ? .type2DMultisample : .type2D
+        d.sampleCount = sampleCount
         d.pixelFormat = pixelformat
         d.width = width
         d.storageMode = store
@@ -183,6 +195,8 @@ public class CokeModelRender{
         height:Int,
         pixelformat:MTLPixelFormat = .depth32Float_stencil8)->MTLTexture?{
         let d = MTLTextureDescriptor()
+            d.textureType = AntialiasingSampleCount > 1 ? .type2DMultisample : .type2D
+            d.sampleCount = AntialiasingSampleCount
         d.pixelFormat = pixelformat
         d.width = width
         d.storageMode = .private
@@ -219,12 +233,14 @@ public class CokeModelRender{
     }
     
     public func makeTextureFrom(cgimage:CGImage) ->MTLTexture?{
-        try? MTKTextureLoader(device: self.device).newTexture(cgImage: cgimage)
+        try? self.textureLoader?.newTexture(cgImage: cgimage)
     }
     public func makeTextureFrom(data:Data)->MTLTexture?{
-        try? MTKTextureLoader(device: self.device).newTexture(data: data)
+        try? self.textureLoader?.newTexture(data: data)
     }
-    
+    public lazy var textureLoader:MTKTextureLoader? = {
+        return MTKTextureLoader(device: self.device)
+    }()
     public typealias RenderCallBack = (MTLRenderCommandEncoder)->Void
     
 }
@@ -246,36 +262,36 @@ public class CokeModelRenderDisplay:CokeRenderDisplay{
     public init(render:CokeModelRender,layer:CAMetalLayer) {
         self.render = render
         self.layer = layer
+        layer.contentsScale = 3
+        layer.rasterizationScale = 3
         self.layer.pixelFormat = .bgra8Unorm
     }
     private var _renderPassDescription:MTLRenderPassDescriptor = MTLRenderPassDescriptor()
 
     private var renderDepthTarget:MTLTexture?
     
-    private var colorTexture:MTLTexture?
-    
     public var currentRenderPassDescription:MTLRenderPassDescriptor{
  
         let renderPassDescription = self._renderPassDescription
         self.currentDrawable = self.layer.nextDrawable()
-        if(colorTexture == nil){
-            self.colorTexture = self.currentDrawable?.texture
-        }
-        let colorTexture = self.colorTexture
+
         if renderDepthTarget == nil{
-            let depthStenci = self.render.createDepthTexture(width: colorTexture!.width, height: colorTexture!.height)
+            let depthStenci = self.render.createDepthTexture(width: Int(self.layer.drawableSize.width), height: Int(self.layer.drawableSize.height))
             self.renderDepthTarget = depthStenci
         }else{
-            if(renderDepthTarget!.width != colorTexture!.width || renderDepthTarget!.height != colorTexture!.height){
-                let depthStenci = self.render.createDepthTexture(width: colorTexture!.width, height: colorTexture!.height)
+            if(renderDepthTarget!.width != Int(self.layer.drawableSize.width) || renderDepthTarget!.height != Int(self.layer.drawableSize.height)){
+                let depthStenci = self.render.createDepthTexture(width: Int(self.layer.drawableSize.width), height: Int(self.layer.drawableSize.height))
                 self.renderDepthTarget = depthStenci
             }
         }
        
         renderPassDescription.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1)
         renderPassDescription.colorAttachments[0].loadAction = .clear
-        renderPassDescription.colorAttachments[0].storeAction = .store
+        renderPassDescription.colorAttachments[0].storeAction = AntialiasingSampleCount > 1 ? .multisampleResolve : .store
+//        renderPassDescription.colorAttachments[0].resolveTexture =
         renderPassDescription.colorAttachments[0].texture = self.currentDrawable?.texture
+//        renderPassDescription.colorAttachments[0].resolveSlice
+        
         
         
         renderPassDescription.depthAttachment.clearDepth = 1;
@@ -290,7 +306,7 @@ public class CokeModelRenderDisplay:CokeRenderDisplay{
     }
     
     public var viewPort:MTLViewport{
-        MTLViewport(originX: 0, originY: 0, width: self.layer.frame.width, height: self.layer.frame.height, znear: -1, zfar: 1)
+        MTLViewport(originX: 0, originY: 0, width: self.layer.frame.width  * 3, height: self.layer.frame.height * 3, znear: -1, zfar: 1)
     }
 }
 
@@ -356,6 +372,13 @@ public class CokeBoxModel:CokeModel{
         let ct = render.library.makeFunction(name: "cokeTriagle")
         let fg = render.library.makeFunction(name: "cokeTriagleFragment")
         let desc = render.newRenderPipelineDesciptor()
+        desc.rasterSampleCount = AntialiasingSampleCount
+        desc.sampleCount = AntialiasingSampleCount
+//        desc.colorAttachments[0].sourceRGBBlendFactor = .blendAlpha
+//        desc.colorAttachments[0].destinationRGBBlendFactor = .oneMinusSourceAlpha
+//        desc.colorAttachments[0].sourceAlphaBlendFactor = .one
+//        desc.colorAttachments[0].destinationAlphaBlendFactor = .oneMinusSourceAlpha
+//        desc.colorAttachments[0].isBlendingEnabled = true
         desc.fragmentFunction = fg
         desc.vertexFunction = ct
         
@@ -480,7 +503,7 @@ public struct CokeScene{
             lightDir: self.lightDir,
             specularStrength: 0.8,
             viewPos: self.cameraPos,
-            shininess: 8,
+            shininess: 256,
             constantValue: 1,
             linear: 0.09,
             quadratic: 0.032,

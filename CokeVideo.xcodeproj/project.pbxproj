@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		A9226E242AB5399E003A1B62 /* CokeModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9226E232AB5399E003A1B62 /* CokeModelViewController.swift */; };
 		A9226E262AB5598D003A1B62 /* CokeModel.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9226E252AB5598D003A1B62 /* CokeModel.metal */; };
+		A922CCEF2AB86D2600E4C8C0 /* CokeLighting.metal in Sources */ = {isa = PBXBuildFile; fileRef = A922CCEC2AB86D2600E4C8C0 /* CokeLighting.metal */; };
+		A922CCF02AB86D2600E4C8C0 /* CokeLighting.h in Headers */ = {isa = PBXBuildFile; fileRef = A922CCED2AB86D2600E4C8C0 /* CokeLighting.h */; };
 		A923536F2AAD6ECD00FFF763 /* CokeAudioConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A923536E2AAD6ECD00FFF763 /* CokeAudioConverter.swift */; };
 		A9A40D192AB4C162000DB84A /* CokeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A40D182AB4C162000DB84A /* CokeModel.swift */; };
 		A9B1F52226B6380500E157A4 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B1F52126B6380500E157A4 /* DetailViewController.swift */; };
@@ -71,6 +73,8 @@
 		A9226E232AB5399E003A1B62 /* CokeModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeModelViewController.swift; sourceTree = "<group>"; };
 		A9226E252AB5598D003A1B62 /* CokeModel.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CokeModel.metal; sourceTree = "<group>"; };
 		A9226E272AB55A8D003A1B62 /* CokeShaderDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CokeShaderDefine.h; sourceTree = "<group>"; };
+		A922CCEC2AB86D2600E4C8C0 /* CokeLighting.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = CokeLighting.metal; sourceTree = "<group>"; };
+		A922CCED2AB86D2600E4C8C0 /* CokeLighting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CokeLighting.h; sourceTree = "<group>"; };
 		A923536E2AAD6ECD00FFF763 /* CokeAudioConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeAudioConverter.swift; sourceTree = "<group>"; };
 		A9A40D182AB4C162000DB84A /* CokeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeModel.swift; sourceTree = "<group>"; };
 		A9B1F52126B6380500E157A4 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
@@ -205,6 +209,8 @@
 		A9D1C9E226B3093800F4421B /* shader */ = {
 			isa = PBXGroup;
 			children = (
+				A922CCED2AB86D2600E4C8C0 /* CokeLighting.h */,
+				A922CCEC2AB86D2600E4C8C0 /* CokeLighting.metal */,
 				A9D1C9E426B3093800F4421B /* CokeVideo.metal */,
 				A9226E252AB5598D003A1B62 /* CokeModel.metal */,
 				A9226E272AB55A8D003A1B62 /* CokeShaderDefine.h */,
@@ -250,6 +256,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A922CCF02AB86D2600E4C8C0 /* CokeLighting.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,6 +381,7 @@
 				A9D1CA1226B3093800F4421B /* Coke.swift in Sources */,
 				A9D1CA1426B3093800F4421B /* CokeVideoLoader.swift in Sources */,
 				A9D1CA2226B31DFE00F4421B /* CokeConfig.swift in Sources */,
+				A922CCEF2AB86D2600E4C8C0 /* CokeLighting.metal in Sources */,
 				A9D1CA0326B3093800F4421B /* CokeDisplay.swift in Sources */,
 				A9D1CA1326B3093800F4421B /* CokeSecurity.swift in Sources */,
 				A9D1CA1126B3093800F4421B /* CokeDiskStorage.swift in Sources */,
