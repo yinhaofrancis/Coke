@@ -109,7 +109,30 @@ public class CodeVideoEncoder{
     public func setProfileLevel(value:CFString){
         VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_ProfileLevel, value: value)
     }
-    
+    public func setColorSpace(vcs:VideoColorSpace){
+        switch(vcs){
+        case .VCS_2100_HLG:
+            VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_ColorPrimaries, value: kCVImageBufferColorPrimaries_ITU_R_2020);
+            VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_TransferFunction, value: kCVImageBufferTransferFunction_ITU_R_2100_HLG);
+            VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_YCbCrMatrix, value: kCVImageBufferYCbCrMatrix_ITU_R_2020);
+            break
+        case .VCS_601:
+            VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_ColorPrimaries, value: kCVImageBufferColorPrimaries_SMPTE_C);
+            VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_TransferFunction, value: kCVImageBufferTransferFunction_ITU_R_709_2);
+            VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_YCbCrMatrix, value: kCVImageBufferYCbCrMatrix_ITU_R_601_4);
+            break
+        case .VCS_2100_PQ:
+            VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_ColorPrimaries, value: kCVImageBufferColorPrimaries_ITU_R_2020);
+            VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_TransferFunction, value: kCVImageBufferTransferFunction_SMPTE_ST_2084_PQ);
+            VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_YCbCrMatrix, value: kCVImageBufferYCbCrMatrix_ITU_R_2020);
+            break
+        case .VCS_SRGB:
+            VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_ColorPrimaries, value: kCVImageBufferColorPrimaries_ITU_R_709_2);
+            VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_TransferFunction, value: kCVImageBufferTransferFunction_sRGB);
+            VTSessionSetProperty(self.session, key: kVTCompressionPropertyKey_YCbCrMatrix, value: kCVImageBufferYCbCrMatrix_ITU_R_709_2);
+            break
+        }
+    }
     public func encode(buffer:VideoEncoderBuffer,callback:@escaping ImageCallback){
         let currentBuffer = buffer
         let err = VTCompressionSessionEncodeFrame(self.session, imageBuffer: currentBuffer.imagebuffer, presentationTimeStamp: currentBuffer.presentationTimeStamp, duration: currentBuffer.duration, frameProperties: nil, infoFlagsOut: nil) { ret, flag, buffer in

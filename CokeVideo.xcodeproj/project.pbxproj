@@ -10,8 +10,6 @@
 		A9226E242AB5399E003A1B62 /* CokeModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9226E232AB5399E003A1B62 /* CokeModelViewController.swift */; };
 		A9226E262AB5598D003A1B62 /* CokeModel.metal in Sources */ = {isa = PBXBuildFile; fileRef = A9226E252AB5598D003A1B62 /* CokeModel.metal */; };
 		A923536F2AAD6ECD00FFF763 /* CokeAudioConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A923536E2AAD6ECD00FFF763 /* CokeAudioConverter.swift */; };
-		A94CC67426B398ED00494732 /* CokeUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A94CC66D26B398ED00494732 /* CokeUI.framework */; };
-		A94CC67526B398ED00494732 /* CokeUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A94CC66D26B398ED00494732 /* CokeUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A9A40D192AB4C162000DB84A /* CokeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A40D182AB4C162000DB84A /* CokeModel.swift */; };
 		A9B1F52226B6380500E157A4 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B1F52126B6380500E157A4 /* DetailViewController.swift */; };
 		A9C8D4E42AA6400200C23FC6 /* CodeVideoDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8D4E32AA6400200C23FC6 /* CodeVideoDecoder.swift */; };
@@ -38,7 +36,6 @@
 		A9D1CA1326B3093800F4421B /* CokeSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F426B3093800F4421B /* CokeSecurity.swift */; };
 		A9D1CA1426B3093800F4421B /* CokeVideoLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F526B3093800F4421B /* CokeVideoLoader.swift */; };
 		A9D1CA1526B3093800F4421B /* CokeDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F626B3093800F4421B /* CokeDownloader.swift */; };
-		A9D1CA1E26B30ADB00F4421B /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1CA1D26B30ADB00F4421B /* PhotosViewController.swift */; };
 		A9D1CA2026B30B6B00F4421B /* Launch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D1CA1F26B30B6B00F4421B /* Launch.storyboard */; };
 		A9D1CA2226B31DFE00F4421B /* CokeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1CA2126B31DFE00F4421B /* CokeConfig.swift */; };
 		A9E3D62F2AA60D9C00BD5CF7 /* CodeVideoEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3D62E2AA60D9C00BD5CF7 /* CodeVideoEncoder.swift */; };
@@ -75,8 +72,6 @@
 		A9226E252AB5598D003A1B62 /* CokeModel.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CokeModel.metal; sourceTree = "<group>"; };
 		A9226E272AB55A8D003A1B62 /* CokeShaderDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CokeShaderDefine.h; sourceTree = "<group>"; };
 		A923536E2AAD6ECD00FFF763 /* CokeAudioConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeAudioConverter.swift; sourceTree = "<group>"; };
-		A94CC66D26B398ED00494732 /* CokeUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CokeUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A94CC67026B398ED00494732 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9A40D182AB4C162000DB84A /* CokeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeModel.swift; sourceTree = "<group>"; };
 		A9B1F52126B6380500E157A4 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		A9C8D4E32AA6400200C23FC6 /* CodeVideoDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeVideoDecoder.swift; sourceTree = "<group>"; };
@@ -105,7 +100,6 @@
 		A9D1C9F426B3093800F4421B /* CokeSecurity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeSecurity.swift; sourceTree = "<group>"; };
 		A9D1C9F526B3093800F4421B /* CokeVideoLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeVideoLoader.swift; sourceTree = "<group>"; };
 		A9D1C9F626B3093800F4421B /* CokeDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CokeDownloader.swift; sourceTree = "<group>"; };
-		A9D1CA1D26B30ADB00F4421B /* PhotosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 		A9D1CA1F26B30B6B00F4421B /* Launch.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Launch.storyboard; sourceTree = "<group>"; };
 		A9D1CA2126B31DFE00F4421B /* CokeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeConfig.swift; sourceTree = "<group>"; };
 		A9E3D5EA2A9E236900BD5CF7 /* CokeVideo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CokeVideo.entitlements; sourceTree = "<group>"; };
@@ -165,7 +159,6 @@
 			isa = PBXGroup;
 			children = (
 				A9E3D5EA2A9E236900BD5CF7 /* CokeVideo.entitlements */,
-				A9D1CA1D26B30ADB00F4421B /* PhotosViewController.swift */,
 				A9D1C9B526B3086500F4421B /* AppDelegate.swift */,
 				A9D1C9B926B3086500F4421B /* ViewController.swift */,
 				A9D1C9BB26B3086500F4421B /* Main.storyboard */,
@@ -363,7 +356,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9D1CA1E26B30ADB00F4421B /* PhotosViewController.swift in Sources */,
 				A9D1C9BA26B3086500F4421B /* ViewController.swift in Sources */,
 				A9D1C9B626B3086500F4421B /* AppDelegate.swift in Sources */,
 				A9226E242AB5399E003A1B62 /* CokeModelViewController.swift in Sources */,
@@ -425,72 +417,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		A94CC67726B398ED00494732 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = JYCHA46QC4;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
-				INFOPLIST_FILE = CokeUI/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
-				PRODUCT_BUNDLE_IDENTIFIER = com.francis.CokeUI;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		A94CC67826B398ED00494732 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = JYCHA46QC4;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
-				INFOPLIST_FILE = CokeUI/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
-				PRODUCT_BUNDLE_IDENTIFIER = com.francis.CokeUI;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
 		A9D1C9C426B3086600F4421B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {

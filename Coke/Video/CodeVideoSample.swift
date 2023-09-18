@@ -484,3 +484,10 @@ public enum VideoSessionPreset{
         }
     }
 }
+
+public enum VideoColorSpace{
+    case VCS_601
+    case VCS_2100_PQ
+    case VCS_2100_HLG
+    case VCS_SRGB
+}

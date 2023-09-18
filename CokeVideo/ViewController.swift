@@ -183,14 +183,6 @@ class ViewController: UITableViewController,UISearchBarDelegate {
         }
     }
     
-    fileprivate func imageShow(_ vc: CokePlayerViewController) {
-        DispatchQueue.global().async {
-            let data = try! Data(contentsOf: URL(string: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpayposter.com%2Fposter_preview%2F1920x1200-hd-48029943.jpg&refer=http%3A%2F%2Fpayposter.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1630144314&t=31bae1063c7752ea541f3f1d97b08c64")!)
-            DispatchQueue.main.async {
-                vc.showImage(data: data)
-            }
-        }
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "detail"{
@@ -216,11 +208,11 @@ class CameraViewController:UIViewController{
     public lazy var camera:CokeCapture = {
         if self.encode == nil{
             
-            self.encode = try? CodeVideoEncoder(width: 720, height: 1280)
-
-            self.encode?.setProfileLevel(value: kVTProfileLevel_H264_Baseline_1_3)
+            self.encode = try? CodeVideoEncoder(width: 720, height: 1280,codec: kCMVideoCodecType_HEVC)
             self.encode?.setBframe(bframe: true)
+            self.encode?.setProfileLevel(value: kVTProfileLevel_HEVC_Main_AutoLevel)
             self.encode?.setMaxKeyFrameInterval(maxKeyFrameInterval: 60)
+            self.encode?.setColorSpace(vcs: .VCS_2100_HLG)
 //            self.encode?.setAverageBitRate(averageBitRate: 1024 * 1024 * 8)
 //            if #available(iOS 15.0, *) {
 //                self.encode?.setMaxAllowQP(qp: 0.6)
@@ -243,6 +235,7 @@ class CameraViewController:UIViewController{
                 self?.encode?.encode(buffer: buffer, callback: { i, f, e, index in
                     guard let e else { return }
                     AppDelegate.sample.append(e);
+                    print(e)
                     print(sample.presentationTimeStamp.seconds,"v \(e.isIFrame) \(e.dataBuffer?.dataLength)")
                 })
                 guard let px = sample.imageBuffer else { return }
