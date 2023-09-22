@@ -7,7 +7,6 @@
 
 import UIKit
 import Coke
-
 public class CokeModelViewController:UIViewController {
     
     public var modelView:CokeModelView{

@@ -160,7 +160,7 @@ public struct CokeAudioConfig{
     public let mChannelsPerFrame:UInt32
     public let mFramesPerPacket:UInt32
     public static let shared = CokeAudioConfig(
-        mSampleRate: 48000,
+        mSampleRate: 44100,
         mBitsPerChannel: 32,
         mChannelsPerFrame: 2,
         mFramesPerPacket: 1
