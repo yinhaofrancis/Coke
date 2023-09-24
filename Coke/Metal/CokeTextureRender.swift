@@ -43,8 +43,8 @@ public class CokeTextureRender {
     public var screenSize:CGSize = CGSize(width: 320, height: 480)
 
     public var rectangle:[vertex] {
-        let w:Float = Float(self.screenSize.width) / 10
-        let h:Float = Float(self.screenSize.height) / 10
+        let w:Float = 1
+        let h:Float = 1
         return [
             vertex(location: simd_float4(-w, h, 0, 1), texture: simd_float2(0, 0)),
             vertex(location: simd_float4(w, h, 0, 1), texture: simd_float2(1, 0)),
@@ -133,7 +133,8 @@ public class CokeTextureRender {
         buffer.present(drawable)
     }
     public func matrix(x:Float,y:Float,z:Float){
-        self.worldState.world = simd_float4x4.perspective(fov: .pi / 4, aspect: Float(self.screenSize.width / self.screenSize.height), near: 0.1, far: 10000) *
+        self.worldState.world = simd_float4x4.identity;
+        simd_float4x4.perspective(fov: .pi / 4, aspect: Float(self.screenSize.width / self.screenSize.height), near: 0.1, far: 10000) *
         simd_float4x4.camera(positionX: 0, positionY: 0, positionZ:  0, rotateX: 0, rotateY: 0 , rotateZ:0) *
         simd_float4x4.translate(x: 0, y: 0, z: 1000) *
         simd_float4x4.rotate(x: x, y: y, z: z)

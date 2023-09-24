@@ -12,13 +12,6 @@
 		A922CCEF2AB86D2600E4C8C0 /* CokeLighting.metal in Sources */ = {isa = PBXBuildFile; fileRef = A922CCEC2AB86D2600E4C8C0 /* CokeLighting.metal */; };
 		A922CCF02AB86D2600E4C8C0 /* CokeLighting.h in Headers */ = {isa = PBXBuildFile; fileRef = A922CCED2AB86D2600E4C8C0 /* CokeLighting.h */; };
 		A923536F2AAD6ECD00FFF763 /* CokeAudioConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A923536E2AAD6ECD00FFF763 /* CokeAudioConverter.swift */; };
-		A95240122ABD7DD20096FF8A /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A952400E2ABD7DC20096FF8A /* libavcodec.a */; };
-		A95240132ABD7DD20096FF8A /* libavdevice.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A952400F2ABD7DC20096FF8A /* libavdevice.a */; };
-		A95240142ABD7DD20096FF8A /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A952400C2ABD7DC20096FF8A /* libavfilter.a */; };
-		A95240152ABD7DD20096FF8A /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A952400D2ABD7DC20096FF8A /* libavformat.a */; };
-		A95240162ABD7DD20096FF8A /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A952400B2ABD7DC20096FF8A /* libavutil.a */; };
-		A95240172ABD7DD30096FF8A /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A95240102ABD7DC20096FF8A /* libswresample.a */; };
-		A95240182ABD7DD30096FF8A /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A95240112ABD7DC20096FF8A /* libswscale.a */; };
 		A9A40D192AB4C162000DB84A /* CokeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A40D182AB4C162000DB84A /* CokeModel.swift */; };
 		A9B1F52226B6380500E157A4 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B1F52126B6380500E157A4 /* DetailViewController.swift */; };
 		A9C8D4E42AA6400200C23FC6 /* CodeVideoDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8D4E32AA6400200C23FC6 /* CodeVideoDecoder.swift */; };
@@ -26,7 +19,6 @@
 		A9C8D4EB2AA78DDF00C23FC6 /* CokeAudioBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8D4EA2AA78DDF00C23FC6 /* CokeAudioBuffer.swift */; };
 		A9C8D50D2AACA64F00C23FC6 /* CokeAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8D50C2AACA64F00C23FC6 /* CokeAudioPlayer.swift */; };
 		A9D1C9B626B3086500F4421B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9B526B3086500F4421B /* AppDelegate.swift */; };
-		A9D1C9BA26B3086500F4421B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9B926B3086500F4421B /* ViewController.swift */; };
 		A9D1C9BD26B3086500F4421B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D1C9BB26B3086500F4421B /* Main.storyboard */; };
 		A9D1C9BF26B3086600F4421B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9D1C9BE26B3086600F4421B /* Assets.xcassets */; };
 		A9D1C9D526B308B100F4421B /* Coke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9D1C9CE26B308B100F4421B /* Coke.framework */; };
@@ -47,6 +39,7 @@
 		A9D1CA1526B3093800F4421B /* CokeDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9F626B3093800F4421B /* CokeDownloader.swift */; };
 		A9D1CA2026B30B6B00F4421B /* Launch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9D1CA1F26B30B6B00F4421B /* Launch.storyboard */; };
 		A9D1CA2226B31DFE00F4421B /* CokeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1CA2126B31DFE00F4421B /* CokeConfig.swift */; };
+		A9D554B52ABDC80000D85BB3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1C9B926B3086500F4421B /* ViewController.swift */; };
 		A9E3D62F2AA60D9C00BD5CF7 /* CodeVideoEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3D62E2AA60D9C00BD5CF7 /* CodeVideoEncoder.swift */; };
 		A9E3D6312AA60FCB00BD5CF7 /* CodeVideoSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3D6302AA60FCB00BD5CF7 /* CodeVideoSample.swift */; };
 		A9E3D6342AA6127900BD5CF7 /* CokeCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3D6332AA6127900BD5CF7 /* CokeCapture.swift */; };
@@ -83,14 +76,6 @@
 		A922CCEC2AB86D2600E4C8C0 /* CokeLighting.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = CokeLighting.metal; sourceTree = "<group>"; };
 		A922CCED2AB86D2600E4C8C0 /* CokeLighting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CokeLighting.h; sourceTree = "<group>"; };
 		A923536E2AAD6ECD00FFF763 /* CokeAudioConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeAudioConverter.swift; sourceTree = "<group>"; };
-		A952400B2ABD7DC20096FF8A /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = "CokeVideo/FFmpeg-iOS/lib/libavutil.a"; sourceTree = "<group>"; };
-		A952400C2ABD7DC20096FF8A /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = "CokeVideo/FFmpeg-iOS/lib/libavfilter.a"; sourceTree = "<group>"; };
-		A952400D2ABD7DC20096FF8A /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = "CokeVideo/FFmpeg-iOS/lib/libavformat.a"; sourceTree = "<group>"; };
-		A952400E2ABD7DC20096FF8A /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = "CokeVideo/FFmpeg-iOS/lib/libavcodec.a"; sourceTree = "<group>"; };
-		A952400F2ABD7DC20096FF8A /* libavdevice.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavdevice.a; path = "CokeVideo/FFmpeg-iOS/lib/libavdevice.a"; sourceTree = "<group>"; };
-		A95240102ABD7DC20096FF8A /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = "CokeVideo/FFmpeg-iOS/lib/libswresample.a"; sourceTree = "<group>"; };
-		A95240112ABD7DC20096FF8A /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = "CokeVideo/FFmpeg-iOS/lib/libswscale.a"; sourceTree = "<group>"; };
-		A9889A8C2ABD301800547CB9 /* FFmpeg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FFmpeg.framework; path = CokeVideo/FFmpeg.framework; sourceTree = "<group>"; };
 		A9A40D182AB4C162000DB84A /* CokeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeModel.swift; sourceTree = "<group>"; };
 		A9B1F52126B6380500E157A4 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		A9C8D4E32AA6400200C23FC6 /* CodeVideoDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeVideoDecoder.swift; sourceTree = "<group>"; };
@@ -132,14 +117,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A95240162ABD7DD20096FF8A /* libavutil.a in Frameworks */,
-				A95240142ABD7DD20096FF8A /* libavfilter.a in Frameworks */,
 				A9D1C9D526B308B100F4421B /* Coke.framework in Frameworks */,
-				A95240132ABD7DD20096FF8A /* libavdevice.a in Frameworks */,
-				A95240182ABD7DD30096FF8A /* libswscale.a in Frameworks */,
-				A95240152ABD7DD20096FF8A /* libavformat.a in Frameworks */,
-				A95240172ABD7DD30096FF8A /* libswresample.a in Frameworks */,
-				A95240122ABD7DD20096FF8A /* libavcodec.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,21 +131,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A9889A8B2ABD301800547CB9 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				A952400E2ABD7DC20096FF8A /* libavcodec.a */,
-				A952400F2ABD7DC20096FF8A /* libavdevice.a */,
-				A952400C2ABD7DC20096FF8A /* libavfilter.a */,
-				A952400D2ABD7DC20096FF8A /* libavformat.a */,
-				A952400B2ABD7DC20096FF8A /* libavutil.a */,
-				A95240102ABD7DC20096FF8A /* libswresample.a */,
-				A95240112ABD7DC20096FF8A /* libswscale.a */,
-				A9889A8C2ABD301800547CB9 /* FFmpeg.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		A9C8D4E72AA78BDF00C23FC6 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
@@ -184,7 +147,6 @@
 				A9D1C9B426B3086500F4421B /* CokeVideo */,
 				A9D1C9CF26B308B100F4421B /* Coke */,
 				A9D1C9B326B3086500F4421B /* Products */,
-				A9889A8B2ABD301800547CB9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -401,9 +363,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9D1C9BA26B3086500F4421B /* ViewController.swift in Sources */,
 				A9D1C9B626B3086500F4421B /* AppDelegate.swift in Sources */,
 				A9226E242AB5399E003A1B62 /* CokeModelViewController.swift in Sources */,
+				A9D554B52ABDC80000D85BB3 /* ViewController.swift in Sources */,
 				A9B1F52226B6380500E157A4 /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -591,7 +553,11 @@
 				CODE_SIGN_ENTITLEMENTS = CokeVideo/CokeVideo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JYCHA46QC4;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ffmpeg",
+					"$(PROJECT_DIR)",
+				);
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = CokeVideo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -624,7 +590,11 @@
 				CODE_SIGN_ENTITLEMENTS = CokeVideo/CokeVideo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JYCHA46QC4;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ffmpeg",
+					"$(PROJECT_DIR)",
+				);
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = CokeVideo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

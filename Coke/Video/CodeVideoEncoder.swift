@@ -6,6 +6,7 @@
 //
 
 import VideoToolbox
+import AVFoundation
 
 public struct VideoEncoderBuffer{
     public var imagebuffer:CVImageBuffer
@@ -154,4 +155,74 @@ public class CodeVideoEncoder{
     deinit{
         VTCompressionSessionInvalidate(self.session)
     }
+}
+
+public class CokeFile{
+    public let url:URL
+    public let queue:DispatchQueue = DispatchQueue(label: "CokeFile")
+    public private(set) var writer:AVAssetWriter
+    public private(set) var videoInput:AVAssetWriterInput
+    public private(set) var audioInput:AVAssetWriterInput
+    private var videos:[CMSampleBuffer] = []
+    private var audio:[CMSampleBuffer] = []
+    private var isfinish:Bool = false
+    public init(url:String,videoFormat:CMFormatDescription,audioFormat:CMAudioFormatDescription) throws{
+        guard let u = URL(string: url) else { throw NSError(domain: "create url fail \(url)", code: 0)}
+        self.url = u
+        if !FileManager.default.fileExists(atPath: url){
+            FileManager.default.createFile(atPath: url, contents: nil)
+        }
+        writer = try AVAssetWriter(url: u, fileType: .mp4)
+        videoInput = AVAssetWriterInput(mediaType: .video, outputSettings: nil,sourceFormatHint: videoFormat)
+        audioInput = AVAssetWriterInput(mediaType: .audio, outputSettings: nil,sourceFormatHint: audioFormat)
+        self.writer.add(videoInput)
+        self.writer.add(audioInput)
+        if self.writer.status == .unknown{
+            self.writer.startWriting()
+            self.writer.startSession(atSourceTime: .zero)
+        }
+    }
+    
+
+    public func write(sample:CMSampleBuffer){
+        if sample.mediaType == kCMMediaType_Video{
+    
+            self.videos.append(sample)
+        }else if sample.mediaType == kCMMediaType_Audio{
+            
+            self.audio.append(sample)
+        }
+    }
+    public func finish(){
+        self.videoInput.requestMediaDataWhenReady(on: self.queue) {
+            while self.videos.count > 0{
+                if self.videoInput.isReadyForMoreMediaData{
+                    self.videoInput.append(self.videos.first!)
+                    print("v")
+                    self.videos.removeFirst()
+                }
+            }
+            if(self.videos.count == 0 && self.audio.count == 0){
+                self.writer.finishWriting {
+                    
+                }
+            }
+        }
+        self.audioInput.requestMediaDataWhenReady(on: self.queue) {
+            while self.audio.count > 0{
+                if self.audioInput.isReadyForMoreMediaData{
+                    self.audioInput.append(self.audio.first!)
+                    print("a")
+                    self.audio.removeFirst()
+                }
+            }
+            if(self.videos.count == 0 && self.audio.count == 0){
+                self.writer.finishWriting {
+                    
+                }
+            }
+        }
+        
+    }
+    
 }

@@ -20,8 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    public static var sample:[CMSampleBuffer] = []
-    
+    public static var video:[CMSampleBuffer] = []
+    public static var audio:[CMSampleBuffer] = []
 //    public static var audio:[CokeAudioConverterAAC.OutputBuffer] = []
     
     public static var desc = AudioStreamBasicDescription()

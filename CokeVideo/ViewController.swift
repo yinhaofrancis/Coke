@@ -204,13 +204,21 @@ class CameraViewController:UIViewController{
     }
     public var encode:CodeVideoEncoder?
     public var decode:CokeVideoDecoder?
+    
+    public var file:CokeFile?
 
     public lazy var camera:CokeCapture = {
         if self.encode == nil{
             
-            self.encode = try? CodeVideoEncoder(width: 720, height: 1280,codec: kCMVideoCodecType_HEVC)
+            self.encode = try? CodeVideoEncoder(width: 720, height: 1280)
             self.encode?.setBframe(bframe: true)
-            self.encode?.setProfileLevel(value: kVTProfileLevel_HEVC_Main_AutoLevel)
+            if #available(iOS 15.0, *) {
+                self.encode?.setMaxAllowQP(qp: 0.3)
+            } else {
+                self.encode?.setQuality(quality: 0.3)
+            }
+            
+            self.encode?.setProfileLevel(value: kVTProfileLevel_H264_Main_AutoLevel)
             self.encode?.setMaxKeyFrameInterval(maxKeyFrameInterval: 60)
             self.encode?.setColorSpace(vcs: .VCS_2100_HLG)
 //            self.encode?.setAverageBitRate(averageBitRate: 1024 * 1024 * 8)
@@ -234,8 +242,7 @@ class CameraViewController:UIViewController{
                 
                 self?.encode?.encode(buffer: buffer, callback: { i, f, e, index in
                     guard let e else { return }
-                    AppDelegate.sample.append(e);
-                    print(e)
+                    AppDelegate.video.append(e);
                     print(sample.presentationTimeStamp.seconds,"v \(e.isIFrame) \(e.dataBuffer?.dataLength)")
                 })
                 guard let px = sample.imageBuffer else { return }
@@ -244,7 +251,7 @@ class CameraViewController:UIViewController{
                 }
             }else{
                 
-                AppDelegate.sample.append(sample);
+                AppDelegate.audio.append(sample);
                 print(sample.presentationTimeStamp.seconds,"a \(sample.dataBuffer?.dataLength)")
             }
             
@@ -252,7 +259,9 @@ class CameraViewController:UIViewController{
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
-        AppDelegate.sample.removeAll()
+       
+        AppDelegate.video.removeAll()
+        AppDelegate.audio.removeAll()
         self.display.videoFilter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
         
         self.camera.start()
@@ -260,6 +269,22 @@ class CameraViewController:UIViewController{
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
       
+    }
+    deinit{
+        self.camera.stop()
+        if(AppDelegate.video.count > 0 && AppDelegate.audio.count > 0){
+            let url = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("a.mp4")
+            let f = try! CokeFile(url: url.absoluteString, videoFormat: AppDelegate.video.first!.formatDescription!, audioFormat: AppDelegate.audio.first!.formatDescription!)
+            f.queue.async {
+                AppDelegate.video.forEach { c in
+                    f.write(sample: c)
+                }
+                AppDelegate.audio.forEach { c in
+                    f.write(sample: c)
+                }
+                f.finish()
+            }
+        }
     }
 }
 
@@ -310,9 +335,16 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
         b .addTarget(self, action: #selector(down), for: .touchDown)
         b .addTarget(self, action: #selector(up), for: .touchUpInside)
         
-        if(AppDelegate.sample.count > 0){
-            self.render.sync.setRate(1, time: AppDelegate.sample.first!.presentationTimeStamp)
-            AppDelegate.sample.forEach { buf in
+        if(AppDelegate.video.count > 0 && AppDelegate.audio.count > 0){
+            if AppDelegate.video.first!.presentationTimeStamp < AppDelegate.audio.first!.presentationTimeStamp {
+                self.render.sync.setRate(1, time: AppDelegate.video.first!.presentationTimeStamp)
+            }else{
+                self.render.sync.setRate(1, time: AppDelegate.audio.first!.presentationTimeStamp)
+            }
+            AppDelegate.video.forEach { buf in
+                self.render.enqueue(sample: buf)
+            }
+            AppDelegate.audio.forEach { buf in
                 self.render.enqueue(sample: buf)
             }
         }
@@ -338,77 +370,76 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
     }
 }
 
-public class LiveStream{
-    public let url:URL
-    public init(url:URL,format_name:String) throws{
-        self.url = url
-        self.outFormat = AVOutputFormat()
-        av_register_all()
-        avformat_network_init()
-        var temp:UnsafeMutablePointer<AVFormatContext>?;
-        avformat_alloc_output_context2(&temp, nil, format_name, url.absoluteString)
-        guard let temp else {
-            throw NSError(domain: "create AVFormatContext fail", code: 0, userInfo: nil);
-        }
-        self.ctx = temp
-        self.outFormat = temp.pointee.oformat.pointee
-        
-        guard let streamPtr = avformat_new_stream(self.ctx, nil) else { throw NSError(domain: "create stream fail", code: 1, userInfo: nil) }
-        self.stream = streamPtr.pointee
-    }
-    public func open() throws{
-        let ret = avio_open(&self.ctx.pointee.pb, self.url.absoluteString, AVIO_FLAG_WRITE);
-        if ret < 0{
-            throw NSError(domain: "open stream fail,url:\(self.url)", code: 2, userInfo: nil);
-        }
-        self.avio = self.ctx.pointee.pb
-        
-    }
-    public func close() throws{
-        av_write_trailer(self.ctx)
-    }
-    public func writeHeader() throws{
-        let ret = avformat_write_header(self.ctx, nil)
-        if ret < 0{
-            throw NSError(domain: "write header fail", code: 3)
-        }
-    }
-    public func writePacket(pkt:UnsafeMutablePointer<AVPacket>){
-        av_interleaved_write_frame(self.ctx, pkt)
-    }
-    public func writeRawData(cmsample:CMSampleBuffer) throws{
-        
-    }
-    
-    deinit{
-        avformat_network_deinit()
-        avio_close(self.avio)
-        avformat_free_context(ctx)
-    }
-    public private(set) var outFormat:AVOutputFormat
-    public private(set) var stream:AVStream
-    public private(set) var ctx:UnsafeMutablePointer<AVFormatContext>
-    public private(set) var avio:UnsafeMutablePointer<AVIOContext>?
-    
-    
-    public enum VideoCodecType{
-        case h264
-        case hevc
-        static public func parse(type:CMVideoCodecType)->VideoCodecType?{
-            if (type == kCMVideoCodecType_H264){
-                return .h264
-            }else if(type == kCMVideoCodecType_HEVC){
-                return .hevc
-            }
-            return nil
-        }
-        public var ffVideoType:AVCodecID{
-            switch(self){
-            case .h264:
-                return AV_CODEC_ID_HEVC
-            case .hevc:
-                return AV_CODEC_ID_H264
-            }
-        }
-    }
-}
+//public class LiveStream{
+//    public let url:URL
+//    public init(url:URL,format_name:String) throws{
+//        self.url = url
+//        self.outFormat = AVOutputFormat()
+//        avformat_network_init()
+//        var temp:UnsafeMutablePointer<AVFormatContext>?;
+//        avformat_alloc_output_context2(&temp, nil, format_name, url.absoluteString)
+//        guard let temp else {
+//            throw NSError(domain: "create AVFormatContext fail", code: 0, userInfo: nil);
+//        }
+//        self.ctx = temp
+//        self.outFormat = temp.pointee.oformat.pointee
+//        
+//        guard let streamPtr = avformat_new_stream(self.ctx, nil) else { throw NSError(domain: "create stream fail", code: 1, userInfo: nil) }
+//        self.stream = streamPtr.pointee
+//    }
+//    public func open() throws{
+//        let ret = avio_open(&self.ctx.pointee.pb, self.url.absoluteString, AVIO_FLAG_WRITE);
+//        if ret < 0{
+//            throw NSError(domain: "open stream fail,url:\(self.url)", code: 2, userInfo: nil);
+//        }
+//        self.avio = self.ctx.pointee.pb
+//        
+//    }
+//    public func close() throws{
+//        av_write_trailer(self.ctx)
+//    }
+//    public func writeHeader() throws{
+//        let ret = avformat_write_header(self.ctx, nil)
+//        if ret < 0{
+//            throw NSError(domain: "write header fail", code: 3)
+//        }
+//    }
+//    public func writePacket(pkt:UnsafeMutablePointer<AVPacket>){
+//        av_interleaved_write_frame(self.ctx, pkt)
+//    }
+//    public func writeRawData(cmsample:CMSampleBuffer) throws{
+//        
+//    }
+//    
+//    deinit{
+//        avformat_network_deinit()
+//        avio_close(self.avio)
+//        avformat_free_context(ctx)
+//    }
+//    public private(set) var outFormat:AVOutputFormat
+//    public private(set) var stream:AVStream
+//    public private(set) var ctx:UnsafeMutablePointer<AVFormatContext>
+//    public private(set) var avio:UnsafeMutablePointer<AVIOContext>?
+//    
+//    
+//    public enum VideoCodecType{
+//        case h264
+//        case hevc
+//        static public func parse(type:CMVideoCodecType)->VideoCodecType?{
+//            if (type == kCMVideoCodecType_H264){
+//                return .h264
+//            }else if(type == kCMVideoCodecType_HEVC){
+//                return .hevc
+//            }
+//            return nil
+//        }
+//        public var ffVideoType:AVCodecID{
+//            switch(self){
+//            case .h264:
+//                return AV_CODEC_ID_HEVC
+//            case .hevc:
+//                return AV_CODEC_ID_H264
+//            }
+//        }
+//    }
+//}
