@@ -383,15 +383,12 @@ public class render2dViewController:UIViewController{
             Coke2DVertex(location: [0,0], color: [1,1,0,0.3]),
             Coke2DVertex(location: [150,0], color: [1,0,0,0.3]),
             Coke2DVertex(location: [0,150], color: [1,0,1,0.3]),
-        ])
-        let r2 = try! Coke2DPath(coke: self.coke, vertex: [
             Coke2DVertex(location: [0,-30], color: [1,1,0,0.3]),
             Coke2DVertex(location: [100,-50], color: [1,0,0,0.3]),
             Coke2DVertex(location: [-30,120], color: [1,0,1,0.3]),
         ])
         try! self.coke.draw { e in
             r.draw(encode: e)
-            r2.draw(encode: e)
         }
     }
 }
