@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VgT-9M-Pc5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VgT-9M-Pc5">
     <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -116,16 +116,23 @@
                                 <segue destination="fP7-jy-9uu" kind="show" id="b8m-bd-MaU"/>
                             </connections>
                         </button>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="rnb-3J-qlq">
-                            <connections>
-                                <segue destination="6JF-As-Pvu" kind="show" id="woZ-In-09B"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="rnb-3J-qlq">
+                                <connections>
+                                    <segue destination="6JF-As-Pvu" kind="show" id="woZ-In-09B"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Item" id="4Jh-YA-ww7">
+                                <connections>
+                                    <segue destination="px8-9N-Phw" kind="show" id="CDX-0b-oe7"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d8B-w7-gOf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="110" y="-393"/>
+            <point key="canvasLocation" x="27" y="-375"/>
         </scene>
         <!--Out View Controller-->
         <scene sceneID="oUl-vi-X7D">
@@ -188,7 +195,26 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s1E-yw-kVv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="140.18691588785046" y="414.03887688984884"/>
+            <point key="canvasLocation" x="-374" y="407"/>
+        </scene>
+        <!--Render 2d View Controller-->
+        <scene sceneID="yuR-kd-Op0">
+            <objects>
+                <viewController id="px8-9N-Phw" customClass="render2dViewController" customModule="CokeVideo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="XkN-4N-kG7"/>
+                        <viewControllerLayoutGuide type="bottom" id="HJ1-rF-ENT"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="HZU-PI-IfL">
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemMintColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="lt2-u0-8rd"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BNc-yG-AQ7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="594" y="407"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="mBe-Sp-fvQ">
@@ -211,6 +237,9 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemMintColor">
+            <color red="0.0" green="0.78039215689999997" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -137,26 +137,185 @@ public class CokeTextureRender {
     }
 }
 
+
+public struct Coke2DVertex{
+    public var location:simd_float2
+    public var texturevx:simd_float2?
+    public var color:simd_float4
+    public init(location: simd_float2, texturevx: simd_float2? = nil, color: simd_float4) {
+        self.location = location
+        self.texturevx = texturevx
+        self.color = color
+    }
+    public var vertexDescription:MTLVertexDescriptor{
+        if texturevx == nil{
+            let mv = MTLVertexDescriptor()
+            mv.attributes[0].format = .float2
+            mv.attributes[0].offset = 0;
+            mv.attributes[0].bufferIndex = 0
+            mv.attributes[1].format = .float4
+            mv.attributes[1].offset = 8
+            mv.attributes[1].bufferIndex = 0
+            mv.layouts[0].stepRate = 1;
+            mv.layouts[0].stepFunction = .perVertex
+            mv.layouts[0].stride = 24
+            return mv
+        }else{
+            let mv = MTLVertexDescriptor()
+            mv.attributes[0].format = .float2
+            mv.attributes[0].offset = 0;
+            mv.attributes[0].bufferIndex = 0
+            mv.attributes[1].format = .float2
+            mv.attributes[1].offset = 8
+            mv.attributes[1].bufferIndex = 0
+            
+            mv.attributes[2].format = .float4
+            mv.attributes[2].offset = 16
+            mv.attributes[2].bufferIndex = 0
+            mv.layouts[0].stepRate = 1;
+            mv.layouts[0].stepFunction = .perVertex
+            mv.layouts[0].stride = 32
+            return mv
+        }
+        
+    }
+    public var vertex:[Float]{
+        if let texturevx {
+            return [self.location.x,self.location.y,texturevx.x,texturevx.y,color.x,color.y,color.z,color.w]
+        }else{
+            return [self.location.x,self.location.y,color.x,color.y,color.z,color.w]
+        }
+        
+    }
+}
+public struct Coke2DPath{
+    public var vertex:[Coke2DVertex]
+    public var index:[UInt32] = []
+    public var plain:[Float]{
+        self.vertex.flatMap{$0.vertex}
+    }
+    public static func triangle(coke:Coke2D,
+                                point1:simd_float2,
+                                point2:simd_float2,
+                                point3:simd_float2,
+                                color:simd_float4)throws ->Coke2DPath{
+        return try Coke2DPath(coke: coke, vertex: [
+            Coke2DVertex(location: point1, color: color),
+            Coke2DVertex(location: point2, color: color),
+            Coke2DVertex(location: point3, color: color),
+        ])
+    }
+    public init(coke:Coke2D,vertex:[Coke2DVertex]) throws{
+        let desc = MTLRenderPipelineDescriptor()
+        self.vertex = vertex
+        desc.colorAttachments[0].pixelFormat = .bgra8Unorm
+        desc.depthAttachmentPixelFormat = .depth32Float_stencil8;
+        desc.stencilAttachmentPixelFormat = .depth32Float_stencil8
+        desc.vertexFunction = coke.shaderLibrary?.makeFunction(name: "coke2dvertex")
+        desc.fragmentFunction = coke.shaderLibrary?.makeFunction(name: "coke2dfragment")
+        desc.vertexDescriptor = vertex.first?.vertexDescription
+        desc.colorAttachments[0].sourceRGBBlendFactor = .sourceAlpha
+        desc.colorAttachments[0].sourceAlphaBlendFactor = .sourceAlpha
+        desc.colorAttachments[0].destinationRGBBlendFactor = .oneMinusSourceAlpha
+        desc.colorAttachments[0].destinationAlphaBlendFactor = .oneMinusSourceAlpha
+        desc.colorAttachments[0].isBlendingEnabled = true
+        desc.colorAttachments[0].rgbBlendOperation = .add
+        desc.colorAttachments[0].alphaBlendOperation = .add
+        self.state = try coke.device.makeRenderPipelineState(descriptor: desc)
+    }
+    
+    public var state:MTLRenderPipelineState
+    
+    public func draw(encode:MTLRenderCommandEncoder){
+        encode.setRenderPipelineState(self.state)
+        let p = self.plain
+        encode.setVertexBytes(p, length: p.count * MemoryLayout<Float>.size, index: 0)
+        encode.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: self.vertex.count)
+    }
+}
 public class Coke2D{
     public var device:MTLDevice
-    public var texture:MTLTexture
+    public var commandQueue:MTLCommandQueue
+    public var depthStencil:MTLTexture
+    public var renderPassDescription:MTLRenderPassDescriptor
+    public var shaderLibrary:MTLLibrary?
+    public private(set) var layer:CAMetalLayer
+    private func loadDefaultLibrary() throws{
+        self.shaderLibrary = try self.device.makeDefaultLibrary(bundle: Bundle(for: CokeComputer.self))
+    }
+    static let scale = 3
+    private var width:Int
+    private var height:Int
     public init(w:UInt32,h:UInt32) throws {
+        self.width = Int(w) * Coke2D.scale
+        self.height = Int(h) * Coke2D.scale
         let device = try Coke2D.createDevice();
         self.device = device
-        self.texture = try Coke2D.createTexture(w: w, h: h, device:device)
+        self.commandQueue = try Coke2D.createCommandQueue(device: device)
+        self.depthStencil = try Coke2D.createTexture(w: self.width, h: self.height, pixelFormat: .depth32Float_stencil8, device: device)
+        self.renderPassDescription = MTLRenderPassDescriptor()
+        renderPassDescription.colorAttachments[0].clearColor = MTLClearColor(red: 1, green: 1, blue: 1, alpha: 1)
+        renderPassDescription.colorAttachments[0].loadAction = .clear
+        renderPassDescription.colorAttachments[0].storeAction = .store
+        renderPassDescription.depthAttachment.clearDepth = 1;
+        renderPassDescription.depthAttachment.texture = self.depthStencil
+        renderPassDescription.depthAttachment.loadAction = .clear
+        renderPassDescription.depthAttachment.storeAction = .store
+        renderPassDescription.stencilAttachment.clearStencil = 1;
+        renderPassDescription.stencilAttachment.texture = self.depthStencil
+        renderPassDescription.stencilAttachment.loadAction = .clear
+        renderPassDescription.stencilAttachment.storeAction = .store
+        self.layer = CAMetalLayer()
+        self.layer.frame = CGRect(x: 0, y: 0, width: Int(w), height: Int(h))
+        self.layer.contentsScale = CGFloat(Coke2D.scale);
+        try self.loadDefaultLibrary()
     }
+    
+    public func createCommandBuffer() throws ->MTLCommandBuffer{
+        guard let buffer = self.commandQueue.makeCommandBuffer() else { throw NSError(domain: "fail create command buffer", code: 5, userInfo: nil)}
+        return buffer
+    }
+    
+    public func draw(call:(MTLRenderCommandEncoder)->Void) throws{
+        let buffer = try self.createCommandBuffer()
+        guard let drawable = self.layer.nextDrawable() else { return }
+        self.renderPassDescription.colorAttachments[0].texture = drawable.texture
+        guard let encoder = buffer.makeRenderCommandEncoder(descriptor: self.renderPassDescription) else {
+            throw NSError(domain: "fail create encoder", code: 6)
+        }
+        encoder.setViewport(MTLViewport(originX: 0, originY: 0, width: Double(self.width), height: Double(self.height), znear: -1, zfar: 1))
+        var mat = simd_float4x4.orthographic(bottom: Float(self.height / -2), top: Float(self.height / 2), left: Float(self.width / -2), right: Float(self.width / 2), near: -1, far: 1)
+        encoder.setVertexBytes(&mat, length: MemoryLayout.size(ofValue: mat), index: 1)
+        call(encoder)
+        encoder.endEncoding()
+        buffer.present(drawable)
+        buffer.commit()
+        buffer.waitUntilCompleted()
+    }
+    
+    
+    
+    
+    
     public static func createDevice() throws ->MTLDevice{
         guard let d = MTLCreateSystemDefaultDevice() else { throw NSError(domain: "fail create device", code: 0, userInfo: nil)}
         return d
     }
-    public static func createTexture(w:UInt32,h:UInt32,device:MTLDevice) throws ->MTLTexture{
+    
+    public static func createTexture(w:Int,h:Int,pixelFormat:MTLPixelFormat,device:MTLDevice) throws ->MTLTexture{
         let d = MTLTextureDescriptor()
-        d.width = Int(w);
-        d.height = Int(h);
+        d.width = w;
+        d.height = h;
         d.usage = [.renderTarget,.shaderRead,.shaderWrite]
         d.storageMode = .shared
         d.textureType = .type2D
-        guard let texture = device.makeTexture(descriptor: d) else { throw NSError(domain: "create texture fail", code: 0, userInfo: nil)  }
+        d.pixelFormat = pixelFormat
+        guard let texture = device.makeTexture(descriptor: d) else { throw NSError(domain: "create texture fail", code: 1, userInfo: nil)  }
         return texture
+    }
+    
+    public static func createCommandQueue(device:MTLDevice) throws -> MTLCommandQueue{
+        guard let queue = device.makeCommandQueue() else { throw NSError(domain: "create queue fail", code: 3)}
+        return queue
     }
 }

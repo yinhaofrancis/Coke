@@ -81,4 +81,16 @@ struct LightingUniform{
     
 };
 
+
+struct CokeModel2DIn{
+    float2 location [[attribute(0)]];
+    float4 color [[attribute(1)]];
+};
+
+struct CokeModel2D{
+    float4 location [[position]];
+    float4 color;
+    float2 textureVX;
+};
+
 #endif /* CokeShaderDefine_h */

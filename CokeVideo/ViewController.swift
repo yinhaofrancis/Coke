@@ -370,87 +370,28 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
     }
 }
 
-//public class LiveStream{
-//    public let url:URL
-//    private var codec:UnsafeMutablePointer<AVCodecContext>?
-//    public init(url:URL,format_name:String,codeid:AVCodecID) throws{
-//        self.url = url
-//        let codec = avcodec_find_encoder(codeid);
-//        let codec_context = avcodec_alloc_context3(codec);
-//        codec?.deallocate()
-//        self.codec = codec_context
-//        self.outFormat = AVOutputFormat()
-//        av_register_all();
-//        avformat_network_init()
-//        var temp:UnsafeMutablePointer<AVFormatContext>?;
-//        avformat_alloc_output_context2(&temp, nil, format_name, url.absoluteString)
-//        guard let temp else {
-//            throw NSError(domain: "create AVFormatContext fail", code: 0, userInfo: nil);
-//        }
-//        self.ctx = temp
-//        self.outFormat = temp.pointee.oformat.pointee
-//
-//        guard let streamPtr = avformat_new_stream(self.ctx, nil) else { throw NSError(domain: "create stream fail", code: 1, userInfo: nil) }
-//        self.stream = streamPtr.pointee
-//    }
-//    public func open() throws{
-//        let ret = avio_open(&self.ctx.pointee.pb, self.url.absoluteString, AVIO_FLAG_WRITE);
-//        if ret < 0{
-//            throw NSError(domain: "open stream fail,url:\(self.url)", code: 2, userInfo: nil);
-//        }
-//        self.avio = self.ctx.pointee.pb
-//
-//    }
-//    public func close() throws{
-//        av_write_trailer(self.ctx)
-//    }
-//    public func writeHeader() throws{
-//        let ret = avformat_write_header(self.ctx, nil)
-//        if ret < 0{
-//            throw NSError(domain: "write header fail", code: 3)
-//        }
-//    }
-//    public func writePacket(pkt:UnsafeMutablePointer<AVPacket>){
-//        av_interleaved_write_frame(self.ctx, pkt)
-//    }
-//    public func writeSampleBuffer(cmsample:CMSampleBuffer) throws{
-//        let pack = av_packet_alloc()
-////        vtenc_cm_to_avpacket(self.codec, cmsample, pack, nil);
-//        guard let pack else {throw NSError(domain: "create packet fail", code: 0, userInfo: nil)}
-//        self.writePacket(pkt: pack)
-//        av_free(pack);
-//    }
-//
-//    deinit{
-//        avformat_network_deinit()
-//        avio_close(self.avio)
-//        avformat_free_context(ctx)
-//        avcodec_free_context(&self.codec)
-//    }
-//    public private(set) var outFormat:AVOutputFormat
-//    public private(set) var stream:AVStream
-//    public private(set) var ctx:UnsafeMutablePointer<AVFormatContext>
-//    public private(set) var avio:UnsafeMutablePointer<AVIOContext>?
-//
-//
-//    public enum VideoCodecType{
-//        case h264
-//        case hevc
-//        static public func parse(type:CMVideoCodecType)->VideoCodecType?{
-//            if (type == kCMVideoCodecType_H264){
-//                return .h264
-//            }else if(type == kCMVideoCodecType_HEVC){
-//                return .hevc
-//            }
-//            return nil
-//        }
-//        public var ffVideoType:AVCodecID{
-//            switch(self){
-//            case .h264:
-//                return AV_CODEC_ID_HEVC
-//            case .hevc:
-//                return AV_CODEC_ID_H264
-//            }
-//        }
-//    }
-//}
+public class render2dViewController:UIViewController{
+    let coke = try! Coke2D(w: 100, h: 100)
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.layer.addSublayer(coke.layer)
+        coke.layer.frame.origin = CGPoint(x: 100, y: 100)
+        FrameTicker.shared.addCallback(sender: self, sel: #selector(render))
+    }
+    @objc public func render(){
+        let r = try! Coke2DPath(coke: self.coke, vertex: [
+            Coke2DVertex(location: [0,0], color: [1,1,0,0.3]),
+            Coke2DVertex(location: [150,0], color: [1,0,0,0.3]),
+            Coke2DVertex(location: [0,150], color: [1,0,1,0.3]),
+        ])
+        let r2 = try! Coke2DPath(coke: self.coke, vertex: [
+            Coke2DVertex(location: [0,-30], color: [1,1,0,0.3]),
+            Coke2DVertex(location: [100,-50], color: [1,0,0,0.3]),
+            Coke2DVertex(location: [-30,120], color: [1,0,1,0.3]),
+        ])
+        try! self.coke.draw { e in
+            r.draw(encode: e)
+            r2.draw(encode: e)
+        }
+    }
+}

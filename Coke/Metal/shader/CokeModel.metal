@@ -50,3 +50,17 @@ fragment half4 cokeTriagleFragment(CokeModel in [[stage_in]],
     
     return half4(diffColor + ambientColor + specularColor,0.9);
 }
+
+
+
+vertex CokeModel2D coke2dvertex(CokeModel2DIn vertices [[stage_in]],
+                                const device float4x4 * cu [[buffer(1)]]){
+    CokeModel2D r;
+    r.location = *cu * float4(vertices.location.x,vertices.location.y,0,1);
+    r.color = vertices.color;
+    return r;
+}
+fragment half4 coke2dfragment(CokeModel2D vertices [[stage_in]]){
+    
+    return half4(vertices.color);
+}
