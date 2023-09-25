@@ -13,6 +13,7 @@ import AVKit
 import VideoToolbox
 import Accelerate
 import os
+import rtmp
 
 class Model:Codable{
     var name:String
@@ -372,9 +373,15 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
 
 //public class LiveStream{
 //    public let url:URL
-//    public init(url:URL,format_name:String) throws{
+//    private var codec:UnsafeMutablePointer<AVCodecContext>?
+//    public init(url:URL,format_name:String,codeid:AVCodecID) throws{
 //        self.url = url
+//        let codec = avcodec_find_encoder(codeid);
+//        let codec_context = avcodec_alloc_context3(codec);
+//        codec?.deallocate()
+//        self.codec = codec_context
 //        self.outFormat = AVOutputFormat()
+//        av_register_all();
 //        avformat_network_init()
 //        var temp:UnsafeMutablePointer<AVFormatContext>?;
 //        avformat_alloc_output_context2(&temp, nil, format_name, url.absoluteString)
@@ -407,14 +414,19 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
 //    public func writePacket(pkt:UnsafeMutablePointer<AVPacket>){
 //        av_interleaved_write_frame(self.ctx, pkt)
 //    }
-//    public func writeRawData(cmsample:CMSampleBuffer) throws{
-//
+//    public func writeSampleBuffer(cmsample:CMSampleBuffer) throws{
+//        let pack = av_packet_alloc()
+////        vtenc_cm_to_avpacket(self.codec, cmsample, pack, nil);
+//        guard let pack else {throw NSError(domain: "create packet fail", code: 0, userInfo: nil)}
+//        self.writePacket(pkt: pack)
+//        av_free(pack);
 //    }
 //
 //    deinit{
 //        avformat_network_deinit()
 //        avio_close(self.avio)
 //        avformat_free_context(ctx)
+//        avcodec_free_context(&self.codec)
 //    }
 //    public private(set) var outFormat:AVOutputFormat
 //    public private(set) var stream:AVStream

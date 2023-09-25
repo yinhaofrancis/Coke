@@ -12,8 +12,24 @@
 		A922CCEF2AB86D2600E4C8C0 /* CokeLighting.metal in Sources */ = {isa = PBXBuildFile; fileRef = A922CCEC2AB86D2600E4C8C0 /* CokeLighting.metal */; };
 		A922CCF02AB86D2600E4C8C0 /* CokeLighting.h in Headers */ = {isa = PBXBuildFile; fileRef = A922CCED2AB86D2600E4C8C0 /* CokeLighting.h */; };
 		A923536F2AAD6ECD00FFF763 /* CokeAudioConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A923536E2AAD6ECD00FFF763 /* CokeAudioConverter.swift */; };
-		A93B679B2AC12DF30020A4FC /* FFmpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93B679A2AC12DF30020A4FC /* FFmpeg.framework */; };
-		A93B679C2AC12DF30020A4FC /* FFmpeg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A93B679A2AC12DF30020A4FC /* FFmpeg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A93B67C42AC158D50020A4FC /* rtmp.h in Headers */ = {isa = PBXBuildFile; fileRef = A93B67C32AC158D50020A4FC /* rtmp.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A93B67C72AC158D50020A4FC /* rtmp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93B67C12AC158D50020A4FC /* rtmp.framework */; };
+		A93B67C82AC158D50020A4FC /* rtmp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A93B67C12AC158D50020A4FC /* rtmp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A93B67DB2AC1591D0020A4FC /* parseurl.c in Sources */ = {isa = PBXBuildFile; fileRef = A93B67CC2AC1591C0020A4FC /* parseurl.c */; };
+		A93B67DC2AC1591D0020A4FC /* bytes.h in Headers */ = {isa = PBXBuildFile; fileRef = A93B67CD2AC1591C0020A4FC /* bytes.h */; };
+		A93B67DD2AC1591D0020A4FC /* http.h in Headers */ = {isa = PBXBuildFile; fileRef = A93B67CE2AC1591C0020A4FC /* http.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A93B67DE2AC1591D0020A4FC /* log.h in Headers */ = {isa = PBXBuildFile; fileRef = A93B67CF2AC1591C0020A4FC /* log.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A93B67DF2AC1591D0020A4FC /* rtmp_sys.h in Headers */ = {isa = PBXBuildFile; fileRef = A93B67D02AC1591C0020A4FC /* rtmp_sys.h */; };
+		A93B67E02AC1591D0020A4FC /* amf.h in Headers */ = {isa = PBXBuildFile; fileRef = A93B67D12AC1591C0020A4FC /* amf.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A93B67E12AC1591D0020A4FC /* rtmp.c in Sources */ = {isa = PBXBuildFile; fileRef = A93B67D22AC1591C0020A4FC /* rtmp.c */; };
+		A93B67E22AC1591D0020A4FC /* hashswf.c in Sources */ = {isa = PBXBuildFile; fileRef = A93B67D32AC1591C0020A4FC /* hashswf.c */; };
+		A93B67E32AC1591D0020A4FC /* log.c in Sources */ = {isa = PBXBuildFile; fileRef = A93B67D42AC1591C0020A4FC /* log.c */; };
+		A93B67E42AC1591D0020A4FC /* error.c in Sources */ = {isa = PBXBuildFile; fileRef = A93B67D52AC1591C0020A4FC /* error.c */; };
+		A93B67E52AC1591D0020A4FC /* dh.h in Headers */ = {isa = PBXBuildFile; fileRef = A93B67D62AC1591C0020A4FC /* dh.h */; };
+		A93B67E62AC1591D0020A4FC /* amf.c in Sources */ = {isa = PBXBuildFile; fileRef = A93B67D72AC1591C0020A4FC /* amf.c */; };
+		A93B67E72AC1591D0020A4FC /* dhgroups.h in Headers */ = {isa = PBXBuildFile; fileRef = A93B67D82AC1591C0020A4FC /* dhgroups.h */; };
+		A93B67E82AC1591D0020A4FC /* handshake.h in Headers */ = {isa = PBXBuildFile; fileRef = A93B67D92AC1591C0020A4FC /* handshake.h */; };
+		A93B67E92AC1591D0020A4FC /* error.h in Headers */ = {isa = PBXBuildFile; fileRef = A93B67DA2AC1591D0020A4FC /* error.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9A40D192AB4C162000DB84A /* CokeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A40D182AB4C162000DB84A /* CokeModel.swift */; };
 		A9B1F52226B6380500E157A4 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B1F52126B6380500E157A4 /* DetailViewController.swift */; };
 		A9C8D4E42AA6400200C23FC6 /* CodeVideoDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8D4E32AA6400200C23FC6 /* CodeVideoDecoder.swift */; };
@@ -48,6 +64,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		A93B67C52AC158D50020A4FC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A9D1C9AA26B3086500F4421B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A93B67C02AC158D50020A4FC;
+			remoteInfo = rtmp;
+		};
 		A9D1C9D326B308B100F4421B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A9D1C9AA26B3086500F4421B /* Project object */;
@@ -65,7 +88,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				A9D1C9D626B308B100F4421B /* Coke.framework in Embed Frameworks */,
-				A93B679C2AC12DF30020A4FC /* FFmpeg.framework in Embed Frameworks */,
+				A93B67C82AC158D50020A4FC /* rtmp.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -79,7 +102,23 @@
 		A922CCEC2AB86D2600E4C8C0 /* CokeLighting.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = CokeLighting.metal; sourceTree = "<group>"; };
 		A922CCED2AB86D2600E4C8C0 /* CokeLighting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CokeLighting.h; sourceTree = "<group>"; };
 		A923536E2AAD6ECD00FFF763 /* CokeAudioConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeAudioConverter.swift; sourceTree = "<group>"; };
-		A93B679A2AC12DF30020A4FC /* FFmpeg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FFmpeg.framework; sourceTree = "<group>"; };
+		A93B67C12AC158D50020A4FC /* rtmp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = rtmp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A93B67C32AC158D50020A4FC /* rtmp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rtmp.h; sourceTree = "<group>"; };
+		A93B67CC2AC1591C0020A4FC /* parseurl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = parseurl.c; sourceTree = "<group>"; };
+		A93B67CD2AC1591C0020A4FC /* bytes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bytes.h; sourceTree = "<group>"; };
+		A93B67CE2AC1591C0020A4FC /* http.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = http.h; sourceTree = "<group>"; };
+		A93B67CF2AC1591C0020A4FC /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
+		A93B67D02AC1591C0020A4FC /* rtmp_sys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rtmp_sys.h; sourceTree = "<group>"; };
+		A93B67D12AC1591C0020A4FC /* amf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = amf.h; sourceTree = "<group>"; };
+		A93B67D22AC1591C0020A4FC /* rtmp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rtmp.c; sourceTree = "<group>"; };
+		A93B67D32AC1591C0020A4FC /* hashswf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hashswf.c; sourceTree = "<group>"; };
+		A93B67D42AC1591C0020A4FC /* log.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = log.c; sourceTree = "<group>"; };
+		A93B67D52AC1591C0020A4FC /* error.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = error.c; sourceTree = "<group>"; };
+		A93B67D62AC1591C0020A4FC /* dh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dh.h; sourceTree = "<group>"; };
+		A93B67D72AC1591C0020A4FC /* amf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = amf.c; sourceTree = "<group>"; };
+		A93B67D82AC1591C0020A4FC /* dhgroups.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dhgroups.h; sourceTree = "<group>"; };
+		A93B67D92AC1591C0020A4FC /* handshake.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = handshake.h; sourceTree = "<group>"; };
+		A93B67DA2AC1591D0020A4FC /* error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = error.h; sourceTree = "<group>"; };
 		A9A40D182AB4C162000DB84A /* CokeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeModel.swift; sourceTree = "<group>"; };
 		A9B1F52126B6380500E157A4 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		A9C8D4E32AA6400200C23FC6 /* CodeVideoDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeVideoDecoder.swift; sourceTree = "<group>"; };
@@ -117,12 +156,19 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		A93B67BE2AC158D50020A4FC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A9D1C9AF26B3086500F4421B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				A9D1C9D526B308B100F4421B /* Coke.framework in Frameworks */,
-				A93B679B2AC12DF30020A4FC /* FFmpeg.framework in Frameworks */,
+				A93B67C72AC158D50020A4FC /* rtmp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,12 +182,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A93B67992AC12DF30020A4FC /* Frameworks */ = {
+		A93B67C22AC158D50020A4FC /* rtmp */ = {
 			isa = PBXGroup;
 			children = (
-				A93B679A2AC12DF30020A4FC /* FFmpeg.framework */,
+				A93B67D72AC1591C0020A4FC /* amf.c */,
+				A93B67D12AC1591C0020A4FC /* amf.h */,
+				A93B67CD2AC1591C0020A4FC /* bytes.h */,
+				A93B67D62AC1591C0020A4FC /* dh.h */,
+				A93B67D82AC1591C0020A4FC /* dhgroups.h */,
+				A93B67D52AC1591C0020A4FC /* error.c */,
+				A93B67DA2AC1591D0020A4FC /* error.h */,
+				A93B67D92AC1591C0020A4FC /* handshake.h */,
+				A93B67D32AC1591C0020A4FC /* hashswf.c */,
+				A93B67CE2AC1591C0020A4FC /* http.h */,
+				A93B67D42AC1591C0020A4FC /* log.c */,
+				A93B67CF2AC1591C0020A4FC /* log.h */,
+				A93B67CC2AC1591C0020A4FC /* parseurl.c */,
+				A93B67D02AC1591C0020A4FC /* rtmp_sys.h */,
+				A93B67D22AC1591C0020A4FC /* rtmp.c */,
+				A93B67C32AC158D50020A4FC /* rtmp.h */,
 			);
-			name = Frameworks;
+			path = rtmp;
 			sourceTree = "<group>";
 		};
 		A9C8D4E72AA78BDF00C23FC6 /* Audio */ = {
@@ -159,8 +220,8 @@
 			children = (
 				A9D1C9B426B3086500F4421B /* CokeVideo */,
 				A9D1C9CF26B308B100F4421B /* Coke */,
+				A93B67C22AC158D50020A4FC /* rtmp */,
 				A9D1C9B326B3086500F4421B /* Products */,
-				A93B67992AC12DF30020A4FC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -169,6 +230,7 @@
 			children = (
 				A9D1C9B226B3086500F4421B /* CokeVideo.app */,
 				A9D1C9CE26B308B100F4421B /* Coke.framework */,
+				A93B67C12AC158D50020A4FC /* rtmp.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -266,6 +328,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		A93B67BC2AC158D50020A4FC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A93B67DD2AC1591D0020A4FC /* http.h in Headers */,
+				A93B67DE2AC1591D0020A4FC /* log.h in Headers */,
+				A93B67E02AC1591D0020A4FC /* amf.h in Headers */,
+				A93B67C42AC158D50020A4FC /* rtmp.h in Headers */,
+				A93B67E92AC1591D0020A4FC /* error.h in Headers */,
+				A93B67DC2AC1591D0020A4FC /* bytes.h in Headers */,
+				A93B67E52AC1591D0020A4FC /* dh.h in Headers */,
+				A93B67E82AC1591D0020A4FC /* handshake.h in Headers */,
+				A93B67E72AC1591D0020A4FC /* dhgroups.h in Headers */,
+				A93B67DF2AC1591D0020A4FC /* rtmp_sys.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A9D1C9C926B308B100F4421B /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -277,6 +356,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		A93B67C02AC158D50020A4FC /* rtmp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A93B67C92AC158D50020A4FC /* Build configuration list for PBXNativeTarget "rtmp" */;
+			buildPhases = (
+				A93B67BC2AC158D50020A4FC /* Headers */,
+				A93B67BD2AC158D50020A4FC /* Sources */,
+				A93B67BE2AC158D50020A4FC /* Frameworks */,
+				A93B67BF2AC158D50020A4FC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = rtmp;
+			productName = rtmp;
+			productReference = A93B67C12AC158D50020A4FC /* rtmp.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		A9D1C9B126B3086500F4421B /* CokeVideo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A9D1C9C626B3086600F4421B /* Build configuration list for PBXNativeTarget "CokeVideo" */;
@@ -290,6 +387,7 @@
 			);
 			dependencies = (
 				A9D1C9D426B308B100F4421B /* PBXTargetDependency */,
+				A93B67C62AC158D50020A4FC /* PBXTargetDependency */,
 			);
 			name = CokeVideo;
 			productName = CokeVideo;
@@ -324,6 +422,9 @@
 				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					A93B67C02AC158D50020A4FC = {
+						CreatedOnToolsVersion = 15.0;
+					};
 					A9D1C9B126B3086500F4421B = {
 						CreatedOnToolsVersion = 12.5.1;
 					};
@@ -348,11 +449,19 @@
 			targets = (
 				A9D1C9B126B3086500F4421B /* CokeVideo */,
 				A9D1C9CD26B308B100F4421B /* Coke */,
+				A93B67C02AC158D50020A4FC /* rtmp */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		A93B67BF2AC158D50020A4FC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A9D1C9B026B3086500F4421B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -373,6 +482,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		A93B67BD2AC158D50020A4FC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A93B67E62AC1591D0020A4FC /* amf.c in Sources */,
+				A93B67E32AC1591D0020A4FC /* log.c in Sources */,
+				A93B67E12AC1591D0020A4FC /* rtmp.c in Sources */,
+				A93B67DB2AC1591D0020A4FC /* parseurl.c in Sources */,
+				A93B67E22AC1591D0020A4FC /* hashswf.c in Sources */,
+				A93B67E42AC1591D0020A4FC /* error.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A9D1C9AE26B3086500F4421B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -420,6 +542,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		A93B67C62AC158D50020A4FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A93B67C02AC158D50020A4FC /* rtmp */;
+			targetProxy = A93B67C52AC158D50020A4FC /* PBXContainerItemProxy */;
+		};
 		A9D1C9D426B308B100F4421B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A9D1C9CD26B308B100F4421B /* Coke */;
@@ -439,6 +566,82 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		A93B67CA2AC158D50020A4FC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = JYCHA46QC4;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.francis.rtmp;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		A93B67CB2AC158D50020A4FC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = JYCHA46QC4;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.francis.rtmp;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		A9D1C9C426B3086600F4421B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -579,10 +782,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/CokeVideo/FFmpeg-iOS/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.CokeVideo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -615,10 +815,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/CokeVideo/FFmpeg-iOS/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.CokeVideo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -711,6 +908,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		A93B67C92AC158D50020A4FC /* Build configuration list for PBXNativeTarget "rtmp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A93B67CA2AC158D50020A4FC /* Debug */,
+				A93B67CB2AC158D50020A4FC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A9D1C9AD26B3086500F4421B /* Build configuration list for PBXProject "CokeVideo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
