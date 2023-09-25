@@ -12,6 +12,8 @@
 		A922CCEF2AB86D2600E4C8C0 /* CokeLighting.metal in Sources */ = {isa = PBXBuildFile; fileRef = A922CCEC2AB86D2600E4C8C0 /* CokeLighting.metal */; };
 		A922CCF02AB86D2600E4C8C0 /* CokeLighting.h in Headers */ = {isa = PBXBuildFile; fileRef = A922CCED2AB86D2600E4C8C0 /* CokeLighting.h */; };
 		A923536F2AAD6ECD00FFF763 /* CokeAudioConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A923536E2AAD6ECD00FFF763 /* CokeAudioConverter.swift */; };
+		A93B679B2AC12DF30020A4FC /* FFmpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93B679A2AC12DF30020A4FC /* FFmpeg.framework */; };
+		A93B679C2AC12DF30020A4FC /* FFmpeg.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A93B679A2AC12DF30020A4FC /* FFmpeg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A9A40D192AB4C162000DB84A /* CokeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A40D182AB4C162000DB84A /* CokeModel.swift */; };
 		A9B1F52226B6380500E157A4 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B1F52126B6380500E157A4 /* DetailViewController.swift */; };
 		A9C8D4E42AA6400200C23FC6 /* CodeVideoDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C8D4E32AA6400200C23FC6 /* CodeVideoDecoder.swift */; };
@@ -63,6 +65,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				A9D1C9D626B308B100F4421B /* Coke.framework in Embed Frameworks */,
+				A93B679C2AC12DF30020A4FC /* FFmpeg.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -76,6 +79,7 @@
 		A922CCEC2AB86D2600E4C8C0 /* CokeLighting.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = CokeLighting.metal; sourceTree = "<group>"; };
 		A922CCED2AB86D2600E4C8C0 /* CokeLighting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CokeLighting.h; sourceTree = "<group>"; };
 		A923536E2AAD6ECD00FFF763 /* CokeAudioConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeAudioConverter.swift; sourceTree = "<group>"; };
+		A93B679A2AC12DF30020A4FC /* FFmpeg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FFmpeg.framework; sourceTree = "<group>"; };
 		A9A40D182AB4C162000DB84A /* CokeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeModel.swift; sourceTree = "<group>"; };
 		A9B1F52126B6380500E157A4 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		A9C8D4E32AA6400200C23FC6 /* CodeVideoDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeVideoDecoder.swift; sourceTree = "<group>"; };
@@ -118,6 +122,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A9D1C9D526B308B100F4421B /* Coke.framework in Frameworks */,
+				A93B679B2AC12DF30020A4FC /* FFmpeg.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +136,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A93B67992AC12DF30020A4FC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A93B679A2AC12DF30020A4FC /* FFmpeg.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A9C8D4E72AA78BDF00C23FC6 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
@@ -147,6 +160,7 @@
 				A9D1C9B426B3086500F4421B /* CokeVideo */,
 				A9D1C9CF26B308B100F4421B /* Coke */,
 				A9D1C9B326B3086500F4421B /* Products */,
+				A93B67992AC12DF30020A4FC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -555,7 +569,6 @@
 				DEVELOPMENT_TEAM = JYCHA46QC4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/ffmpeg",
 					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "";
@@ -592,7 +605,6 @@
 				DEVELOPMENT_TEAM = JYCHA46QC4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/ffmpeg",
 					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "";

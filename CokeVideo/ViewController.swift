@@ -35,7 +35,7 @@ class ViewController: UITableViewController,UISearchBarDelegate {
     public var window:UIWindow = UIWindow(frame: UIScreen.main.bounds)
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.window.makeKeyAndVisible()
         self.window.isUserInteractionEnabled = false;
         self.window.isHidden = false
@@ -63,8 +63,8 @@ class ViewController: UITableViewController,UISearchBarDelegate {
                 self.data = try JSONDecoder().decode([Model].self, from: data)
             }
         }catch{
-            
-        }        
+
+        }
         self.actions = [
             UITableViewRowAction(style: .destructive, title: "删除") { (a, index) in
                 if #available(iOS 11.0, *) {
@@ -74,7 +74,7 @@ class ViewController: UITableViewController,UISearchBarDelegate {
                         try? self.saveData()
                         try? CokeVideoLoader(url: u).downloader.storage.delete()
                     } completion: { (_) in
-                        
+
                     }
                 } else {
                     let u = self.data.remove(at: index.row).url
@@ -105,7 +105,7 @@ class ViewController: UITableViewController,UISearchBarDelegate {
                 }
             }
         ]
-        
+
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -150,7 +150,7 @@ class ViewController: UITableViewController,UISearchBarDelegate {
         }
         self.data.append(contentsOf: a)
         self.tableView.reloadData()
-        
+
         try? self.saveData()
         self.view.window?.endEditing(true)
     }
@@ -171,7 +171,7 @@ class ViewController: UITableViewController,UISearchBarDelegate {
         }
         print("Cancel")
         RunLoop.main.run(mode: .init("CC"), before: Date(timeIntervalSinceNow: 100))
-        
+
     }
     func saveData() throws{
         do {
@@ -182,8 +182,8 @@ class ViewController: UITableViewController,UISearchBarDelegate {
             throw error
         }
     }
-    
-    
+
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "detail"{
             let des:DetailViewController = segue.destination as! DetailViewController
@@ -204,12 +204,12 @@ class CameraViewController:UIViewController{
     }
     public var encode:CodeVideoEncoder?
     public var decode:CokeVideoDecoder?
-    
+
     public var file:CokeFile?
 
     public lazy var camera:CokeCapture = {
         if self.encode == nil{
-            
+
             self.encode = try? CodeVideoEncoder(width: 720, height: 1280)
             self.encode?.setBframe(bframe: true)
             if #available(iOS 15.0, *) {
@@ -217,7 +217,7 @@ class CameraViewController:UIViewController{
             } else {
                 self.encode?.setQuality(quality: 0.3)
             }
-            
+
             self.encode?.setProfileLevel(value: kVTProfileLevel_H264_Main_AutoLevel)
             self.encode?.setMaxKeyFrameInterval(maxKeyFrameInterval: 60)
             self.encode?.setColorSpace(vcs: .VCS_2100_HLG)
@@ -237,9 +237,9 @@ class CameraViewController:UIViewController{
         }
         return try! CokeCapture{[weak self] sample in
 
-            
+
             if let buffer = VideoEncoderBuffer(sample: sample)  {
-                
+
                 self?.encode?.encode(buffer: buffer, callback: { i, f, e, index in
                     guard let e else { return }
                     AppDelegate.video.append(e);
@@ -250,25 +250,25 @@ class CameraViewController:UIViewController{
                     self?.display.render(pixelBuffer: px)
                 }
             }else{
-                
+
                 AppDelegate.audio.append(sample);
                 print(sample.presentationTimeStamp.seconds,"a \(sample.dataBuffer?.dataLength)")
             }
-            
+
         }
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+
         AppDelegate.video.removeAll()
         AppDelegate.audio.removeAll()
         self.display.videoFilter = CokeGaussBackgroundFilter(configuration: .defaultConfiguration)
-        
+
         self.camera.start()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-      
+
     }
     deinit{
         self.camera.stop()
@@ -291,19 +291,19 @@ class CameraViewController:UIViewController{
 
 
 class outViewController:UIViewController,CokeAudioRecoderOutput{
-    
+
     func handle(recorder: Coke.CokeAudioRecorder, output: Coke.CokeAudioOutputBuffer) {
 
         guard let out = encoder?.encode(buffer: output) else { return }
         guard let out2 = self.decoder?.decode(buffer: out) else { return }
         self.buffer.append(out2)
     }
-    
+
 
     public var render:CokeSampleView{
         return self.view as! CokeSampleView
     }
-    
+
     let b = UIButton(type: .close)
 
     public var buffer:[CokeAudioOutputBuffer] = []
@@ -321,7 +321,7 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
         self.decoder = try? CokeAudioConverter(decode: self.encoder!.destination)
         self.player = try! CokeAudioPlayer(audioDiscription: self.decoder!.destination)
         b.frame = CGRect(x: 0, y: 200, width: 88, height: 88)
-        
+
         self.view .addSubview(b)
         self.view.addConstraints([
             b.centerXAnchor .constraint(equalTo: self.view.centerXAnchor),
@@ -334,7 +334,7 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
         b.translatesAutoresizingMaskIntoConstraints = false;
         b .addTarget(self, action: #selector(down), for: .touchDown)
         b .addTarget(self, action: #selector(up), for: .touchUpInside)
-        
+
         if(AppDelegate.video.count > 0 && AppDelegate.audio.count > 0){
             if AppDelegate.video.first!.presentationTimeStamp < AppDelegate.audio.first!.presentationTimeStamp {
                 self.render.sync.setRate(1, time: AppDelegate.video.first!.presentationTimeStamp)
@@ -355,7 +355,7 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
         self.decoder?.reset()
         self.player = try! CokeAudioPlayer(audioDiscription: self.decoder!.destination)
 //        self.recoder?.reset()
-    
+
         try? AVAudioSession.sharedInstance().setCategory(.record)
         self.recoder?.start()
     }
@@ -383,7 +383,7 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
 //        }
 //        self.ctx = temp
 //        self.outFormat = temp.pointee.oformat.pointee
-//        
+//
 //        guard let streamPtr = avformat_new_stream(self.ctx, nil) else { throw NSError(domain: "create stream fail", code: 1, userInfo: nil) }
 //        self.stream = streamPtr.pointee
 //    }
@@ -393,7 +393,7 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
 //            throw NSError(domain: "open stream fail,url:\(self.url)", code: 2, userInfo: nil);
 //        }
 //        self.avio = self.ctx.pointee.pb
-//        
+//
 //    }
 //    public func close() throws{
 //        av_write_trailer(self.ctx)
@@ -408,9 +408,9 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
 //        av_interleaved_write_frame(self.ctx, pkt)
 //    }
 //    public func writeRawData(cmsample:CMSampleBuffer) throws{
-//        
+//
 //    }
-//    
+//
 //    deinit{
 //        avformat_network_deinit()
 //        avio_close(self.avio)
@@ -420,8 +420,8 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
 //    public private(set) var stream:AVStream
 //    public private(set) var ctx:UnsafeMutablePointer<AVFormatContext>
 //    public private(set) var avio:UnsafeMutablePointer<AVIOContext>?
-//    
-//    
+//
+//
 //    public enum VideoCodecType{
 //        case h264
 //        case hevc
