@@ -36,7 +36,6 @@ class ViewController: UITableViewController,UISearchBarDelegate {
     public var window:UIWindow = UIWindow(frame: UIScreen.main.bounds)
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.window.makeKeyAndVisible()
         self.window.isUserInteractionEnabled = false;
         self.window.isHidden = false

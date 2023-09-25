@@ -37,6 +37,17 @@ extension simd_float4x4 {
             [0,0,1,0]
         ])
     }
+    public static func orthographic(bottom:Float,top:Float,left:Float,right:Float,near:Float,far:Float) -> simd_float4x4{
+
+        return simd_float4x4(rows: [
+            [2 / (right - left),0,0,0],
+            [0, 2 / (top - bottom),0,0],
+            [0,0,-2 / (far - near),0],
+            [-(right + left) / (right - left),
+              -(top + bottom) / (top - bottom),
+              -(far + near) / (far - near),1]
+        ])
+    }
     public static let identity:simd_float4x4 = {
         return simd_float4x4(rows: [
             [1,0,0,0],
@@ -374,11 +385,14 @@ public class CokeBoxModel:CokeModel{
         let desc = render.newRenderPipelineDesciptor()
         desc.rasterSampleCount = AntialiasingSampleCount
         desc.sampleCount = AntialiasingSampleCount
-//        desc.colorAttachments[0].sourceRGBBlendFactor = .blendAlpha
-//        desc.colorAttachments[0].destinationRGBBlendFactor = .oneMinusSourceAlpha
-//        desc.colorAttachments[0].sourceAlphaBlendFactor = .one
-//        desc.colorAttachments[0].destinationAlphaBlendFactor = .oneMinusSourceAlpha
-//        desc.colorAttachments[0].isBlendingEnabled = true
+        
+        desc.colorAttachments[0].sourceRGBBlendFactor = .sourceAlpha
+        desc.colorAttachments[0].sourceAlphaBlendFactor = .sourceAlpha
+        desc.colorAttachments[0].destinationRGBBlendFactor = .oneMinusSourceAlpha
+        desc.colorAttachments[0].destinationAlphaBlendFactor = .oneMinusSourceAlpha
+        desc.colorAttachments[0].isBlendingEnabled = true
+        desc.colorAttachments[0].rgbBlendOperation = .add
+        desc.colorAttachments[0].alphaBlendOperation = .add
         desc.fragmentFunction = fg
         desc.vertexFunction = ct
         
