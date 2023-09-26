@@ -189,11 +189,9 @@ public struct Coke2DVertex{
     }
 }
 public struct Coke2DPath{
-    public var vertex:[Coke2DVertex]
+    public var vertexCount:Int
     public var index:[UInt32] = []
-    public var plain:[Float]{
-        self.vertex.flatMap{$0.vertex}
-    }
+    public var plain:[Float]
     public static func triangle(coke:Coke2D,
                                 point1:simd_float2,
                                 point2:simd_float2,
@@ -206,14 +204,18 @@ public struct Coke2DPath{
         ])
     }
     public init(coke:Coke2D,vertex:[Coke2DVertex]) throws{
+        try self.init(coke: coke, value: vertex.flatMap{$0.vertex}, vertexCount: vertex.count, vertexDescriptor: vertex.first?.vertexDescription)
+    }
+    public init(coke:Coke2D,value:[Float],vertexCount:Int,vertexDescriptor:MTLVertexDescriptor?) throws{
         let desc = MTLRenderPipelineDescriptor()
-        self.vertex = vertex
+        self.plain = value
+        self.vertexCount = vertexCount
         desc.colorAttachments[0].pixelFormat = .bgra8Unorm
-        desc.depthAttachmentPixelFormat = .depth32Float_stencil8;
-        desc.stencilAttachmentPixelFormat = .depth32Float_stencil8
+//        desc.depthAttachmentPixelFormat = .depth32Float_stencil8;
+//        desc.stencilAttachmentPixelFormat = .depth32Float_stencil8
         desc.vertexFunction = coke.shaderLibrary?.makeFunction(name: "coke2dvertex")
         desc.fragmentFunction = coke.shaderLibrary?.makeFunction(name: "coke2dfragment")
-        desc.vertexDescriptor = vertex.first?.vertexDescription
+        desc.vertexDescriptor = vertexDescriptor
         desc.colorAttachments[0].sourceRGBBlendFactor = .sourceAlpha
         desc.colorAttachments[0].sourceAlphaBlendFactor = .sourceAlpha
         desc.colorAttachments[0].destinationRGBBlendFactor = .oneMinusSourceAlpha
@@ -229,8 +231,9 @@ public struct Coke2DPath{
     public func draw(encode:MTLRenderCommandEncoder){
         encode.setRenderPipelineState(self.state)
         let p = self.plain
-        encode.setVertexBytes(p, length: p.count * MemoryLayout<Float>.size, index: 0)
-        encode.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: self.vertex.count)
+        let buffer = encode.device.makeBuffer(bytes: p, length: p.count * MemoryLayout<Float>.size)
+        encode.setVertexBuffer(buffer, offset: 0, index: 0)
+        encode.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: self.vertexCount)
     }
 }
 public class Coke2D{
@@ -243,13 +246,17 @@ public class Coke2D{
     private func loadDefaultLibrary() throws{
         self.shaderLibrary = try self.device.makeDefaultLibrary(bundle: Bundle(for: CokeComputer.self))
     }
-    static let scale = 3
-    private var width:Int
-    private var height:Int
-    public init(w:UInt32,h:UInt32) throws {
+    public lazy private(set) var loader:MTKTextureLoader = {
+        MTKTextureLoader(device: self.device)
+    }()
+    public static let scale = 3
+    public private(set) var width:Int
+    public private(set) var height:Int
+    public var mat:simd_float4x4 = simd_float4x4.identity
+    public init(w:UInt32,h:UInt32,mtdevice:MTLDevice? = MTLCreateSystemDefaultDevice()) throws {
         self.width = Int(w) * Coke2D.scale
         self.height = Int(h) * Coke2D.scale
-        let device = try Coke2D.createDevice();
+        let device = try Coke2D.createDevice(device: mtdevice)
         self.device = device
         self.commandQueue = try Coke2D.createCommandQueue(device: device)
         self.depthStencil = try Coke2D.createTexture(w: self.width, h: self.height, pixelFormat: .depth32Float_stencil8, device: device)
@@ -257,48 +264,111 @@ public class Coke2D{
         renderPassDescription.colorAttachments[0].clearColor = MTLClearColor(red: 1, green: 1, blue: 1, alpha: 1)
         renderPassDescription.colorAttachments[0].loadAction = .clear
         renderPassDescription.colorAttachments[0].storeAction = .store
-        renderPassDescription.depthAttachment.clearDepth = 1;
-        renderPassDescription.depthAttachment.texture = self.depthStencil
-        renderPassDescription.depthAttachment.loadAction = .clear
-        renderPassDescription.depthAttachment.storeAction = .store
-        renderPassDescription.stencilAttachment.clearStencil = 1;
-        renderPassDescription.stencilAttachment.texture = self.depthStencil
-        renderPassDescription.stencilAttachment.loadAction = .clear
-        renderPassDescription.stencilAttachment.storeAction = .store
+//        renderPassDescription.depthAttachment.clearDepth = 1;
+//        renderPassDescription.depthAttachment.texture = self.depthStencil
+//        renderPassDescription.depthAttachment.loadAction = .clear
+//        renderPassDescription.depthAttachment.storeAction = .store
+//        renderPassDescription.stencilAttachment.clearStencil = 1;
+//        renderPassDescription.stencilAttachment.texture = self.depthStencil
+//        renderPassDescription.stencilAttachment.loadAction = .clear
+//        renderPassDescription.stencilAttachment.storeAction = .store
         self.layer = CAMetalLayer()
         self.layer.frame = CGRect(x: 0, y: 0, width: Int(w), height: Int(h))
         self.layer.contentsScale = CGFloat(Coke2D.scale);
         try self.loadDefaultLibrary()
     }
     
-    public func createCommandBuffer() throws ->MTLCommandBuffer{
+    public func begin() throws ->MTLCommandBuffer{
         guard let buffer = self.commandQueue.makeCommandBuffer() else { throw NSError(domain: "fail create command buffer", code: 5, userInfo: nil)}
         return buffer
     }
     
-    public func draw(call:(MTLRenderCommandEncoder)->Void) throws{
-        let buffer = try self.createCommandBuffer()
+    public func draw(buffer:MTLCommandBuffer, call:(MTLRenderCommandEncoder)->Void) throws{
         guard let drawable = self.layer.nextDrawable() else { return }
-        self.renderPassDescription.colorAttachments[0].texture = drawable.texture
+        let texture = drawable.texture
+        try self.drawIn(buffer: buffer, texture: texture, call: call)
+        buffer.present(drawable)
+    }
+    public func drawInto(buffer:MTLCommandBuffer,texture:MTLTexture, call:(MTLRenderCommandEncoder)->Void) throws{
+        try self.drawIn(buffer:buffer,texture: texture, call: call)
+    }
+    private func drawIn(buffer:MTLCommandBuffer,texture:MTLTexture, call:(MTLRenderCommandEncoder)->Void) throws{
+        self.renderPassDescription.colorAttachments[0].texture = texture
         guard let encoder = buffer.makeRenderCommandEncoder(descriptor: self.renderPassDescription) else {
             throw NSError(domain: "fail create encoder", code: 6)
         }
-        encoder.setViewport(MTLViewport(originX: 0, originY: 0, width: Double(self.width), height: Double(self.height), znear: -1, zfar: 1))
-        var mat = simd_float4x4.orthographic(bottom: Float(self.height / -2), top: Float(self.height / 2), left: Float(self.width / -2), right: Float(self.width / 2), near: -1, far: 1)
+//        encoder.setViewport(MTLViewport(originX: 0, originY: 0, width: Double(self.width), height: Double(self.height), znear: -1, zfar: 1))
+        var mat = self.mat
         encoder.setVertexBytes(&mat, length: MemoryLayout.size(ofValue: mat), index: 1)
         call(encoder)
         encoder.endEncoding()
+    }
+    public func draw(buffer:MTLCommandBuffer,texture:MTLTexture) throws{
+        self.layer.framebufferOnly = false
+        guard let drawable = self.layer.nextDrawable() else { throw NSError(domain: "drawable buffer fail", code: 7) }
+        let target = drawable.texture
+        let encod = buffer.makeBlitCommandEncoder()
+        encod?.copy(from: texture, to: target)
+        encod?.endEncoding()
         buffer.present(drawable)
+    }
+    public func copy(buffer:MTLCommandBuffer,texture:MTLTexture,to:MTLBuffer) throws{
+
+        let target = to
+        let encod = buffer.makeBlitCommandEncoder()
+        encod?.copy(from: texture, sourceSlice: 0, sourceLevel: 0, sourceOrigin: MTLOrigin(x: 0, y: 0, z: 0), sourceSize: MTLSize(width: texture.width, height: texture.height, depth: 1), to: to, destinationOffset: 0, destinationBytesPerRow:texture.width * 16, destinationBytesPerImage: texture.width * 16 * texture.height)
+        encod?.endEncoding()
+
+    }
+    public func copy(buffer:MTLCommandBuffer,from:MTLTexture,to:MTLTexture) throws{
+
+        let target = to
+        let encod = buffer.makeBlitCommandEncoder()
+        encod?.copy(from: from, to: to)
+        encod?.endEncoding()
+
+    }
+    
+    public func commit(buffer:MTLCommandBuffer){
         buffer.commit()
         buffer.waitUntilCompleted()
     }
+    public func compute(buffer:MTLCommandBuffer,call:(MTLComputeCommandEncoder)->Void) throws{
+        guard let encoder = buffer.makeComputeCommandEncoder() else { throw NSError(domain: "create compute shader fail", code: 7)}
+        call(encoder)
+        encoder.endEncoding()
+
+    }
+    public func computeSerial(buffer:MTLCommandBuffer,call:(MTLComputeCommandEncoder)->Void) throws{
+        guard let encoder = buffer.makeComputeCommandEncoder(dispatchType: .serial) else { throw NSError(domain: "create compute shader fail", code: 7)}
+        call(encoder)
+        encoder.endEncoding()
+
+    }
     
+    public func dispatchGroup(pixelSize:MTLSize,encoder:MTLComputeCommandEncoder){
+        let maxX = Int(sqrt(Double(self.device.maxThreadsPerThreadgroup.width)))
+        let maxY = Int(sqrt(Double(self.device.maxThreadsPerThreadgroup.height)))
+        let x = Int(ceil(Float(pixelSize.width) / Float(maxX)))
+        let y = Int(ceil(Float(pixelSize.height) / Float(maxY)))
+        let s = MTLSize(width: x, height: y, depth: 1)
+        encoder.dispatchThreadgroups(s, threadsPerThreadgroup: MTLSize(width: maxX, height: maxY, depth: 1))
+    }
+    public func dispatchSingleGroup(pixelSize:MTLSize,encoder:MTLComputeCommandEncoder){
+
+        encoder.dispatchThreadgroups(pixelSize, threadsPerThreadgroup: MTLSize(width: 1, height: 1, depth: 1))
+    }
     
+    public func createTexture(w:Int,h:Int) throws ->MTLTexture{
+        try Coke2D.createTexture(w: w, h: h, pixelFormat: .bgra8Unorm, device: self.device)
+    }
     
-    
-    
-    public static func createDevice() throws ->MTLDevice{
-        guard let d = MTLCreateSystemDefaultDevice() else { throw NSError(domain: "fail create device", code: 0, userInfo: nil)}
+    public func createBuffer(size:Int) throws ->MTLBuffer{
+        guard let buffer = self.device.makeBuffer(length: size,options: .storageModeShared) else { throw NSError(domain: "create buffer fail", code: 2)}
+        return buffer
+    }
+    public static func createDevice(device:MTLDevice?) throws ->MTLDevice{
+        guard let d = device ?? MTLCreateSystemDefaultDevice() else { throw NSError(domain: "fail create device", code: 0, userInfo: nil)}
         return d
     }
     
@@ -318,4 +388,55 @@ public class Coke2D{
         guard let queue = device.makeCommandQueue() else { throw NSError(domain: "create queue fail", code: 3)}
         return queue
     }
+}
+
+public protocol ComputeFilter{
+    func compute(encoder:MTLComputeCommandEncoder,coke:Coke2D);
+}
+
+public struct ComputeDiff:ComputeFilter{
+    public var origin:MTLTexture
+    public var diff:MTLTexture?
+    public var out:MTLTexture?
+    public init(coke:Coke2D,origin:MTLTexture) throws{
+        self.origin = origin
+        guard let fun = coke.shaderLibrary?.makeFunction(name: "coke_image_diff") else { throw NSError(domain: "create kernel shader fail", code: 0)}
+        self.state = try coke.device.makeComputePipelineState(function: fun)
+        self.out = try Coke2D.createTexture(w: origin.width, h: origin.height, pixelFormat: origin.pixelFormat, device: coke.device)
+    }
+    public init(coke:Coke2D,cg:CGImage) throws{
+        try self.init(coke: coke, origin: try coke.loader.newTexture(cgImage: cg))
+    }
+    public func compute(encoder: MTLComputeCommandEncoder,coke:Coke2D) {
+        encoder.setTexture(self.origin, index: 0)
+        encoder.setTexture(self.diff, index: 1)
+        encoder.setTexture(self.out, index: 2)
+        encoder.setComputePipelineState(self.state)
+        coke.dispatchGroup(pixelSize: MTLSize(width: self.origin.width, height: self.origin.height, depth: 1), encoder: encoder)
+    }
+    public var state:MTLComputePipelineState
+}
+
+public struct ComputeSum:ComputeFilter{
+
+    public var sum:UInt{
+        self.out.contents().assumingMemoryBound(to: UInt.self).pointee
+    }
+    public var out:MTLBuffer
+    public var texture:MTLTexture?
+    public init(coke:Coke2D) throws{
+        guard let fun = coke.shaderLibrary?.makeFunction(name: "coke_sum") else { throw NSError(domain: "create kernel shader fail", code: 0)}
+        self.state = try coke.device.makeComputePipelineState(function: fun)
+        guard let c = coke.device.makeBuffer(length: MemoryLayout<UInt>.size,options: .storageModeShared) else { throw NSError(domain: "create buffer fail", code: 1)}
+        self.out = c
+    }
+    public func compute(encoder: MTLComputeCommandEncoder,coke:Coke2D) {
+        self.out.contents().storeBytes(of: 0, as: UInt.self)
+        encoder.setTexture(self.texture, index: 0)
+        encoder.setComputePipelineState(self.state)
+        encoder.setBuffer(self.out, offset: 0, index: 0)
+        guard let texture else { return }
+        coke.dispatchSingleGroup(pixelSize: MTLSize(width: texture.width, height: texture.height, depth: 1), encoder: encoder)
+    }
+    public var state:MTLComputePipelineState
 }

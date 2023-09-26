@@ -387,7 +387,8 @@ public class render2dViewController:UIViewController{
             Coke2DVertex(location: [100,-50], color: [1,0,0,0.3]),
             Coke2DVertex(location: [-30,120], color: [1,0,1,0.3]),
         ])
-        try! self.coke.draw { e in
+        let b = try! self.coke.begin()
+        try! self.coke.draw(buffer: b) { e in
             r.draw(encode: e)
         }
     }

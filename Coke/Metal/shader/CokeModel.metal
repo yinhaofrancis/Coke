@@ -64,3 +64,20 @@ fragment half4 coke2dfragment(CokeModel2D vertices [[stage_in]]){
     
     return half4(vertices.color);
 }
+kernel void coke_image_diff(const texture2d<float, access::read> origin [[ texture(0) ]],
+                            texture2d<float, access::read> diff [[texture(1)]],
+                            texture2d<float, access::write> out [[texture(2)]],
+                            uint2 gid [[thread_position_in_grid]]){
+    float4 h = fabs(diff.read(gid) - origin.read(gid));
+    out.write(h, gid);
+}
+
+kernel void coke_sum(const texture2d<float, access::read> origin [[ texture(0) ]],
+                         uint2 gid [[thread_position_in_grid]],
+                         device atomic_uint * average  [[buffer(0)]]){
+    float4 f = origin.read(gid);
+    float sum = (f.x + f.y + f.z + f.w);
+    uint r = uint(clamp(sum, 0.0, 4.0) * 1024 * 1024 * 1024 * 1024 * 1024);
+    atomic_fetch_add_explicit(average, r, memory_order_relaxed);
+}
+
