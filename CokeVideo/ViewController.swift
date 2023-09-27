@@ -394,9 +394,9 @@ public class render2dViewController:UIViewController{
             }
             self.coke.commit(buffer: b)
         }
-        
+        let score = self.popu.gens.first!.score
         RunLoop.main.perform {
-            self.title = "\(self.popu.gens.first!.score)"
+            self.title = "\(score)"
         }
     }
 }

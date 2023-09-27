@@ -96,7 +96,7 @@ public class Population{
         gene.score = Double(sum.sum)
     }
     public func filter() throws{
-        for _ in 0 ..< 2 {
+        for _ in 0 ..< 20 {
             var ges:[Gene] = []
             for i in 0 ..< ges.count{
                 if gens[i].score < 0.0001{
