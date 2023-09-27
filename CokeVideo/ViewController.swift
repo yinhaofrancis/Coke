@@ -374,22 +374,26 @@ public class render2dViewController:UIViewController{
     let coke = try! Coke2D(w: 100, h: 100)
     public override func viewDidLoad() {
         super.viewDidLoad()
+
         self.view.layer.addSublayer(coke.layer)
         coke.layer.frame.origin = CGPoint(x: 100, y: 100)
         FrameTicker.shared.addCallback(sender: self, sel: #selector(render))
     }
+    lazy var out = try! self.coke.createTexture(w: self.coke.width, h: self.coke.height)
+    lazy var diffout = try! self.coke.createTexture(w: self.coke.width, h: self.coke.height)
+//    lazy var diff = try! ComputeDiff(coke: self.coke, cg: UIImage(named: "icon")!.cgImage!, type: .hamming)
+//    lazy var sum = try! ComputeSum(coke: self.coke)
+    lazy var popu = try! Population(count: 100, coke: self.coke, filterSource: UIImage(named: "icon")!.cgImage!)
     @objc public func render(){
-        let r = try! Coke2DPath(coke: self.coke, vertex: [
-            Coke2DVertex(location: [0,0], color: [1,1,0,0.3]),
-            Coke2DVertex(location: [150,0], color: [1,0,0,0.3]),
-            Coke2DVertex(location: [0,150], color: [1,0,1,0.3]),
-            Coke2DVertex(location: [0,-30], color: [1,1,0,0.3]),
-            Coke2DVertex(location: [100,-50], color: [1,0,0,0.3]),
-            Coke2DVertex(location: [-30,120], color: [1,0,1,0.3]),
-        ])
+        try! popu.filter()
+        let g = try! popu.gens.first?.path(coke: self.coke)
         let b = try! self.coke.begin()
         try! self.coke.draw(buffer: b) { e in
-            r.draw(encode: e)
+            g?.draw(encode: e)
+        }
+        self.coke.commit(buffer: b)
+        RunLoop.main.perform {
+            self.title = "\(self.popu.gens.first!.score)"
         }
     }
 }

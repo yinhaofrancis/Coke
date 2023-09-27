@@ -332,6 +332,7 @@ public class Coke2D{
     public func commit(buffer:MTLCommandBuffer){
         buffer.commit()
         buffer.waitUntilCompleted()
+        
     }
     public func compute(buffer:MTLCommandBuffer,call:(MTLComputeCommandEncoder)->Void) throws{
         guard let encoder = buffer.makeComputeCommandEncoder() else { throw NSError(domain: "create compute shader fail", code: 7)}
@@ -398,14 +399,20 @@ public struct ComputeDiff:ComputeFilter{
     public var origin:MTLTexture
     public var diff:MTLTexture?
     public var out:MTLTexture?
-    public init(coke:Coke2D,origin:MTLTexture) throws{
+    
+    public enum DiffType:String{
+        case average = "coke_image_diff"
+        case hamming = "coke_image_hamming_diff"
+    }
+    
+    public init(coke:Coke2D,origin:MTLTexture,type:DiffType) throws{
         self.origin = origin
-        guard let fun = coke.shaderLibrary?.makeFunction(name: "coke_image_diff") else { throw NSError(domain: "create kernel shader fail", code: 0)}
+        guard let fun = coke.shaderLibrary?.makeFunction(name: type.rawValue) else { throw NSError(domain: "create kernel shader fail", code: 0)}
         self.state = try coke.device.makeComputePipelineState(function: fun)
         self.out = try Coke2D.createTexture(w: origin.width, h: origin.height, pixelFormat: origin.pixelFormat, device: coke.device)
     }
-    public init(coke:Coke2D,cg:CGImage) throws{
-        try self.init(coke: coke, origin: try coke.loader.newTexture(cgImage: cg))
+    public init(coke:Coke2D,cg:CGImage,type:DiffType) throws{
+        try self.init(coke: coke, origin: try coke.loader.newTexture(cgImage: cg),type: type)
     }
     public func compute(encoder: MTLComputeCommandEncoder,coke:Coke2D) {
         encoder.setTexture(self.origin, index: 0)

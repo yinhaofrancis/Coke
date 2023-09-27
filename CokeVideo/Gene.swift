@@ -9,6 +9,8 @@ import Foundation
 import Coke
 import Metal
 import CoreGraphics
+import os
+
 public struct Gene{
     public var values:[Float] = []
     public var score:Double = 0
@@ -52,14 +54,15 @@ public class Population{
     public var gens:[Gene] = []
     public var coke:Coke2D
     public var filterSource:MTLTexture
-
+    lazy var texture = try! coke.createTexture(w: coke.width, h: coke.height)
+    lazy var out = try! coke.createTexture(w: coke.width, h: coke.height)
     private var diff:ComputeDiff
     private var sum:ComputeSum
     public init(count:Int,coke:Coke2D,filterSource:CGImage) throws{
         self.coke = coke
         self.filterSource = try coke.loader.newTexture(cgImage: filterSource)
         self.sum = try ComputeSum(coke: coke)
-        self.diff = try ComputeDiff(coke: coke, cg: filterSource)
+        self.diff = try ComputeDiff(coke: coke, cg: filterSource, type: .hamming)
         gens = (0 ..< count).map({ i in
             var g = Gene()
             try! self.filter(gene: &g)
@@ -67,13 +70,12 @@ public class Population{
         })
     }
     public func filter(gene:inout Gene) throws{
-        let texture = try coke.createTexture(w: coke.width, h: coke.height)
         let path = try gene.path(coke: coke)
         let buffer = try coke.begin();
         try coke.drawInto(buffer: buffer, texture: texture) { e in
             path.draw(encode: e)
         }
-        let out = try coke.createTexture(w: coke.width, h: coke.height)
+        
         diff.origin = texture;
         diff.diff = self.filterSource
         diff.out = out
@@ -82,20 +84,36 @@ public class Population{
             diff.compute(encoder: e, coke: coke)
             sum.compute(encoder: e, coke: coke)
         }
+        coke.commit(buffer: buffer)
         gene.score = Double(sum.sum)
     }
-    public func filter() throws{
-        var ges = self.gens
-        for i in 0 ..< self.gens.count{
-            if(Int.random(in: 0 ..< 10) < 4){
-                var new = self.gens[i].mutations()
+    public func filter() throws{        
+        for _ in 0 ..< 20 {
+            var ges = self.gens
+            for i in 0 ..< self.gens.count{
+                if(Int.random(in: 0 ..< 10) < 4){
+                    var new = self.gens[i].mutations()
+                    try self.filter(gene: &new);
+                    ges.append(new)
+                }
+                let randi = Int.random(in: 0 ..< self.gens.count)
+                var new = self.gens[i].exchange(gen: self.gens[randi])
                 try self.filter(gene: &new);
                 ges.append(new)
             }
-            let randi = Int.random(in: 0 ..< self.gens.count)
-            var new = self.gens[i].exchange(gen: self.gens[randi])
-            try self.filter(gene: &new);
-            ges.append(new)
+            ges.sort { a, b in
+                a.score < b.score
+            }
+            while(ges.count > self.gens.count){
+                let a = ges.removeLast()
+                if #available(iOS 14.0, *) {
+                    os_log("\(a.score)")
+                } else {
+                    // Fallback on earlier versions
+                }
+            }
+            self.gens = ges;
         }
+        
     }
 }

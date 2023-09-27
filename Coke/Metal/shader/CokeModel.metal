@@ -6,7 +6,8 @@
 //
 
 #include "CokeShaderDefine.h"
-
+#include <metal_stdlib>
+using namespace metal;
 
 vertex CokeModel cokeTriagle(CokeModelIn vertices [[stage_in]],
                               const device TransformUniform * um [[buffer(ShaderVertexWorldMatrixIndex)]], // world matrix
@@ -64,20 +65,53 @@ fragment half4 coke2dfragment(CokeModel2D vertices [[stage_in]]){
     
     return half4(vertices.color);
 }
-kernel void coke_image_diff(const texture2d<float, access::read> origin [[ texture(0) ]],
-                            texture2d<float, access::read> diff [[texture(1)]],
-                            texture2d<float, access::write> out [[texture(2)]],
+kernel void coke_image_diff(const texture2d<half, access::read> origin [[ texture(0) ]],
+                            texture2d<half, access::read> diff [[texture(1)]],
+                            texture2d<half, access::write> out [[texture(2)]],
                             uint2 gid [[thread_position_in_grid]]){
-    float4 h = fabs(diff.read(gid) - origin.read(gid));
+    half4 h = fabs(diff.read(gid) - origin.read(gid));
     out.write(h, gid);
 }
 
-kernel void coke_sum(const texture2d<float, access::read> origin [[ texture(0) ]],
+kernel void coke_sum(const texture2d<half, access::read> origin [[ texture(0) ]],
                          uint2 gid [[thread_position_in_grid]],
                          device atomic_uint * average  [[buffer(0)]]){
-    float4 f = origin.read(gid);
+    half4 f = origin.read(gid);
     float sum = (f.x + f.y + f.z + f.w);
-    uint r = uint(clamp(sum, 0.0, 4.0) * 1024 * 1024 * 1024 * 1024 * 1024);
+    uint r = uint(clamp(sum, 0.0, 4.0) * 1024);
     atomic_fetch_add_explicit(average, r, memory_order_relaxed);
 }
 
+
+kernel void coke_image_hamming_diff(const texture2d<half, access::read> origin [[ texture(0) ]],
+                            texture2d<half, access::read> diff [[texture(1)]],
+                            texture2d<half, access::write> out [[texture(2)]],
+                            uint2 gid [[thread_position_in_grid]]){
+
+    half4 diffColor = diff.read(gid);
+    half4 originColor = origin.read(gid);
+    float x = hammingDistanceFloat(diffColor.x, originColor.x);
+    float y = hammingDistanceFloat(diffColor.y, originColor.y);
+    float z = hammingDistanceFloat(diffColor.z, originColor.z);
+    float w = hammingDistanceFloat(diffColor.w, originColor.w);
+    out.write(half4(x,y,z,w), gid);
+}
+uint32_t colorHalfBitInt(half f)
+{
+    return (int)(f * 1000);
+}
+
+int hammingDistance(uint32_t a){
+    int c = 0;
+    for (int i = 0; i < 32; i++){
+        if (((a >> i) & 1) == 1){
+            c++;
+        }
+    }
+    return c;
+}
+half hammingDistanceFloat(half t1,half t2) {
+    uint32_t t3 = colorHalfBitInt(t1) ^ colorHalfBitInt(t2);
+
+    return clamp(half(hammingDistance(t3)), half(0.0), half(16.0)) / 16.0;
+}

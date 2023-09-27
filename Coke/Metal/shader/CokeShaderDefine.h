@@ -93,4 +93,8 @@ struct CokeModel2D{
     float2 textureVX;
 };
 
+uint32_t colorHalfBitInt(half f);
+int hammingDistance(uint32_t a);
+half hammingDistanceFloat(half t1,half t2);
+
 #endif /* CokeShaderDefine_h */
