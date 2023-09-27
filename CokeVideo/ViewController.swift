@@ -386,12 +386,15 @@ public class render2dViewController:UIViewController{
     lazy var popu = try! Population(count: 100, coke: self.coke, filterSource: UIImage(named: "icon")!.cgImage!)
     @objc public func render(){
         try! popu.filter()
-        let g = try! popu.gens.first?.path(coke: self.coke)
-        let b = try! self.coke.begin()
-        try! self.coke.draw(buffer: b) { e in
-            g?.draw(encode: e)
+        for i in popu.gens{
+            let g = try! i.path(coke: self.coke)
+            let b = try! self.coke.begin()
+            try! self.coke.draw(buffer: b) { e in
+                g.draw(encode: e)
+            }
+            self.coke.commit(buffer: b)
         }
-        self.coke.commit(buffer: b)
+        
         RunLoop.main.perform {
             self.title = "\(self.popu.gens.first!.score)"
         }
