@@ -97,7 +97,13 @@ public class Population{
     }
     public func filter() throws{
         for _ in 0 ..< 2 {
-            var ges = self.gens
+            var ges:[Gene] = []
+            for i in 0 ..< ges.count{
+                if gens[i].score < 0.0001{
+                    try self.filter(gene: &gens[i]);
+                }
+                ges.append(gens[i])
+            }
             for i in 0 ..< self.gens.count{
                 var new = self.gens[i].mutations(count: 5)
                 try self.filter(gene: &new);
