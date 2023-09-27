@@ -72,6 +72,12 @@ kernel void coke_image_diff(const texture2d<half, access::read> origin [[ textur
     half4 h = fabs(diff.read(gid) - origin.read(gid));
     out.write(h, gid);
 }
+kernel void coke_image_hamming(const texture2d<float, access::read> origin [[ texture(0) ]],
+                               texture2d<float, access::read> diff [[texture(1)]],
+                               texture2d<float, access::write> out [[texture(2)]],
+                               uint2 gid [[thread_position_in_grid]]){
+    
+}
 
 kernel void coke_sum(const texture2d<half, access::read> origin [[ texture(0) ]],
                          uint2 gid [[thread_position_in_grid]],

@@ -372,6 +372,8 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
 
 public class render2dViewController:UIViewController{
     let coke = try! Coke2D(w: 100, h: 100)
+    var texture:MTLTexture?
+    lazy var po = try! Population(count: 60, coke: self.coke, filterSource: UIImage(named: "icon")!.cgImage!)
     public override func viewDidLoad() {
         super.viewDidLoad()
 

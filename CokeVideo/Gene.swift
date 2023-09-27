@@ -22,8 +22,7 @@ public struct Gene:Codable{
             Float.random(in: -1 ... 1)
         })
     }
-    public func draw(coke:Coke2D) throws{
-        let texture = try coke.createTexture(w: coke.width, h: coke.height)
+    public mutating func draw(coke:Coke2D,texture:MTLTexture) throws{
         let path = try self.path(coke: coke)
         let buffer = try coke.begin();
         try coke.drawInto(buffer: buffer, texture: texture) { e in
@@ -49,6 +48,7 @@ public struct Gene:Codable{
                 g.values[i] = gen.values[i];
             }
         }
+        
         return g
     }
 }
@@ -80,7 +80,7 @@ public class Population{
     public func filter(gene:inout Gene) throws{
         let path = try gene.path(coke: coke)
         let buffer = try coke.begin();
-        try coke.drawInto(buffer: buffer, texture: texture) { e in
+        try coke.drawInto(buffer: buffer, texture: texture!) { e in
             path.draw(encode: e)
         }
         
@@ -134,6 +134,20 @@ public class Population{
         } else {
             // Fallback on earlier versions
         }
+        ges.sort { a, b in
+            a.score < b.score
+        }
+        while ges.count > 60 {
+            let a = ges.removeLast()
+            
+            if #available(iOS 14.0, *) {
+                os_log("coke __ remove \(a.score)")
+            } else {
+                // Fallback on earlier versions
+            }
+        }
+        self.gens = ges
+        
     }
     public static func parse(coke:Coke2D,filterSource:CGImage) ->Population{
         do{
