@@ -11,7 +11,7 @@ import Metal
 import CoreGraphics
 import os
 
-public struct Gene{
+public struct Gene:Codable{
     public var values:[Float] = []
     public var score:Double = 0
     public func path(coke:Coke2D) throws ->Coke2DPath {
@@ -62,16 +62,20 @@ public class Population{
     lazy var out = try! coke.createTexture(w: coke.width, h: coke.height)
     private var diff:ComputeDiff
     private var sum:ComputeSum
-    public init(count:Int,coke:Coke2D,filterSource:CGImage) throws{
+    public init(count:Int,coke:Coke2D,filterSource:CGImage,ngens:[Gene] = []) throws{
         self.coke = coke
         self.filterSource = try coke.loader.newTexture(cgImage: filterSource)
         self.sum = try ComputeSum(coke: coke)
         self.diff = try ComputeDiff(coke: coke, cg: filterSource, type: .hamming)
-        gens = (0 ..< count).map({ i in
-            var g = Gene()
-            try! self.filter(gene: &g)
-            return g
-        })
+        if ngens.count > 0{
+            self.gens = ngens
+        }else{
+            gens = (0 ..< count).map({ i in
+                var g = Gene()
+                try! self.filter(gene: &g)
+                return g
+            })
+        }
     }
     public func filter(gene:inout Gene) throws{
         let path = try gene.path(coke: coke)
@@ -92,7 +96,7 @@ public class Population{
         gene.score = Double(sum.sum)
     }
     public func filter() throws{
-        for _ in 0 ..< 20 {
+        for _ in 0 ..< 2 {
             var ges = self.gens
             for i in 0 ..< self.gens.count{
                 var new = self.gens[i].mutations(count: 5)
@@ -107,7 +111,7 @@ public class Population{
             ges.sort { a, b in
                 a.score < b.score
             }
-            while(ges.count > self.gens.count){
+            while(ges.count > self.gens.count || ges.count > 60){
                 let a = ges.removeLast()
                 if #available(iOS 14.0, *) {
                     os_log("\(a.score)")
@@ -116,6 +120,27 @@ public class Population{
                 }
             }
             self.gens = ges;
+        }
+        let data = try JSONEncoder().encode(self.gens)
+        if #available(iOS 16.0, *) {
+            let u = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: "data.json")
+            try data.write(to: u);
+        } else {
+            // Fallback on earlier versions
+        }
+    }
+    public static func parse(coke:Coke2D,filterSource:CGImage) ->Population{
+        do{
+            if #available(iOS 16.0, *) {
+                let u = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: "data.json")
+                let data = try Data(contentsOf: u)
+                let gem = try JSONDecoder().decode([Gene].self, from: data)
+                return try Population(count: gem.count, coke: coke, filterSource: filterSource,ngens: gem)
+            } else {
+                return try! Population(count: 60, coke: coke, filterSource: filterSource)
+            }
+        }catch{
+            return try! Population(count: 60, coke: coke, filterSource: filterSource)
         }
         
     }

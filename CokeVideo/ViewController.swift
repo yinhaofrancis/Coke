@@ -383,7 +383,7 @@ public class render2dViewController:UIViewController{
     lazy var diffout = try! self.coke.createTexture(w: self.coke.width, h: self.coke.height)
 //    lazy var diff = try! ComputeDiff(coke: self.coke, cg: UIImage(named: "icon")!.cgImage!, type: .hamming)
 //    lazy var sum = try! ComputeSum(coke: self.coke)
-    lazy var popu = try! Population(count: 100, coke: self.coke, filterSource: UIImage(named: "icon")!.cgImage!)
+    lazy var popu = Population.parse(coke: self.coke, filterSource: UIImage(named: "icon")!.cgImage!)
     @objc public func render(){
         try! popu.filter()
         for i in popu.gens{
