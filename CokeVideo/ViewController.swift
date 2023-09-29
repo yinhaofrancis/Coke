@@ -295,8 +295,10 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
     func handle(recorder: Coke.CokeAudioRecorder, output: Coke.CokeAudioOutputBuffer) {
 
         guard let out = encoder?.encode(buffer: output) else { return }
+        
         guard let out2 = self.decoder?.decode(buffer: out) else { return }
         self.buffer.append(out2)
+        print(output.data.count,out.data.count,out2.data.count)
     }
 
 
@@ -318,7 +320,7 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
         self.recoder?.output = self
         self.encoder = try? CokeAudioConverter(encode: self.recoder!.audioStreamBasicDescription)
         self.encoder?.bitRate = 96000
-        self.decoder = try? CokeAudioConverter(decode: self.encoder!.destination)
+        self.decoder = try? CokeAudioConverter(decode: self.encoder!.destination,mChannelsPerFrame: 1)
         self.player = try! CokeAudioPlayer(audioDiscription: self.decoder!.destination)
         b.frame = CGRect(x: 0, y: 200, width: 88, height: 88)
 

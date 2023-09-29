@@ -167,16 +167,18 @@ public struct CokeAudioConfig{
     )
     
     public var pcmIntegerAudioStreamBasicDescription:AudioStreamBasicDescription{
-        self.pcmAudioStreamBasicDescription(mFrameRate: self.mSampleRate)
+        self.pcmAudioStreamBasicDescription(mFrameRate: self.mSampleRate, mChannelsPerFrame: self.mChannelsPerFrame)
     }
     public var pcmAudioStreamBasicDescription:AudioStreamBasicDescription{
-        self.pcmAudioStreamBasicDescription(mFrameRate: self.mSampleRate,flag: kAudioFormatFlagIsFloat)
+        self.pcmAudioStreamBasicDescription(mFrameRate: self.mSampleRate, mChannelsPerFrame: self.mChannelsPerFrame,flag: kAudioFormatFlagIsFloat)
     }
     
-    public func pcmAudioStreamBasicDescription(mFrameRate:Float64,flag:AudioFormatFlags = kAudioFormatFlagIsSignedInteger)-> AudioStreamBasicDescription{
+    public func pcmAudioStreamBasicDescription(mFrameRate:Float64,
+                                               mChannelsPerFrame:UInt32,
+                                               flag:AudioFormatFlags = kAudioFormatFlagIsSignedInteger)->AudioStreamBasicDescription{
         let mSampleRate:Float64 = mFrameRate
         let mBitsPerChannel:UInt32 = self.mBitsPerChannel
-        let mChannelsPerFrame:UInt32 = self.mChannelsPerFrame
+        let mChannelsPerFrame:UInt32 = mChannelsPerFrame
         let mFramesPerPacket:UInt32 = self.mFramesPerPacket
         return AudioStreamBasicDescription(
             mSampleRate: mSampleRate,

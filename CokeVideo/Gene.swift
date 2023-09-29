@@ -80,7 +80,7 @@ public class Population{
     public func filter(gene:inout Gene) throws{
         let path = try gene.path(coke: coke)
         let buffer = try coke.begin();
-        try coke.drawInto(buffer: buffer, texture: texture!) { e in
+        try coke.drawInto(buffer: buffer, texture: texture) { e in
             path.draw(encode: e)
         }
         
@@ -96,57 +96,57 @@ public class Population{
         gene.score = Double(sum.sum)
     }
     public func filter() throws{
-        for _ in 0 ..< 20 {
-            var ges:[Gene] = []
-            for i in 0 ..< ges.count{
-                if gens[i].score < 0.0001{
-                    try self.filter(gene: &gens[i]);
-                }
-                ges.append(gens[i])
-            }
-            for i in 0 ..< self.gens.count{
-                var new = self.gens[i].mutations(count: 5)
-                try self.filter(gene: &new);
-                ges.append(new)
-                
-                let randi = Int.random(in: 0 ..< self.gens.count)
-                var new2 = self.gens[i].exchange(gen: self.gens[randi])
-                try self.filter(gene: &new2);
-                ges.append(new2)
-            }
-            ges.sort { a, b in
-                a.score < b.score
-            }
-            while(ges.count > self.gens.count || ges.count > 60){
-                let a = ges.removeLast()
-                if #available(iOS 14.0, *) {
-                    os_log("\(a.score)")
-                } else {
-                    // Fallback on earlier versions
-                }
-            }
-            self.gens = ges;
-        }
-        let data = try JSONEncoder().encode(self.gens)
-        if #available(iOS 16.0, *) {
-            let u = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: "data.json")
-            try data.write(to: u);
-        } else {
-            // Fallback on earlier versions
-        }
-        ges.sort { a, b in
-            a.score < b.score
-        }
-        while ges.count > 60 {
-            let a = ges.removeLast()
-            
-            if #available(iOS 14.0, *) {
-                os_log("coke __ remove \(a.score)")
-            } else {
-                // Fallback on earlier versions
-            }
-        }
-        self.gens = ges
+//        for _ in 0 ..< 20 {
+//            var ges:[Gene] = []
+//            for i in 0 ..< ges.count{
+//                if gens[i].score < 0.0001{
+//                    try self.filter(gene: &gens[i]);
+//                }
+//                ges.append(gens[i])
+//            }
+//            for i in 0 ..< self.gens.count{
+//                var new = self.gens[i].mutations(count: 5)
+//                try self.filter(gene: &new);
+//                ges.append(new)
+//                
+//                let randi = Int.random(in: 0 ..< self.gens.count)
+//                var new2 = self.gens[i].exchange(gen: self.gens[randi])
+//                try self.filter(gene: &new2);
+//                ges.append(new2)
+//            }
+//            ges.sort { a, b in
+//                a.score < b.score
+//            }
+//            while(ges.count > self.gens.count || ges.count > 60){
+//                let a = ges.removeLast()
+//                if #available(iOS 14.0, *) {
+//                    os_log("\(a.score)")
+//                } else {
+//                    // Fallback on earlier versions
+//                }
+//            }
+//            self.gens = ges;
+//        }
+//        let data = try JSONEncoder().encode(self.gens)
+//        if #available(iOS 16.0, *) {
+//            let u = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: "data.json")
+//            try data.write(to: u);
+//        } else {
+//            // Fallback on earlier versions
+//        }
+//        ges.sort { a, b in
+//            a.score < b.score
+//        }
+//        while ges.count > 60 {
+//            let a = ges.removeLast()
+//            
+//            if #available(iOS 14.0, *) {
+//                os_log("coke __ remove \(a.score)")
+//            } else {
+//                // Fallback on earlier versions
+//            }
+//        }
+//        self.gens = ges
         
     }
     public static func parse(coke:Coke2D,filterSource:CGImage) ->Population{

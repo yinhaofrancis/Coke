@@ -23,8 +23,8 @@ public class CokeAudioConverter{
         try self.init(source: encode, destination: to)
     }
     
-    public convenience init (decode:AudioStreamBasicDescription,toSampleRate:Float64? = nil) throws{
-        let dest = CokeAudioConfig.shared.pcmAudioStreamBasicDescription(mFrameRate: toSampleRate ?? decode.mSampleRate)
+    public convenience init (decode:AudioStreamBasicDescription,toSampleRate:Float64? = nil,mChannelsPerFrame:UInt32 = 1) throws{
+        let dest = CokeAudioConfig.shared.pcmAudioStreamBasicDescription(mFrameRate: toSampleRate ?? decode.mSampleRate, mChannelsPerFrame: mChannelsPerFrame)
         try self.init(source: decode, destination: dest)
     }
     
@@ -74,7 +74,7 @@ public class CokeAudioConverter{
 
         var outbuff = AudioBufferList(mNumberBuffers: 1, mBuffers: AudioBuffer(mNumberChannels: buffer.numberOfChannel, mDataByteSize: UInt32(buffer.data.count), mData: outpointer))
         
-        let packets:UnsafeMutablePointer<AudioStreamPacketDescription> = .allocate(capacity: 64)
+        let packets:UnsafeMutablePointer<AudioStreamPacketDescription> = .allocate(capacity: 1)
         defer {
             packets.deallocate()
         }
@@ -84,12 +84,7 @@ public class CokeAudioConverter{
             packetDesc?.pointee = nil
             inbuffer.pointee.mBuffers.mDataByteSize = inbuff.buffer.mBuffers.mDataByteSize
             inbuffer.pointee.mBuffers.mData = inbuff.buffer.mBuffers.mData
-            if(inbuff.source.mFormatID == kAudioFormatLinearPCM){
-                countOfPacket.pointee = inbuff.buffer.mBuffers.mDataByteSize / inbuff.source.mBytesPerPacket
-            }else{
-                countOfPacket.pointee = inbuff.numberOfPacket;
-                packetDesc?.pointee = inbuff.packetDescriptions
-            }
+            countOfPacket.pointee = inbuff.buffer.mBuffers.mDataByteSize / inbuff.source.mBytesPerPacket
             return noErr
         }, Unmanaged<CokeAudioInputBuffer>.passUnretained(inb).toOpaque(), &inputPacketNum, &outbuff, packets)
         return CokeAudioOutputBuffer(time: buffer.time, data: Data(bytes: outpointer, count: Int(outbuff.mBuffers.mDataByteSize)), numberOfChannel: self.destination.mChannelsPerFrame, packetDescriptions: [packets.pointee], description: self.destination)
@@ -115,7 +110,7 @@ public class CokeAudioConverter{
 
         var outbuff = AudioBufferList(mNumberBuffers: 1, mBuffers: AudioBuffer(mNumberChannels: buffer.numberOfChannel, mDataByteSize:UInt32(max) , mData: outpointer))
         
-        let packets:UnsafeMutablePointer<AudioStreamPacketDescription> = .allocate(capacity: 64)
+        let packets:UnsafeMutablePointer<AudioStreamPacketDescription> = .allocate(capacity: 1)
         defer {
             packets.deallocate()
         }
