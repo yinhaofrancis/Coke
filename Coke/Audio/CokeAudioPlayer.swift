@@ -8,7 +8,7 @@ public class CokeAudioPlayer {
     
     var  queue:AudioQueueRef?
     
-    var  packetPerBuffer:UInt32 = 1024
+    var  packetPerBuffer:UInt32 = CokeAudioConfig.shared.packSampleCount.rawValue
     
     private var buffers:[AudioQueueBufferRef] = []
     
@@ -138,7 +138,7 @@ public class CokeAudioPlayer {
     }
     
     public init(audioDiscription: AudioStreamBasicDescription = CokeAudioConfig.shared.pcmAudioStreamBasicDescription,
-                packPerBuffer:UInt32 = 1024) throws{
+                packPerBuffer:UInt32 = CokeAudioConfig.shared.packSampleCount.rawValue) throws{
         var desc = audioDiscription
         var tempQueue:AudioQueueRef?
         self.packetPerBuffer = packPerBuffer
@@ -193,7 +193,7 @@ public class CokeAudioRecorder{
     
     public let bufferCount = 20
     
-    public let sampleNum:UInt32 = 1024
+    public let sampleNum:UInt32 = CokeAudioConfig.shared.packSampleCount.rawValue
     
     public var endCallBack:(()->Void)?
     

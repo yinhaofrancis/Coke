@@ -295,10 +295,16 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
     func handle(recorder: Coke.CokeAudioRecorder, output: Coke.CokeAudioOutputBuffer) {
 
         guard let out = encoder?.encode(buffer: output) else { return }
-        
         guard let out2 = self.decoder?.decode(buffer: out) else { return }
+        
         self.buffer.append(out2)
-        print(output.data.count,out.data.count,out2.data.count)
+        
+//        var wav = out2.data.complex(description: self.decoder!.destination)
+//        var outComp = (Array<Float>(repeating: 0, count: 1024),Array<Float>(repeating: 0, count: 1024))
+//        fft.forward(realp: &wav.0, imagp: &wav.1, orealp: &outComp.0, oimagp: &outComp.1)
+//        var outComp2 = (Array<Float>(repeating: 0, count: 1024),Array<Float>(repeating: 0, count: 1024))
+//        fft.inverse(realp: &outComp.0, imagp: &outComp.1, orealp: &outComp2.0, oimagp: &outComp2.1)
+        
     }
 
 
@@ -318,9 +324,9 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
         self.recoder = try! CokeAudioRecorder()
         try? AVAudioSession.sharedInstance().setCategory(.playback)
         self.recoder?.output = self
-        self.encoder = try? CokeAudioConverter(encode: self.recoder!.audioStreamBasicDescription)
+        self.encoder = try! CokeAudioConverter(encode: self.recoder!.audioStreamBasicDescription)
         self.encoder?.bitRate = 96000
-        self.decoder = try? CokeAudioConverter(decode: self.encoder!.destination,mChannelsPerFrame: 1)
+        self.decoder = try? CokeAudioConverter(decode: self.encoder!.destination)
         self.player = try! CokeAudioPlayer(audioDiscription: self.decoder!.destination)
         b.frame = CGRect(x: 0, y: 200, width: 88, height: 88)
 

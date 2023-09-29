@@ -7,13 +7,13 @@
 
 import Foundation
 import Accelerate
-
+import AudioToolbox
 
 public struct ComputeTools{
     public class fft{
         let ctx:vDSP.FFT<DSPSplitComplex>?
-        public init(log2n:vDSP_Length){
-            ctx = vDSP.FFT(log2n: log2n, radix: .radix5, ofType: DSPSplitComplex.self)
+        public init(){
+            ctx = vDSP.FFT(log2n: 10, radix: .radix5, ofType: DSPSplitComplex.self)
         }
         @discardableResult
         public func complex(realp:inout [Float],
@@ -54,5 +54,36 @@ public struct ComputeTools{
                 ctx?.inverse(input: inv, output: &ouv)
             }
         }
+    }
+}
+
+extension Data{
+    public func list<T>(type:T.Type)->[T]{
+        self.withUnsafeBytes { $0.withMemoryRebound(to: type.self){$0}.map{$0} }
+    }
+    public func pointer<T>(type:T.Type)->UnsafeBufferPointer<T>{
+        self.withUnsafeBytes{$0.withMemoryRebound(to: type){$0}}
+    }
+    public func rawPointer()->UnsafeRawBufferPointer{
+        self.withUnsafeBytes {$0}
+    }
+    public mutating func mutablePointer<T>(type:T.Type)->UnsafeMutableBufferPointer<T>{
+        self.withUnsafeMutableBytes {$0.withMemoryRebound(to: type) {$0}}
+    }
+    public mutating func mutableRawPointer()->UnsafeMutableRawBufferPointer{
+        self.withUnsafeMutableBytes {$0}
+    }
+    public func complex(description:AudioStreamBasicDescription)->([Float],[Float]){
+        let time = Double(description.mBytesPerFrame) / Double(description.mSampleRate)
+        let sampleCount = self.count / Int(description.mBytesPerFrame)
+        let timeOffset = time / Double(sampleCount)
+        let times:[Float] = (0 ..< sampleCount).reduce(into: []) { partialResult, i in
+            if partialResult.count == 0{
+                partialResult.append(0)
+            }else{
+                partialResult.append(partialResult.last! + Float(timeOffset))
+            }
+        }
+        return (times,self.list(type: Float.self))
     }
 }

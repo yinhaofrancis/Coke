@@ -56,18 +56,15 @@ public class CokeAudioConverter{
         
         var inputPacketNum:UInt32 = 1
  
-        let inpoint = UnsafeMutablePointer<UInt8>.allocate(capacity: buffer.data.count)
-        defer{
-            inpoint.deallocate()
-        }
-        buffer.data.copyBytes(to: inpoint, count: buffer.data.count)
+        var newIn = buffer.data
+        
+        guard let inpoint = newIn.mutableRawPointer().baseAddress else { return nil }
         
         let inbuffer = AudioBufferList(mNumberBuffers: 1, mBuffers: AudioBuffer(mNumberChannels: buffer.numberOfChannel, mDataByteSize: UInt32(buffer.data.count), mData: inpoint))
         
         let inb = CokeAudioInputBuffer(buffer: inbuffer, numberOfChannel: buffer.numberOfChannel, source: self.source,packetDescriptions: buffer.packetDescriptions ?? [])
         
         let outpointer = UnsafeMutablePointer<UInt8>.allocate(capacity: buffer.data.count)
-        
         defer{
             outpointer.deallocate()
         }
@@ -87,17 +84,17 @@ public class CokeAudioConverter{
             countOfPacket.pointee = inbuff.buffer.mBuffers.mDataByteSize / inbuff.source.mBytesPerPacket
             return noErr
         }, Unmanaged<CokeAudioInputBuffer>.passUnretained(inb).toOpaque(), &inputPacketNum, &outbuff, packets)
+        if(outbuff.mBuffers.mDataByteSize < 10){
+            return nil;
+        }
         return CokeAudioOutputBuffer(time: buffer.time, data: Data(bytes: outpointer, count: Int(outbuff.mBuffers.mDataByteSize)), numberOfChannel: self.destination.mChannelsPerFrame, packetDescriptions: [packets.pointee], description: self.destination)
     }
     
     public func decode(buffer: CokeAudioOutputBuffer)->CokeAudioOutputBuffer?{
         
-        var inputPacketNum:UInt32 = 1024
-        let inpoint = UnsafeMutablePointer<UInt8>.allocate(capacity: buffer.data.count)
-        defer {
-            inpoint.deallocate()
-        }
-        buffer.data.copyBytes(to: inpoint, count: buffer.data.count)
+        var inputPacketNum:UInt32 = self.source.mFramesPerPacket
+        var newIn = buffer.data
+        guard let inpoint = newIn.mutableRawPointer().baseAddress else { return nil }
         
         let inbuffer = AudioBufferList(mNumberBuffers: 1, mBuffers: AudioBuffer(mNumberChannels: buffer.numberOfChannel, mDataByteSize: UInt32(buffer.data.count), mData: inpoint))
         

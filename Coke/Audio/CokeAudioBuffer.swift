@@ -8,6 +8,9 @@
 import AudioToolbox
 import AVFoundation
 import Accelerate
+public enum PackSampleCount:UInt32{
+    case sample1024 = 1024
+}
 
 public struct AudioOutBufferPacket{
     
@@ -159,10 +162,11 @@ public struct CokeAudioConfig{
     public let mBitsPerChannel:UInt32
     public let mChannelsPerFrame:UInt32
     public let mFramesPerPacket:UInt32
+    public let packSampleCount: PackSampleCount = .sample1024
     public static let shared = CokeAudioConfig(
         mSampleRate: 44100,
-        mBitsPerChannel: 32,
-        mChannelsPerFrame: 2,
+        mBitsPerChannel: 16,
+        mChannelsPerFrame: 1,
         mFramesPerPacket: 1
     )
     
@@ -170,7 +174,7 @@ public struct CokeAudioConfig{
         self.pcmAudioStreamBasicDescription(mFrameRate: self.mSampleRate, mChannelsPerFrame: self.mChannelsPerFrame)
     }
     public var pcmAudioStreamBasicDescription:AudioStreamBasicDescription{
-        self.pcmAudioStreamBasicDescription(mFrameRate: self.mSampleRate, mChannelsPerFrame: self.mChannelsPerFrame,flag: kAudioFormatFlagIsFloat)
+        self.pcmAudioStreamBasicDescription(mFrameRate: self.mSampleRate, mChannelsPerFrame: self.mChannelsPerFrame)
     }
     
     public func pcmAudioStreamBasicDescription(mFrameRate:Float64,
@@ -192,10 +196,10 @@ public struct CokeAudioConfig{
     }
     
     public var aacAudioStreamBasicDescription:AudioStreamBasicDescription{
-        return AudioStreamBasicDescription(mSampleRate: self.mSampleRate, mFormatID: kAudioFormatMPEG4AAC, mFormatFlags: 0, mBytesPerPacket: 0, mFramesPerPacket: 1024, mBytesPerFrame: 0, mChannelsPerFrame: self.mChannelsPerFrame, mBitsPerChannel: 0, mReserved: 0)
+        return AudioStreamBasicDescription(mSampleRate: self.mSampleRate, mFormatID: kAudioFormatMPEG4AAC, mFormatFlags: 0, mBytesPerPacket: 0, mFramesPerPacket: packSampleCount.rawValue, mBytesPerFrame: 0, mChannelsPerFrame: self.mChannelsPerFrame, mBitsPerChannel: 0, mReserved: 0)
     }
     
     public var flacAudioStreamBasicDescription:AudioStreamBasicDescription{
-        return AudioStreamBasicDescription(mSampleRate: self.mSampleRate, mFormatID: kAudioFormatFLAC, mFormatFlags: 0, mBytesPerPacket: 0, mFramesPerPacket: 1024, mBytesPerFrame: 0, mChannelsPerFrame: self.mChannelsPerFrame, mBitsPerChannel: 0, mReserved: 0)
+        return AudioStreamBasicDescription(mSampleRate: self.mSampleRate, mFormatID: kAudioFormatFLAC, mFormatFlags: 0, mBytesPerPacket: 0, mFramesPerPacket: packSampleCount.rawValue, mBytesPerFrame: 0, mChannelsPerFrame: self.mChannelsPerFrame, mBitsPerChannel: 0, mReserved: 0)
     }
 }

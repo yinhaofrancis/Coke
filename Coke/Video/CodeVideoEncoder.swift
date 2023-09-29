@@ -198,7 +198,6 @@ public class CokeFile{
             while self.videos.count > 0{
                 if self.videoInput.isReadyForMoreMediaData{
                     self.videoInput.append(self.videos.first!)
-                    print("v")
                     self.videos.removeFirst()
                 }
             }
@@ -212,7 +211,6 @@ public class CokeFile{
             while self.audio.count > 0{
                 if self.audioInput.isReadyForMoreMediaData{
                     self.audioInput.append(self.audio.first!)
-                    print("a")
                     self.audio.removeFirst()
                 }
             }
