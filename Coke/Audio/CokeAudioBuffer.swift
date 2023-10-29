@@ -109,6 +109,13 @@ public struct CokeAudioOutputBuffer{
     public var numberOfChannel:UInt32
     public var packetDescriptions:[AudioStreamPacketDescription]?
     public var description:AudioStreamBasicDescription
+    public init(time: CMTime, data: Data, numberOfChannel: UInt32, packetDescriptions: [AudioStreamPacketDescription]? = nil, description: AudioStreamBasicDescription) {
+        self.time = time
+        self.data = data
+        self.numberOfChannel = numberOfChannel
+        self.packetDescriptions = packetDescriptions
+        self.description = description
+    }
     public func createSampleBuffer()->CMSampleBuffer?{
         do{
             let format = try CMAudioFormatDescription(audioStreamBasicDescription: self.description)
@@ -165,7 +172,7 @@ public struct CokeAudioConfig{
     public let packSampleCount: PackSampleCount = .sample1024
     public static let shared = CokeAudioConfig(
         mSampleRate: 44100,
-        mBitsPerChannel: 16,
+        mBitsPerChannel: 32,
         mChannelsPerFrame: 1,
         mFramesPerPacket: 1
     )
@@ -174,7 +181,7 @@ public struct CokeAudioConfig{
         self.pcmAudioStreamBasicDescription(mFrameRate: self.mSampleRate, mChannelsPerFrame: self.mChannelsPerFrame)
     }
     public var pcmAudioStreamBasicDescription:AudioStreamBasicDescription{
-        self.pcmAudioStreamBasicDescription(mFrameRate: self.mSampleRate, mChannelsPerFrame: self.mChannelsPerFrame)
+        self.pcmAudioStreamBasicDescription(mFrameRate: self.mSampleRate, mChannelsPerFrame: self.mChannelsPerFrame,flag: kAudioFormatFlagIsFloat)
     }
     
     public func pcmAudioStreamBasicDescription(mFrameRate:Float64,

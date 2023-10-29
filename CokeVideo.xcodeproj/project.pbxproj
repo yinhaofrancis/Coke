@@ -63,6 +63,7 @@
 		A9E3D62F2AA60D9C00BD5CF7 /* CodeVideoEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3D62E2AA60D9C00BD5CF7 /* CodeVideoEncoder.swift */; };
 		A9E3D6312AA60FCB00BD5CF7 /* CodeVideoSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3D6302AA60FCB00BD5CF7 /* CodeVideoSample.swift */; };
 		A9E3D6342AA6127900BD5CF7 /* CokeCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E3D6332AA6127900BD5CF7 /* CokeCapture.swift */; };
+		A9F2B2202AC80C480037FE0E /* Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2B21F2AC80C480037FE0E /* Display.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -157,6 +158,7 @@
 		A9E3D62E2AA60D9C00BD5CF7 /* CodeVideoEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeVideoEncoder.swift; sourceTree = "<group>"; };
 		A9E3D6302AA60FCB00BD5CF7 /* CodeVideoSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeVideoSample.swift; sourceTree = "<group>"; };
 		A9E3D6332AA6127900BD5CF7 /* CokeCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CokeCapture.swift; sourceTree = "<group>"; };
+		A9F2B21F2AC80C480037FE0E /* Display.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Display.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -252,6 +254,7 @@
 				A9D1C9BE26B3086600F4421B /* Assets.xcassets */,
 				A9D1CA1F26B30B6B00F4421B /* Launch.storyboard */,
 				A9D1C9C326B3086600F4421B /* Info.plist */,
+				A9F2B21F2AC80C480037FE0E /* Display.swift */,
 			);
 			path = CokeVideo;
 			sourceTree = "<group>";
@@ -517,6 +520,7 @@
 				A9D1C9B626B3086500F4421B /* AppDelegate.swift in Sources */,
 				A9226E242AB5399E003A1B62 /* CokeModelViewController.swift in Sources */,
 				A9D554B52ABDC80000D85BB3 /* ViewController.swift in Sources */,
+				A9F2B2202AC80C480037FE0E /* Display.swift in Sources */,
 				A9B1F52226B6380500E157A4 /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -590,7 +594,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = JYCHA46QC4;
+				DEVELOPMENT_TEAM = 27ZYBRBPV8;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -628,7 +632,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = JYCHA46QC4;
+				DEVELOPMENT_TEAM = 27ZYBRBPV8;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -785,7 +789,7 @@
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_ENTITLEMENTS = CokeVideo/CokeVideo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = JYCHA46QC4;
+				DEVELOPMENT_TEAM = 27ZYBRBPV8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -799,7 +803,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.CokeVideo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.cvideo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
@@ -818,7 +822,7 @@
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_ENTITLEMENTS = CokeVideo/CokeVideo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = JYCHA46QC4;
+				DEVELOPMENT_TEAM = 27ZYBRBPV8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -832,7 +836,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.CokeVideo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.cvideo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
@@ -851,7 +855,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = JYCHA46QC4;
+				DEVELOPMENT_TEAM = 27ZYBRBPV8;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -871,7 +875,7 @@
 				);
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.Coke;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.coke;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -891,7 +895,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = JYCHA46QC4;
+				DEVELOPMENT_TEAM = 27ZYBRBPV8;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -911,7 +915,7 @@
 				);
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.Coke;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yinhao.coke;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;

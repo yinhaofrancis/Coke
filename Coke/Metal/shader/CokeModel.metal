@@ -27,10 +27,10 @@ fragment half4 cokeTriagleFragment(CokeModel in [[stage_in]],
                                    const sampler textureSampler [[sampler(ShaderFragmentSamplerIndex)]]){
 
     float3 norm = normalize(in.normal); //单位法线线向量
-    float3 lightDir = float3(0,0,0);
+    float3 lightDir = float3(0,0,0); //默认光线方向
     float attenuation = 1;
     if (lu->lightType == directlight){
-        lightDir = normalize(-lu->lightDir);
+        lightDir = normalize(-lu->lightDir); //平行光
     }else if (lu->lightType == spotlight){
         lightDir = normalize(lu->lightPos - in.fragLocation); // 光源方向
         float distance = length(lu->lightPos - in.fragLocation);

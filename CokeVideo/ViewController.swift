@@ -297,14 +297,13 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
         guard let out = encoder?.encode(buffer: output) else { return }
         guard let out2 = self.decoder?.decode(buffer: out) else { return }
         
+        
+        
+        var wav = out2.data.complex(description: self.decoder!.destination)
+        var outComp = (Array<Float>(repeating: 0, count: 1024),Array<Float>(repeating: 0, count: 1024))
+        fft.forward(realp: &wav.0, imagp: &wav.1, orealp: &outComp.0, oimagp: &outComp.1)
+        
         self.buffer.append(out2)
-        
-//        var wav = out2.data.complex(description: self.decoder!.destination)
-//        var outComp = (Array<Float>(repeating: 0, count: 1024),Array<Float>(repeating: 0, count: 1024))
-//        fft.forward(realp: &wav.0, imagp: &wav.1, orealp: &outComp.0, oimagp: &outComp.1)
-//        var outComp2 = (Array<Float>(repeating: 0, count: 1024),Array<Float>(repeating: 0, count: 1024))
-//        fft.inverse(realp: &outComp.0, imagp: &outComp.1, orealp: &outComp2.0, oimagp: &outComp2.1)
-        
     }
 
 
@@ -314,6 +313,7 @@ class outViewController:UIViewController,CokeAudioRecoderOutput{
 
     let b = UIButton(type: .close)
 
+    let fft = ComputeTools.fft()
     public var buffer:[CokeAudioOutputBuffer] = []
     public var player:CokeAudioPlayer?
     public var recoder:CokeAudioRecorder?
