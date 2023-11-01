@@ -31,7 +31,7 @@ public class CokeCapture:NSObject,
 
     lazy var output: AVCaptureVideoDataOutput = {
         let out =  AVCaptureVideoDataOutput()
-        out.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
+        out.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: CokeConfig.videoColorFormat]
         out.setSampleBufferDelegate(self, queue: .global())
         return out
     }()

@@ -28,6 +28,28 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A92C47282AF0198F008CC7E2"
+               BuildableName = "CokeVideoTests.xctest"
+               BlueprintName = "CokeVideoTests"
+               ReferencedContainer = "container:CokeVideo.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A92C47352AF01B02008CC7E2"
+               BuildableName = "CokeVideoUITests.xctest"
+               BlueprintName = "CokeVideoUITests"
+               ReferencedContainer = "container:CokeVideo.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
