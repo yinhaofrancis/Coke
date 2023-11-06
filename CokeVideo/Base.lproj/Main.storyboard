@@ -102,7 +102,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="2Mm-Ub-LP8">
                         <nil key="title"/>
-                        <barButtonItem key="leftBarButtonItem" title="Item" id="nlV-WP-gsD">
+                        <barButtonItem key="leftBarButtonItem" title="录制" id="nlV-WP-gsD">
                             <connections>
                                 <segue destination="zIH-R9-HcI" kind="show" id="dOA-I6-fmx"/>
                             </connections>
@@ -116,7 +116,7 @@
                                 <segue destination="fP7-jy-9uu" kind="show" id="b8m-bd-MaU"/>
                             </connections>
                         </button>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="rnb-3J-qlq">
+                        <barButtonItem key="rightBarButtonItem" systemItem="play" id="rnb-3J-qlq">
                             <connections>
                                 <segue destination="6JF-As-Pvu" kind="show" id="woZ-In-09B"/>
                             </connections>
