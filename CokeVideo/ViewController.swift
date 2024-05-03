@@ -51,6 +51,9 @@ class ViewController: UITableViewController,UISearchBarDelegate {
             let data = try Data(contentsOf: url)
             if data.count == 0{
                 DispatchQueue.main.async {
+                    self.process(str: "https://www.heishenhua.com/video/b1/PV05Full_ZH.mp4")
+                    self.process(str: "https://www.heishenhua.com/video/b1/gamesci_2024.mp4")
+                    self.process(str: "https://www.heishenhua.com/video/b1/gamesci_2022PV03.mp4")
                     self.process(str: "http://www.heishenhua.com/video/b1/gamesci_2021.mp4")
                     self.process(str: "http://www.heishenhua.com/video/preview/video_Day1.mp4")
                     self.process(str: "http://www.heishenhua.com/video/preview/video_Day2.mp4")
