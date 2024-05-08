@@ -146,10 +146,17 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         return CokeTransformFilter(configuration: .defaultConfiguration)!
     }()
     private var render:CokeTextureRender
+    private weak var sharedRender:CokeTextureRender?
     private var observer:Any?
     private var lastPixel:MTLTexture?
     public init(configuration:CokeMetalConfiguration = .defaultConfiguration) {
-        self.render = CokeTextureRender(configuration: configuration)
+        if let sharedRender {
+            self.render = sharedRender
+        }else{
+            let c = CokeTextureRender(configuration: configuration)
+            self.render = c
+            sharedRender = c
+        }
         super.init()
         self.contentsScale = UIScreen.main.scale;
     }
@@ -165,12 +172,24 @@ public class CokeVideoLayer:CAMetalLayer,CokeVideoDisplayer{
         }
     }
     required init?(coder: NSCoder) {
-        self.render = CokeTextureRender(configuration: .defaultConfiguration)
+        if let sharedRender {
+            self.render = sharedRender
+        }else{
+            let c = CokeTextureRender(configuration: .defaultConfiguration)
+            self.render = c
+            sharedRender = c
+        }
         super.init(coder: coder)
         self.startNotificationScreen()
     }
     public override init() {
-        self.render = CokeTextureRender(configuration: .defaultConfiguration)
+        if let sharedRender {
+            self.render = sharedRender
+        }else{
+            let c = CokeTextureRender(configuration: .defaultConfiguration)
+            self.render = c
+            sharedRender = c
+        }
         super.init()
         self.startNotificationScreen()
     }

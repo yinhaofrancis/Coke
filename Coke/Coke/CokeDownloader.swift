@@ -122,8 +122,13 @@ public class CokeSessionDownloader{
     }
     public subscript(offset:UInt64)->Data?{
         guard let range = self.storage.dataRanges.filter({$0.contains(offset)}).first else { return nil}
-        let useRange = offset ... range.upperBound
-        return self.storage[useRange]
+        if(range.upperBound - offset < page){
+            let useRange = offset ... range.upperBound
+            return self.storage[useRange]
+        }else{
+            let useRange = offset ... offset + page
+            return self.storage[useRange]
+        }
     }
 
     public func cancel(range:ClosedRange<UInt64>){

@@ -138,4 +138,5 @@ public class CokeTextureRender {
 //        simd_float4x4.translate(x: 0, y: 0, z: 100) *
 //        simd_float4x4.rotate(x: x, y: y, z: z)
     }
+    public static let shared:CokeTextureRender = CokeTextureRender(configuration: .defaultConfiguration)
 }
